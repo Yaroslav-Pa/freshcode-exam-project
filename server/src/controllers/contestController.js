@@ -183,6 +183,94 @@ module.exports.setOfferStatus = async (req, res, next) => {
 
 //* вище нічого не робив
 
+//! Contests
+
+module.exports.getCustomerContests = async (req, res, next) => {
+  try {
+    const {
+      query: { limit, offset, status },
+      tokenData: { userId },
+    } = req;
+
+    const contests = await db.Contests.findAll({
+      where: { status, userId },
+      limit,
+      offset: offset || 0,
+      order: [['id', 'DESC']],
+      include: [
+        {
+          model: db.Offers,
+          required: false,
+          attributes: ['id'],
+        },
+      ],
+    });
+
+    contests.forEach(
+      (contest) => (contest.dataValues.count = contest.dataValues.Offers.length)
+    );
+
+    res.send({
+      contests,
+      haveMore: contests.length !== 0,
+    });
+  } catch (error) {
+    next(new ServerError(error.message));
+  }
+};
+
+module.exports.getContests = async (req, res, next) => {
+  try {
+    const {
+      query: {
+        contestId,
+        limit,
+        offset,
+        typeIndex,
+        industry,
+        awardSort,
+        ownEntries,
+      },
+      tokenData: { userId },
+    } = req;
+
+    const { where, order } = UtilFunctions.createWhereForAllContests(
+      typeIndex,
+      contestId,
+      industry,
+      awardSort
+    );
+
+    const isOwnEntries = ownEntries === 'true';
+
+    const contests = await db.Contests.findAll({
+      where,
+      order,
+      limit,
+      offset: offset || 0,
+      include: [
+        {
+          model: db.Offers,
+          required: isOwnEntries,
+          where: isOwnEntries ? { userId } : {},
+          attributes: ['id'],
+        },
+      ],
+    });
+
+    contests.forEach(
+      (contest) => (contest.dataValues.count = contest.dataValues.Offers.length)
+    );
+
+    res.send({
+      contests,
+      haveMore: contests.length !== 0,
+    });
+  } catch (error) {
+    next(new ServerError(error.message));
+  }
+};
+
 module.exports.getContestById = async (req, res, next) => {
   try {
     const {
@@ -258,89 +346,6 @@ module.exports.updateContest = async (req, res, next) => {
       userId,
     });
     res.send(updatedContest);
-  } catch (error) {
-    next(new ServerError(error.message));
-  }
-};
-
-module.exports.getCustomerContests = async (req, res, next) => {
-  try {
-    const {
-      query: { limit, offset, status },
-      tokenData: { userId },
-    } = req;
-
-    const contests = await db.Contests.findAll({
-      where: { status, userId },
-      limit,
-      offset: offset || 0,
-      order: [['id', 'DESC']],
-      include: [
-        {
-          model: db.Offers,
-          required: false,
-          attributes: ['id'],
-        },
-      ],
-    });
-
-    contests.forEach(
-      (contest) => (contest.dataValues.count = contest.dataValues.Offers.length)
-    );
-
-    res.send({
-      contests,
-      haveMore: contests.length !== 0,
-    });
-  } catch (error) {
-    next(new ServerError(error.message));
-  }
-};
-
-module.exports.getContests = async (req, res, next) => {
-  try {
-    const {
-      query: {
-        contestId,
-        limit,
-        offset,
-        typeIndex,
-        industry,
-        awardSort,
-        ownEntries,
-      },
-      tokenData: { userId },
-    } = req;
-
-    const { where, order } = UtilFunctions.createWhereForAllContests(
-      typeIndex,
-      contestId,
-      industry,
-      awardSort
-    );
-    const contests = await db.Contests.findAll({
-      where,
-      order,
-      limit,
-      offset: offset || 0,
-      include: [
-        {
-          model: db.Offers,
-          required: ownEntries,
-          where: ownEntries ? { userId } : {},
-          attributes: ['id'],
-        },
-      ],
-    });
-
-    contests.forEach(
-      (contest) => (contest.dataValues.count = contest.dataValues.Offers.length)
-    );
-
-    res.send({
-      contests,
-      haveMore: contests.length !== 0,
-    });
   } catch (error) {
     next(new ServerError(error.message));
   }

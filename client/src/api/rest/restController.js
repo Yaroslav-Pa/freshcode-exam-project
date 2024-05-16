@@ -28,6 +28,7 @@ export const changeCatalogName = (data) => http.post('updateNameCatalog', data);
 
 //* вище нічого не змінював
 
+  // only user contests
 export const getCustomerContests = (data) =>
   http.get('contests/customers', {
     params: {
@@ -37,6 +38,7 @@ export const getCustomerContests = (data) =>
     },
   });
 
+  // all contests (creative)
 export const getActiveContests = (data) =>
   http.get('contests/', { params: { ...data } });
 

@@ -9,7 +9,6 @@ contestRouter.get(
   contestController.getCustomerContests
 );
 
-
 // all contests (creative)
 contestRouter.get(
   '/',

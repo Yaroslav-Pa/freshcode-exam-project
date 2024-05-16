@@ -40,58 +40,6 @@ module.exports.dataForContest = async (req, res, next) => {
   }
 };
 
-module.exports.getContestById = async (req, res, next) => {
-  try {
-    let contestInfo = await db.Contests.findOne({
-      where: { id: req.headers.contestid },
-      order: [[db.Offers, 'id', 'asc']],
-      include: [
-        {
-          model: db.Users,
-          required: true,
-          attributes: {
-            exclude: ['password', 'role', 'balance', 'accessToken'],
-          },
-        },
-        {
-          model: db.Offers,
-          required: false,
-          where:
-            req.tokenData.role === CONSTANTS.CREATOR
-              ? { userId: req.tokenData.userId }
-              : {},
-          attributes: { exclude: ['userId', 'contestId'] },
-          include: [
-            {
-              model: db.Users,
-              required: true,
-              attributes: {
-                exclude: ['password', 'role', 'balance', 'accessToken'],
-              },
-            },
-            {
-              model: db.Ratings,
-              required: false,
-              where: { userId: req.tokenData.userId },
-              attributes: { exclude: ['userId', 'offerId'] },
-            },
-          ],
-        },
-      ],
-    });
-    contestInfo = contestInfo.get({ plain: true });
-    contestInfo.Offers.forEach((offer) => {
-      if (offer.Rating) {
-        offer.mark = offer.Rating.mark;
-      }
-      delete offer.Rating;
-    });
-    res.send(contestInfo);
-  } catch (e) {
-    next(new ServerError());
-  }
-};
-
 module.exports.downloadFile = async (req, res, next) => {
   const file = CONSTANTS.CONTESTS_DEFAULT_DIR + req.params.fileName;
   res.download(file);
@@ -235,9 +183,67 @@ module.exports.setOfferStatus = async (req, res, next) => {
 
 //* вище нічого не робив
 
+module.exports.getContestById = async (req, res, next) => {
+  try {
+    const {
+      params: { contestId },
+      tokenData: { userId, role },
+    } = req;
+
+    let contestInfo = await db.Contests.findOne({
+      where: { id: contestId },
+      order: [[db.Offers, 'id', 'asc']],
+      include: [
+        {
+          model: db.Users,
+          required: true,
+          attributes: {
+            exclude: ['password', 'role', 'balance', 'accessToken'],
+          },
+        },
+        {
+          model: db.Offers,
+          required: false,
+          where: role === CONSTANTS.CREATOR ? { userId } : {},
+          attributes: { exclude: ['userId', 'contestId'] },
+          include: [
+            {
+              model: db.Users,
+              required: true,
+              attributes: {
+                exclude: ['password', 'role', 'balance', 'accessToken'],
+              },
+            },
+            {
+              model: db.Ratings,
+              required: false,
+              where: { userId },
+              attributes: { exclude: ['userId', 'offerId'] },
+            },
+          ],
+        },
+      ],
+    });
+    //TODO переробити
+    contestInfo = contestInfo.get({ plain: true });
+    contestInfo.Offers.forEach((offer) => {
+      if (offer.Rating) {
+        offer.mark = offer.Rating.mark;
+      }
+      delete offer.Rating;
+    });
+
+    res.send(contestInfo);
+  } catch (error) {
+    next(new ServerError(error.message));
+  }
+};
+
 module.exports.updateContest = async (req, res, next) => {
   try {
     const {
+      //TODO! НЕ ПРАЦЮЄ не розумію чому (params)
+      body: { contestId },
       file,
       body,
       tokenData: { userId },
@@ -248,10 +254,7 @@ module.exports.updateContest = async (req, res, next) => {
       body.originalFileName = file.originalname;
     }
 
-    //TODO переробити щоб воно не отримувало "contestId" з body
-    const { contestId, ...newBody } = body;
-
-    const updatedContest = await contestQueries.updateContest(newBody, {
+    const updatedContest = await contestQueries.updateContest(body, {
       id: contestId,
       userId,
     });
@@ -261,13 +264,12 @@ module.exports.updateContest = async (req, res, next) => {
   }
 };
 
-module.exports.getCustomersContests = async (req, res, next) => {
+module.exports.getCustomerContests = async (req, res, next) => {
   try {
-    //TODO переробити щоб воно не отримувало limit, offset з body
     const {
+      params: { limit, offset },
       headers: { status },
       tokenData: { userId },
-      body: { limit, offset },
     } = req;
 
     const contests = await db.Contests.findAll({
@@ -286,7 +288,8 @@ module.exports.getCustomersContests = async (req, res, next) => {
 
     //TODO! що краще? мутувати об'єкт або створювати копію, змінювати та повертати її;
     contests.forEach(
-      contest => contest.dataValues.count = contest.dataValues.Offers.length);
+      (contest) => (contest.dataValues.count = contest.dataValues.Offers.length)
+    );
 
     res.send({
       contests,
@@ -336,7 +339,8 @@ module.exports.getContests = async (req, res, next) => {
     //TODO! що краще? мутувати об'єкт або створювати копію, змінювати та повертати її;
     // копіювати напевно не варіант бо deep не робить копію наслідування
     contests.forEach(
-      contest => contest.dataValues.count = contest.dataValues.Offers.length);
+      (contest) => (contest.dataValues.count = contest.dataValues.Offers.length)
+    );
 
     res.send({
       contests,

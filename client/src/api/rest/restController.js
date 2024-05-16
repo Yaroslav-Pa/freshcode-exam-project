@@ -28,25 +28,24 @@ export const changeCatalogName = (data) => http.post('updateNameCatalog', data);
 
 //* вище нічого не змінював
 
-export const getActiveContests = (data) => http.post('contests/', data);
-
-export const getCustomersContests = (data) =>
-  http.post(
-    'contests/customers/getCustomersContests',
-    { limit: data.limit, offset: data.offset },
+export const getCustomerContests = (data) =>
+  http.get(
+    'contests/customers',
     {
+      params: {
+        limit: data.limit,
+        offset: data.offset,
+      },
       headers: {
         status: data.contestStatus,
       },
     }
   );
 
-export const getContestById = (data) =>
-  http.get('contests/getContestById', {
-    headers: {
-      contestId: data.contestId,
-    },
-  });
+  //неПрацює-*
+export const getActiveContests = (data) => http.post('contests/', data);
 
-export const updateContest = (data) =>
-  http.put('contests/getContestById', data);
+export const getContestById = (data) => http.get(`contests/${data.contestId}`);
+
+//неПрацює
+export const updateContest = (data) => http.put(`contests/${data.contestId}`, data);

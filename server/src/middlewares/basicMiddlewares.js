@@ -21,20 +21,19 @@ module.exports.parseBody = (req, res, next) => {
 
 module.exports.canGetContest = async (req, res, next) => {
   const {
+    params: { contestId },
     tokenData: { role, userId },
-    //TODO переробити щоб воно не отримувало contestId з headers
-    headers: { contestid },
   } = req;
   let result = null;
   try {
     if (role === CONSTANTS.CUSTOMER) {
       result = await bd.Contests.findOne({
-        where: { id: contestid, userId },
+        where: { id: contestId, userId },
       });
     } else if (role === CONSTANTS.CREATOR) {
       result = await bd.Contests.findOne({
         where: {
-          id: contestid,
+          id: contestId,
           status: {
             [bd.Sequelize.Op.or]: [
               CONSTANTS.CONTEST_STATUS_ACTIVE,
@@ -46,7 +45,7 @@ module.exports.canGetContest = async (req, res, next) => {
     }
     result ? next() : next(new RightsError());
   } catch (e) {
-    next(new ServerError(e));
+    next(new ServerError(e.message));
   }
 };
 
@@ -68,6 +67,7 @@ module.exports.onlyForCustomer = (req, res, next) => {
 
 module.exports.canSendOffer = async (req, res, next) => {
   const {
+    // params: { contestId },
     tokenData: { role },
     //TODO переробити щоб воно не отримувало contestId з body
     body: { contestId },

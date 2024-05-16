@@ -9,7 +9,7 @@ userRouter.post(
   '/pay',
   basicMiddlewares.onlyForCustomer,
   upload.uploadContestFiles,
-  basicMiddlewares.parseBody,
+  basicMiddlewares.parseBody, //TODO? можливо замінити на express.json()?
   validators.validateContestCreation,
   userController.payment,
 );

@@ -3,7 +3,6 @@ import http from '../interceptor';
 export const registerRequest = (data) => http.post('registration', data);
 export const loginRequest = (data) => http.post('login', data);
 export const getUser = () => http.post('getUser');
-export const updateContest = (data) => http.post('updateContest', data);
 export const setNewOffer = (data) => http.post('setNewOffer', data);
 export const setOfferStatus = (data) => http.post('setOfferStatus', data);
 export const downloadContestFile = (data) =>
@@ -26,9 +25,14 @@ export const deleteCatalog = (data) => http.post('deleteCatalog', data);
 export const removeChatFromCatalog = (data) =>
   http.post('removeChatFromCatalog', data);
 export const changeCatalogName = (data) => http.post('updateNameCatalog', data);
+
+//* вище нічого не змінював
+
+export const getActiveContests = (data) => http.post('contests/', data);
+
 export const getCustomersContests = (data) =>
   http.post(
-    'getCustomersContests',
+    'contests/customers/getCustomersContests',
     { limit: data.limit, offset: data.offset },
     {
       headers: {
@@ -37,28 +41,12 @@ export const getCustomersContests = (data) =>
     }
   );
 
-export const getActiveContests = ({
-  offset,
-  limit,
-  typeIndex,
-  contestId,
-  industry,
-  awardSort,
-  ownEntries,
-}) =>
-  http.post('getAllContests', {
-    offset,
-    limit,
-    typeIndex,
-    contestId,
-    industry,
-    awardSort,
-    ownEntries,
-  });
-
 export const getContestById = (data) =>
-  http.get('getContestById', {
+  http.get('contests/getContestById', {
     headers: {
       contestId: data.contestId,
     },
   });
+
+export const updateContest = (data) =>
+  http.put('contests/getContestById', data);

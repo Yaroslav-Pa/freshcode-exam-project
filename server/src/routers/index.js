@@ -12,19 +12,19 @@ const chatRouter = require('./chatRouter');
 const userRouter = require('./userRouter');
 const router = express.Router();
 
-userRouter.post(
+router.post(
   '/getUser',
   checkToken.checkAuth,
 );
 
-userRouter.post(
+router.post(
   '/registration',
   validators.validateRegistrationData,
   hashPass,
   userController.registration,
 );
 
-userRouter.post(
+router.post(
   '/login',
   validators.validateLogin,
   userController.login,

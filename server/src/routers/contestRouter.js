@@ -3,16 +3,16 @@ const contestController = require('../controllers/contestController');
 const upload = require('../utils/fileUpload');
 const contestRouter = require('express').Router();
 
-contestRouter.get(
+contestRouter.post(
   '/',
   basicMiddlewares.onlyForCreative,
   contestController.getContests,
 );
 
-contestRouter.get('/customers/:customerId', contestController.getCustomersContests);
+contestRouter.post('/customers/getCustomersContests', contestController.getCustomersContests);
 
 contestRouter
-  .route('/:contestId') //! 
+  .route('/getContestById') //! 
   .get(basicMiddlewares.canGetContest, contestController.getContestById)
   .put(upload.updateContestFile, contestController.updateContest); //TODO
 

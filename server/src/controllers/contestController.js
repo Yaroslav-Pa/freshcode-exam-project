@@ -242,8 +242,7 @@ module.exports.getContestById = async (req, res, next) => {
 module.exports.updateContest = async (req, res, next) => {
   try {
     const {
-      //TODO! НЕ ПРАЦЮЄ не розумію чому (params)
-      body: { contestId },
+      params: { contestId },
       file,
       body,
       tokenData: { userId },
@@ -267,8 +266,7 @@ module.exports.updateContest = async (req, res, next) => {
 module.exports.getCustomerContests = async (req, res, next) => {
   try {
     const {
-      params: { limit, offset },
-      headers: { status },
+      query: { limit, offset, status },
       tokenData: { userId },
     } = req;
 
@@ -286,7 +284,6 @@ module.exports.getCustomerContests = async (req, res, next) => {
       ],
     });
 
-    //TODO! що краще? мутувати об'єкт або створювати копію, змінювати та повертати її;
     contests.forEach(
       (contest) => (contest.dataValues.count = contest.dataValues.Offers.length)
     );
@@ -303,8 +300,7 @@ module.exports.getCustomerContests = async (req, res, next) => {
 module.exports.getContests = async (req, res, next) => {
   try {
     const {
-      body: {
-        //TODO переробити щоб воно не отримувало "contestId, limit, offset" з body
+      query: {
         contestId,
         limit,
         offset,
@@ -336,8 +332,7 @@ module.exports.getContests = async (req, res, next) => {
         },
       ],
     });
-    //TODO! що краще? мутувати об'єкт або створювати копію, змінювати та повертати її;
-    // копіювати напевно не варіант бо deep не робить копію наслідування
+
     contests.forEach(
       (contest) => (contest.dataValues.count = contest.dataValues.Offers.length)
     );

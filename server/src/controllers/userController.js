@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const CONSTANTS = require('../constants');
 const bd = require('../models');
 const NotUniqueEmail = require('../errors/NotUniqueEmail');
+const NotFound = require('../errors/UserNotFoundError');
 const moment = require('moment');
 const { v4: uuid } = require('uuid');
 const controller = require('../socketInit');
@@ -12,7 +13,13 @@ const ratingQueries = require('./queries/ratingQueries');
 module.exports.login = async (req, res, next) => {
   try {
     const foundUser = await userQueries.findUser({ email: req.body.email });
-    await userQueries.passwordCompare(req.body.password, foundUser.password);
+
+    const isValidPassword = await foundUser.passwordCompare(req.body.password);
+
+    if(!isValidPassword) {
+      throw new NotFound('user with this data dont exist');
+    }
+
     const accessToken = jwt.sign({
       firstName: foundUser.firstName,
       userId: foundUser.id,
@@ -32,8 +39,7 @@ module.exports.login = async (req, res, next) => {
 };
 module.exports.registration = async (req, res, next) => {
   try {
-    const newUser = await userQueries.userCreation(
-      Object.assign(req.body, { password: req.hashPass }));
+    const newUser = await userQueries.userCreation(req.body);
     const accessToken = jwt.sign({
       firstName: newUser.firstName,
       userId: newUser.id,

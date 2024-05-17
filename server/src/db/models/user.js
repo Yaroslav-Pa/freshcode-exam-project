@@ -7,14 +7,36 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Offer, Contest, Rating }) {
+    static associate({ Offer, Contest, Rating, TransactionHistory }) {
       // define association here
 
-      User.hasMany(Offer, { foreignKey: 'userId', targetKey: 'id' });
+      User.hasMany(Offer, {
+        foreignKey: 'userId',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
 
-      User.hasMany(Contest, { foreignKey: 'userId', targetKey: 'id' });
+      User.hasMany(Contest, {
+        foreignKey: 'userId',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
 
-      User.hasMany(Rating, { foreignKey: 'userId', targetKey: 'id' });
+      User.hasMany(Rating, {
+        foreignKey: 'userId',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+
+      User.hasMany(TransactionHistory, {
+        foreignKey: 'userId',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
     }
   }
   User.init(
@@ -26,14 +48,17 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       firstName: {
+        field: 'first_name',
         type: DataTypes.STRING,
         allowNull: false,
       },
       lastName: {
+        field: 'last_name',
         type: DataTypes.STRING,
         allowNull: false,
       },
       displayName: {
+        field: 'display_name',
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -64,6 +89,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       accessToken: {
+        field: 'access_token',
         type: DataTypes.TEXT,
         allowNull: true,
       },
@@ -75,6 +101,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
+      underscored: true,
+      tableName: 'users',
       modelName: 'User',
       timestamps: false,
     }

@@ -1,4 +1,4 @@
-const db = require('../../models');
+const db = require('../../db/models');
 const ServerError = require('../../errors/ServerError');
 
 module.exports.updateCount = (contests) => {

@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../db/models');
 const ServerError = require('../errors/ServerError');
 const contestQueries = require('./queries/contestQueries');
 const userQueries = require('./queries/userQueries');
@@ -64,8 +64,8 @@ module.exports.setNewOffer = async (req, res, next) => {
       .emitEntryCreated(req.body.customerId);
     const User = Object.assign({}, req.tokenData, { id: req.tokenData.userId });
     res.send(Object.assign({}, result, { User }));
-  } catch (e) {
-    return next(new ServerError());
+  } catch (error) {
+    return next(new ServerError(error.message));
   }
 };
 
@@ -95,10 +95,10 @@ const resolveOffer = async (
   const finishedContest = await contestQueries.updateContestStatus(
     {
       status: db.sequelize.literal(`   CASE
-            WHEN "id"=${contestId}  AND "orderId"='${orderId}' THEN '${
+            WHEN "id"=${contestId}  AND "order_id"='${orderId}' THEN '${
         CONSTANTS.CONTEST_STATUS_FINISHED
       }'
-            WHEN "orderId"='${orderId}' AND "priority"=${priority + 1}  THEN '${
+            WHEN "order_id"='${orderId}' AND "priority"=${priority + 1}  THEN '${
         CONSTANTS.CONTEST_STATUS_ACTIVE
       }'
             ELSE '${CONSTANTS.CONTEST_STATUS_PENDING}'

@@ -1,46 +1,47 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Rating extends Model {
+  class TransactionHistory extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ User, Offer }) {
-      // define association here
-      Rating.belongsTo(User, { foreignKey: 'userId', targetKey: 'id' });
+    static associate({ User }) {
 
-      Rating.belongsTo(Offer, { foreignKey: 'offerId', targetKey: 'id' });
     }
   }
-  Rating.init(
+  TransactionHistory.init(
     {
-      offerId: {
+      id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
       userId: {
+        allowNull: false,
         type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-      },
-      mark: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-        defaultValue: 0,
-        validate: {
-          min: 0,
-          max: 5,
+        references: {
+          model: 'User',
+          key: 'id',
         },
+      },
+      operationType: {
+        allowNull: false,
+        type: DataTypes.ENUM('INCOME', 'CONSUMPTION'),
+      },
+      sum: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
       },
     },
     {
       sequelize,
-      modelName: 'Rating',
+      tableName: 'transaction_historys',
+      modelName: 'TransactionHistory',
       timestamps: false,
     }
   );
-  return Rating;
+  return TransactionHistory;
 };

@@ -4,7 +4,7 @@ const ServerError = require('../../errors/ServerError');
 module.exports.updateCount = (contests) => {
   //! inTesting
   //!fix була проблема у тому що воно ломається якщо приходить пустий масив
-  //TODO? перереобити цю логіку бо dataValues.count це буквально копія dataValues.Offers.length
+  //TODO? перерoбити цю логіку бо dataValues.count це буквально копія dataValues.Offers.length
   // console.log(contests);
   const clone = structuredClone(contests);
   clone.dataValues.count = clone.dataValues.Offers.length;
@@ -12,11 +12,14 @@ module.exports.updateCount = (contests) => {
   return clone;
 };
 
-//* не дивився нижче 
+//* не дивився нижче
 
 module.exports.updateContest = async (data, predicate, transaction) => {
-  const [updatedCount, [updatedContest]] = await bd.Contest.update(data,
-    { where: predicate, returning: true, transaction });
+  const [updatedCount, [updatedContest]] = await bd.Contest.update(data, {
+    where: predicate,
+    returning: true,
+    transaction,
+  });
   if (updatedCount !== 1) {
     throw new ServerError('cannot update Contest');
   } else {
@@ -25,18 +28,24 @@ module.exports.updateContest = async (data, predicate, transaction) => {
 };
 
 module.exports.updateContestStatus = async (data, predicate, transaction) => {
-  const updateResult = await bd.Contest.update(data,
-    { where: predicate, returning: true, transaction });
-  if (updateResult[ 0 ] < 1) {
+  const updateResult = await bd.Contest.update(data, {
+    where: predicate,
+    returning: true,
+    transaction,
+  });
+  if (updateResult[0] < 1) {
     throw new ServerError('cannot update Contest');
   } else {
-    return updateResult[ 1 ][ 0 ].dataValues;
+    return updateResult[1][0].dataValues;
   }
 };
 
 module.exports.updateOffer = async (data, predicate, transaction) => {
-  const [updatedCount, [updatedOffer]] = await bd.Offer.update(data,
-    { where: predicate, returning: true, transaction });
+  const [updatedCount, [updatedOffer]] = await bd.Offer.update(data, {
+    where: predicate,
+    returning: true,
+    transaction,
+  });
   if (updatedCount !== 1) {
     throw new ServerError('cannot update offer!');
   } else {
@@ -45,12 +54,15 @@ module.exports.updateOffer = async (data, predicate, transaction) => {
 };
 
 module.exports.updateOfferStatus = async (data, predicate, transaction) => {
-  const result = await bd.Offer.update(data,
-    { where: predicate, returning: true, transaction });
-  if (result[ 0 ] < 1) {
+  const result = await bd.Offer.update(data, {
+    where: predicate,
+    returning: true,
+    transaction,
+  });
+  if (result[0] < 1) {
     throw new ServerError('cannot update offer!');
   } else {
-    return result[ 1 ];
+    return result[1];
   }
 };
 

@@ -192,14 +192,14 @@ module.exports.getCustomerContests = async (req, res, next) => {
       tokenData: { userId },
     } = req;
 
-    const contests = await db.Contests.findAll({
+    const contests = await db.Contest.findAll({
       where: { status, userId },
       limit,
       offset: offset || 0,
       order: [['id', 'DESC']],
       include: [
         {
-          model: db.Offers,
+          model: db.Offer,
           required: false,
           attributes: ['id'],
         },
@@ -243,14 +243,14 @@ module.exports.getContests = async (req, res, next) => {
 
     const isOwnEntries = ownEntries === 'true';
 
-    const contests = await db.Contests.findAll({
+    const contests = await db.Contest.findAll({
       where,
       order,
       limit,
       offset: offset || 0,
       include: [
         {
-          model: db.Offers,
+          model: db.Offer,
           required: isOwnEntries,
           where: isOwnEntries ? { userId } : {},
           attributes: ['id'],
@@ -278,32 +278,32 @@ module.exports.getContestById = async (req, res, next) => {
       tokenData: { userId, role },
     } = req;
 
-    let contestInfo = await db.Contests.findOne({
+    let contestInfo = await db.Contest.findOne({
       where: { id: contestId },
-      order: [[db.Offers, 'id', 'asc']],
+      order: [[db.Offer, 'id', 'asc']],
       include: [
         {
-          model: db.Users,
+          model: db.User,
           required: true,
           attributes: {
             exclude: ['password', 'role', 'balance', 'accessToken'],
           },
         },
         {
-          model: db.Offers,
+          model: db.Offer,
           required: false,
           where: role === CONSTANTS.CREATOR ? { userId } : {},
           attributes: { exclude: ['userId', 'contestId'] },
           include: [
             {
-              model: db.Users,
+              model: db.User,
               required: true,
               attributes: {
                 exclude: ['password', 'role', 'balance', 'accessToken'],
               },
             },
             {
-              model: db.Ratings,
+              model: db.Rating,
               required: false,
               where: { userId },
               attributes: { exclude: ['userId', 'offerId'] },

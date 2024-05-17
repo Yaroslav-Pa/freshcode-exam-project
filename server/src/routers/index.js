@@ -12,23 +12,16 @@ const chatRouter = require('./chatRouter');
 const userRouter = require('./userRouter');
 const router = express.Router();
 
-router.post(
-  '/getUser',
-  checkToken.checkAuth,
-);
+router.post('/getUser', checkToken.checkAuth);
 
 router.post(
   '/registration',
   validators.validateRegistrationData,
   hashPass,
-  userController.registration,
+  userController.registration
 );
 
-router.post(
-  '/login',
-  validators.validateLogin,
-  userController.login,
-);
+router.post('/login', validators.validateLogin, userController.login);
 
 router.use(checkToken.checkToken);
 
@@ -40,13 +33,13 @@ router.use('/', userRouter);
 router.post(
   '/dataForContest',
   checkToken.checkToken,
-  contestController.dataForContest,
+  contestController.dataForContest
 );
 
 router.get(
   '/downloadFile/:fileName',
   checkToken.checkToken,
-  contestController.downloadFile,
+  contestController.downloadFile
 );
 
 router.post(
@@ -54,22 +47,18 @@ router.post(
   checkToken.checkToken,
   upload.uploadLogoFiles,
   basicMiddlewares.canSendOffer,
-  contestController.setNewOffer,
+  contestController.setNewOffer
 );
 
 router.post(
   '/setOfferStatus',
   checkToken.checkToken,
   basicMiddlewares.onlyForCustomerWhoCreateContest,
-  contestController.setOfferStatus,
+  contestController.setOfferStatus
 );
 
 router.use('/', chatRouter);
 
 router.use('/', catalogRouter);
-
-
-
-
 
 module.exports = router;

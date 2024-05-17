@@ -76,7 +76,7 @@ module.exports.canSendOffer = async (req, res, next) => {
     return next(new RightsError());
   }
   try {
-    const result = await bd.Contests.findOne({
+    const result = await bd.Contest.findOne({
       where: {
         id: contestId,
       },
@@ -99,7 +99,7 @@ module.exports.canSendOffer = async (req, res, next) => {
 
 module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
   try {
-    const result = await bd.Contests.findOne({
+    const result = await bd.Contest.findOne({
       where: {
         userId: req.tokenData.userId,
         id: req.body.contestId,
@@ -117,7 +117,7 @@ module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
 
 module.exports.canUpdateContest = async (req, res, next) => {
   try {
-    const result = bd.Contests.findOne({
+    const result = bd.Contest.findOne({
       where: {
         userId: req.tokenData.userId,
         id: req.body.contestId,

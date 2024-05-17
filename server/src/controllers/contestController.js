@@ -17,7 +17,7 @@ module.exports.dataForContest = async (req, res, next) => {
       Boolean
     );
 
-    const characteristics = await db.Selects.findAll({
+    const characteristics = await db.Select.findAll({
       where: {
         type: {
           [db.Sequelize.Op.or]: types,

@@ -309,6 +309,8 @@ module.exports.getContests = (req, res, next) => {
     awardSort
   );
 
+  const isOwnEntries = ownEntries === 'true' ? true : false;
+
   db.Contest.findAll({
     where: predicates.where,
     order: predicates.order,
@@ -317,8 +319,8 @@ module.exports.getContests = (req, res, next) => {
     include: [
       {
         model: db.Offer,
-        required: ownEntries,
-        where: ownEntries ? { userId: req.tokenData.userId } : {},
+        required: isOwnEntries,
+        where: isOwnEntries ? { userId: req.tokenData.userId } : {},
         attributes: ['id'],
       },
     ],

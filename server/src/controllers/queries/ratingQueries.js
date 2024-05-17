@@ -1,8 +1,8 @@
-const bd = require('../../models');
+const db = require('../../models');
 const ServerError = require('../../errors/ServerError');
 
 module.exports.updateRating = async (data, predicate, transaction) => {
-  const [updatedCount, [updatedRating]] = await bd.Rating.update(data, {
+  const [updatedCount, [updatedRating]] = await db.Rating.update(data, {
     where: predicate,
     returning: true,
     transaction,
@@ -14,7 +14,7 @@ module.exports.updateRating = async (data, predicate, transaction) => {
 };
 
 module.exports.createRating = async (data, transaction) => {
-  const result = await bd.Rating.create(data, { transaction });
+  const result = await db.Rating.create(data, { transaction });
   if (!result) {
     throw new ServerError('cannot mark offer');
   } else {

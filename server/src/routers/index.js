@@ -10,6 +10,7 @@ const contestRouter = require('./contestRouter');
 const catalogRouter = require('./catalogRouter');
 const chatRouter = require('./chatRouter');
 const userRouter = require('./userRouter');
+const transactionHistoryRouter = require('./transactionHistoryRouter');
 const router = express.Router();
 
 router.post('/getUser', checkToken.checkAuth);
@@ -23,8 +24,9 @@ router.post(
 
 router.post('/login', validators.validateLogin, userController.login);
 
-router.use(checkToken.checkToken);
+router.use('/transactionHistory', transactionHistoryRouter)
 
+router.use(checkToken.checkToken);
 router.use('/contests', contestRouter);
 
 router.use('/', userRouter);

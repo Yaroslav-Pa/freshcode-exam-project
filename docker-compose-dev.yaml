@@ -45,7 +45,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=squad_help
+      - POSTGRES_DB=squad-help
     ports:
       - "12346:5432"
 

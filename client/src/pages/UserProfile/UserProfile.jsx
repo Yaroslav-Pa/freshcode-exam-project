@@ -9,81 +9,49 @@ import PayForm from '../../components/PayForm/PayForm';
 import { cashOut, clearPaymentStore } from '../../store/slices/paymentSlice';
 import { changeProfileViewMode } from '../../store/slices/userProfileSlice';
 import Error from '../../components/Error/Error';
+import UserProfileSectionButton from '../../components/UserProfileSectionButton/UserProfileSectionButton';
+import UserProfilePayFormShower from '../../components/UserProfilePayFormShower/UserProfilePayFormShower';
 
-const UserProfile = (props) => {
-  const pay = (values) => {
-    const { number, expiry, cvc, sum } = values;
-    props.cashOut({
-      number,
-      expiry,
-      cvc,
-      sum,
-    });
-  };
-
-  const {
-    balance,
-    role,
-    profileViewMode,
-    changeProfileViewMode,
-    error,
-    clearPaymentStore,
-  } = props;
+const UserProfile = ({
+  role,
+  profileViewMode,
+  changeProfileViewMode,
+  ...restProps
+}) => {
   return (
-    <div>
+    <>
       <Header />
-      <div className={styles.mainContainer}>
-        <div className={styles.aside}>
-          <span className={styles.headerAside}>Select Option</span>
+      <main className={styles.mainContainer}>
+        <aside className={styles.aside}>
+          <h1 className={styles.headerAside}>Select Option</h1>
           <div className={styles.optionsContainer}>
-            <div
-              className={classNames(styles.optionContainer, {
-                [styles.currentOption]:
-                  profileViewMode === CONSTANTS.USER_INFO_MODE,
-              })}
-              onClick={() => changeProfileViewMode(CONSTANTS.USER_INFO_MODE)}
-            >
-              UserInfo
-            </div>
+            <UserProfileSectionButton
+              profileViewMode={profileViewMode}
+              changeProfileViewMode={changeProfileViewMode}
+              text={'User info'}
+              mode={CONSTANTS.USER_INFO_MODE}
+            />
             {role === CONSTANTS.CREATOR && (
-              <div
-                className={classNames(styles.optionContainer, {
-                  [styles.currentOption]:
-                    profileViewMode === CONSTANTS.CASHOUT_MODE,
-                })}
-                onClick={() => changeProfileViewMode(CONSTANTS.CASHOUT_MODE)}
-              >
-                Cashout
-              </div>
+              <UserProfileSectionButton
+                profileViewMode={profileViewMode}
+                changeProfileViewMode={changeProfileViewMode}
+                text={'Cashout'}
+                mode={CONSTANTS.CASHOUT_MODE}
+              />
             )}
           </div>
-        </div>
+        </aside>
         {profileViewMode === CONSTANTS.USER_INFO_MODE ? (
           <UserInfo />
         ) : (
-          <div className={styles.container}>
-            {parseInt(balance) === 0 ? (
-              <span className={styles.notMoney}>
-                There is no money on your balance
-              </span>
-            ) : (
-              <div>
-                {error && (
-                  <Error
-                    data={error.data}
-                    status={error.status}
-                    clearError={clearPaymentStore}
-                  />
-                )}
-                <PayForm sendRequest={pay} />
-              </div>
-            )}
-          </div>
+          <UserProfilePayFormShower {...restProps} />
         )}
-      </div>
-    </div>
+      </main>
+    </>
   );
 };
+
+//TODO! приробити slice та переробити це пекло
 
 const mapStateToProps = (state) => {
   const { balance, role } = state.userStore.data;

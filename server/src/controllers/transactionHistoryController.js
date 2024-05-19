@@ -1,11 +1,13 @@
 const db = require('../db/models');
-const RightsError = require('../errors/RightsError');
 const ServerError = require('../errors/ServerError');
-const UserNotFoundError = require('../errors/UserNotFoundError');
 
 module.exports.getUserTransactionHistory = async (req, res, next) => {
   try {
-    const { user } = req;
+    const {
+      tokenData: { userId },
+    } = req;
+
+    const user = await db.User.findByPk(userId);
 
     const fullHistory = await user.getTransactionHistories({
       attributes: {

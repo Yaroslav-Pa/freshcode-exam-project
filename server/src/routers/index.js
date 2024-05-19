@@ -29,15 +29,16 @@ router.post(
 
 router.post('/login', validators.validateLogin, userController.login);
 
+router.use(checkToken.checkToken);
+
 router.use(
-  '/transactionHistory/:userId',
-  findUserById,
-  getUserIdFromToken,
-  isSamePerson,
+  '/transactionHistory/',
+  // findUserById,
+  // getUserIdFromToken,
+  // isSamePerson,
   transactionHistoryRouter
 );
 
-router.use(checkToken.checkToken);
 router.use('/contests', contestRouter);
 
 router.use('/', userRouter);

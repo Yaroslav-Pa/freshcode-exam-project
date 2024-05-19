@@ -4,7 +4,7 @@ import SelectInput from '../SelectInput/SelectInput';
 import FormInput from '../FormInput/FormInput';
 import styles from '../ContestForm/ContestForm.module.sass';
 import Spinner from '../Spinner/Spinner';
-
+//TODO
 const OptionalSelects = props => {
   if (props.isFetching) {
     return <Spinner />;

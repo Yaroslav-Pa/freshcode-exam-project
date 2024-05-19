@@ -1,16 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
 import Header from '../../components/Header/Header';
 import styles from './UserProfile.module.sass';
 import CONSTANTS from '../../constants';
 import UserInfo from '../../components/UserInfo/UserInfo';
-import PayForm from '../../components/PayForm/PayForm';
 import { cashOut, clearPaymentStore } from '../../store/slices/paymentSlice';
 import { changeProfileViewMode } from '../../store/slices/userProfileSlice';
-import Error from '../../components/Error/Error';
 import UserProfileSectionButton from '../../components/UserProfileSectionButton/UserProfileSectionButton';
 import UserProfilePayFormShower from '../../components/UserProfilePayFormShower/UserProfilePayFormShower';
+import UserProfileTransactionTable from '../../components/UserProfileTransactionTable/UserProfileTransactionTable';
 
 const UserProfile = ({
   role,
@@ -39,19 +37,27 @@ const UserProfile = ({
                 mode={CONSTANTS.CASHOUT_MODE}
               />
             )}
+            <UserProfileSectionButton
+              profileViewMode={profileViewMode}
+              changeProfileViewMode={changeProfileViewMode}
+              text={'View transaction history'}
+              mode={CONSTANTS.TRANSACTION_HISTORY_MODE}
+            />
           </div>
         </aside>
-        {profileViewMode === CONSTANTS.USER_INFO_MODE ? (
-          <UserInfo />
-        ) : (
+        {profileViewMode === CONSTANTS.USER_INFO_MODE && <UserInfo />}
+        {profileViewMode === CONSTANTS.CASHOUT_MODE && (
           <UserProfilePayFormShower {...restProps} />
+        )}
+        {profileViewMode === CONSTANTS.TRANSACTION_HISTORY_MODE && (
+          <UserProfileTransactionTable />
         )}
       </main>
     </>
   );
 };
 
-//TODO! приробити slice та переробити це пекло
+//TODO! продивитись slice та переробити на хуки (?)
 
 const mapStateToProps = (state) => {
   const { balance, role } = state.userStore.data;

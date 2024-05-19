@@ -6,6 +6,8 @@ const TokenError = require('../errors/TokenError');
 const UserNotFoundError = require('../errors/UserNotFoundError');
 const RightsError = require('../errors/RightsError');
 
+//TODO! не впевнений чи потрібно усе це
+
 module.exports.findUserById = async (req, res, next) => {
   try {
     const {
@@ -46,15 +48,13 @@ module.exports.getUserIdFromToken = async (req, res, next) => {
 module.exports.isSamePerson = async (req, res, next) => {
   try {
     const {
-      tokenUserId,
-      user
+      tokenData: { userId },
+      user,
     } = req;
 
-    if (user?.id !== tokenUserId) {
+    if (user?.id !== userId) {
       //TODO можливо іншу помилку?
-      return next(
-        new RightsError("Cannot get another person's information")
-      );
+      return next(new RightsError("Cannot get another person's information"));
     }
     next();
   } catch (error) {

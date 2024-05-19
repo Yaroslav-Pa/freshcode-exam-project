@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   TransactionHistory.init(
     {
       userId: {
-        field:"user_id",
+        field: 'user_id',
         allowNull: false,
         type: DataTypes.INTEGER,
         references: {
@@ -28,13 +28,16 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       operationType: {
-        field:"operation_type",
+        field: 'operation_type',
         allowNull: false,
         type: DataTypes.ENUM('INCOME', 'CONSUMPTION'),
       },
       sum: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL,
+        validate: {
+          min: 0,
+        },
       },
     },
     {

@@ -1,12 +1,11 @@
 const db = require('../db/models');
+const RightsError = require('../errors/RightsError');
 const ServerError = require('../errors/ServerError');
 const UserNotFoundError = require('../errors/UserNotFoundError');
 
 module.exports.getUserTransactionHistory = async (req, res, next) => {
   try {
     const { user } = req;
-
-    //TODO! доробити перевірку що користувач та він запитує себе а не інших
 
     const fullHistory = await user.getTransactionHistories({
       attributes: {
@@ -23,8 +22,6 @@ module.exports.getUserTransactionHistory = async (req, res, next) => {
 module.exports.getUserTransactionSummary = async (req, res, next) => {
   try {
     const { user } = req;
-
-    //TODO! доробити перевірку що користувач та він запитує себе а не інших
 
     const transactions = await user.getTransactionHistories({
       attributes: [

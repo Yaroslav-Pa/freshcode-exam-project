@@ -1,27 +1,32 @@
-import styles from './TransactionTable.module.sass';
+import TableRowItem from './TableRowItem/TableRowItem';
+import style from './TransactionTable.module.sass';
 
 function TransactionTable({ transactionHistory }) {
   return (
-    <section>
-      <h1 className={styles.MainText}>Your transaction history</h1>
-      <table>
+    <section className={style.tableContainer}>
+      <h1 className={style.mainText}>Your transaction history</h1>
+      <table className={style.table}>
         <thead>
           <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Transaction type</th>
-            <th scope="col">Sum</th>
-            <th scope="col">Date</th>
+            <th>Id</th>
+            <th>Transaction type</th>
+            <th>Sum</th>
+            <th>Date</th>
           </tr>
         </thead>
         <tbody>
           {transactionHistory
-            .toReversed()
-            .map(({ id, operationType, sum, createdAt: date }) => (
-              <tr key={id}>
-                <td>{id}</td>
-                <td>{operationType.toLowerCase()}</td>
-                <td>{sum}</td>
-                <td>{new Date(date).toUTCString()}</td>
+            ?.toReversed()
+            .map(({ id, operationType, sum, createdAt }) => (
+              <tr>
+                <td className={style.tableElement}>{id}</td>
+                <td className={style.tableElement}>
+                  {operationType.toLowerCase()}
+                </td>
+                <td className={style.tableElement}>{sum}</td>
+                <td className={style.tableElement}>
+                  {new Date(createdAt).toUTCString()}
+                </td>
               </tr>
             ))}
         </tbody>

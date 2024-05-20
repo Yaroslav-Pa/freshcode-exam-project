@@ -5,7 +5,7 @@ import SpinnerLoader from '../Spinner/Spinner';
 import styles from './UserProfileTransactionTable.module.sass';
 import TransactionTable from '../TransactionTable/TransactionTable';
 
-function UserProfileTransactionTable({}) {
+function UserProfileTransactionTable() {
   const dispatch = useDispatch();
 
   const { isFetching, transactionHistory, error } = useSelector((state) => ({

@@ -1,4 +1,9 @@
 const express = require('express');
+const {
+  findUserById,
+  getUserIdFromToken,
+  isSamePerson,
+} = require('../middlewares/userMW');
 const validators = require('../middlewares/validators');
 const hashPass = require('../middlewares/hashPassMiddle');
 const userController = require('../controllers/userController');
@@ -10,6 +15,7 @@ const contestRouter = require('./contestRouter');
 const catalogRouter = require('./catalogRouter');
 const chatRouter = require('./chatRouter');
 const userRouter = require('./userRouter');
+const transactionHistoryRouter = require('./transactionHistoryRouter');
 const router = express.Router();
 
 router.post('/getUser', checkToken.checkAuth);
@@ -24,6 +30,14 @@ router.post(
 router.post('/login', validators.validateLogin, userController.login);
 
 router.use(checkToken.checkToken);
+
+router.use(
+  '/transactionHistory/',
+  // findUserById,
+  // getUserIdFromToken,
+  // isSamePerson,
+  transactionHistoryRouter
+);
 
 router.use('/contests', contestRouter);
 

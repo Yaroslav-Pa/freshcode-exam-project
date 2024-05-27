@@ -1,9 +1,10 @@
 {
+  "_comment": "back to docker - change host to 'db-dev' and password to 'password'",
   "development": {
     "username": "postgres",
-    "password": "password",
-    "database": "todo-dev",
-    "host": "db-dev",
+    "password": "postgres",
+    "database": "squad-help",
+    "host": "localhost",
     "dialect": "postgres",
     "operatorsAliases": "Op",
     "seederStorage": "sequelize"

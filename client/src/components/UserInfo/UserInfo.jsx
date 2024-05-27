@@ -24,7 +24,7 @@ const UserInfo = (props) => {
       {isEdit ? (
         <UpdateUserInfoForm onSubmit={updateUserData} />
       ) : (
-        <div className={styles.infoContainer}>
+        <section className={styles.infoContainer}>
           <img
             src={
               avatar === 'anon.png'
@@ -62,7 +62,7 @@ const UserInfo = (props) => {
               </div>
             )}
           </div>
-        </div>
+        </section>
       )}
       <div
         onClick={() => changeEditMode(!isEdit)}

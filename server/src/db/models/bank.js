@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Bank.init(
     {
       cardNumber: {
+        field: 'card_number',
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
@@ -38,6 +39,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
+      underscored: true,
+      tableName: 'banks',
       modelName: 'Bank',
       timestamps: false,
     }

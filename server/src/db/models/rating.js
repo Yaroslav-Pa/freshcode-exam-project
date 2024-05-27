@@ -9,19 +9,31 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ User, Offer }) {
       // define association here
-      Rating.belongsTo(User, { foreignKey: 'userId', targetKey: 'id' });
+      Rating.belongsTo(User, {
+        foreignKey: 'userId',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
 
-      Rating.belongsTo(Offer, { foreignKey: 'offerId', targetKey: 'id' });
+      Rating.belongsTo(Offer, {
+        foreignKey: 'offerId',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
     }
   }
   Rating.init(
     {
       offerId: {
+        field:"offer_id",
         allowNull: false,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
       userId: {
+        field:"user_id",
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
@@ -38,6 +50,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
+      underscored: true,
+      tableName: 'ratings',
       modelName: 'Rating',
       timestamps: false,
     }

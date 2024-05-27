@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const constants = require('../../constants');
 module.exports = (sequelize, DataTypes) => {
   class TransactionHistory extends Model {
     /**
@@ -30,7 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       operationType: {
         field: 'operation_type',
         allowNull: false,
-        type: DataTypes.ENUM('INCOME', 'CONSUMPTION'),
+        type: DataTypes.ENUM(
+          constants.TRANSACTION_INCOME,
+          constants.TRANSACTION_CONSUMPTION
+        ),
       },
       sum: {
         allowNull: false,

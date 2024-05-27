@@ -8,6 +8,7 @@ const controller = require('../socketInit');
 const userQueries = require('./queries/userQueries');
 const bankQueries = require('./queries/bankQueries');
 const ratingQueries = require('./queries/ratingQueries');
+const { createTransact } = require('./queries/transactQueries');
 
 module.exports.login = async (req, res, next) => {
   try {
@@ -131,9 +132,11 @@ module.exports.payment = async (req, res, next) => {
               ''
             )}' AND "cvc"='${req.body.cvc}' AND "expiry"='${req.body.expiry}'
                 THEN "balance"-${req.body.price}
-            WHEN "card_number"='${CONSTANTS.SQUADHELP_BANK_NUMBER}' AND "cvc"='${
-          CONSTANTS.SQUADHELP_BANK_CVC
-        }' AND "expiry"='${CONSTANTS.SQUADHELP_BANK_EXPIRY}'
+            WHEN "card_number"='${
+              CONSTANTS.SQUADHELP_BANK_NUMBER
+            }' AND "cvc"='${CONSTANTS.SQUADHELP_BANK_CVC}' AND "expiry"='${
+          CONSTANTS.SQUADHELP_BANK_EXPIRY
+        }'
                 THEN "balance"+${req.body.price} END
         `),
       },
@@ -164,6 +167,12 @@ module.exports.payment = async (req, res, next) => {
     });
     await db.Contest.bulkCreate(req.body.contests, transaction);
     transaction.commit();
+    const transact = await createTransact(
+      req.tokenData.userId,
+      CONSTANTS.TRANSACTION_CONSUMPTION,
+      req.body.price
+    );
+
     res.send();
   } catch (err) {
     transaction.rollback();
@@ -234,7 +243,14 @@ module.exports.cashout = async (req, res, next) => {
       transaction
     );
     transaction.commit();
-    res.send({ balance: updatedUser.balance });
+
+    const transact = await createTransact(
+      req.tokenData.userId,
+      CONSTANTS.TRANSACTION_CONSUMPTION,
+      req.body.sum
+    );
+
+    res.send({ balance: updatedUser.balance, transact });
   } catch (err) {
     transaction.rollback();
     next(err);

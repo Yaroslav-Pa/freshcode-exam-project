@@ -46,19 +46,16 @@ router.use('/', userRouter);
 //! напевно також у контест роутер
 router.post(
   '/dataForContest',
-  checkToken.checkToken,
   contestController.dataForContest
 );
 
 router.get(
   '/downloadFile/:fileName',
-  checkToken.checkToken,
   contestController.downloadFile
 );
 
 router.post(
   '/setNewOffer',
-  checkToken.checkToken,
   upload.uploadLogoFiles,
   basicMiddlewares.canSendOffer,
   contestController.setNewOffer
@@ -66,7 +63,6 @@ router.post(
 
 router.post(
   '/setOfferStatus',
-  checkToken.checkToken,
   basicMiddlewares.onlyForCustomerWhoCreateContest,
   contestController.setOfferStatus
 );

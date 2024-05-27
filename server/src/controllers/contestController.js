@@ -5,6 +5,7 @@ const userQueries = require('./queries/userQueries');
 const controller = require('../socketInit');
 const UtilFunctions = require('../utils/functions');
 const CONSTANTS = require('../constants');
+const { createTransact } = require('./queries/transactQueries');
 
 module.exports.dataForContest = async (req, res, next) => {
   const response = {};
@@ -98,9 +99,9 @@ const resolveOffer = async (
             WHEN "id"=${contestId}  AND "order_id"='${orderId}' THEN '${
         CONSTANTS.CONTEST_STATUS_FINISHED
       }'
-            WHEN "order_id"='${orderId}' AND "priority"=${priority + 1}  THEN '${
-        CONSTANTS.CONTEST_STATUS_ACTIVE
-      }'
+            WHEN "order_id"='${orderId}' AND "priority"=${
+        priority + 1
+      }  THEN '${CONSTANTS.CONTEST_STATUS_ACTIVE}'
             ELSE '${CONSTANTS.CONTEST_STATUS_PENDING}'
             END
     `),
@@ -113,6 +114,12 @@ const resolveOffer = async (
     creatorId,
     transaction
   );
+  await createTransact(
+    creatorId,
+    CONSTANTS.TRANSACTION_INCOME,
+    finishedContest.prize
+  );
+
   const updatedOffers = await contestQueries.updateOfferStatus(
     {
       status: db.sequelize.literal(` CASE

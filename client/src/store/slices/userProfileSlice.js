@@ -6,7 +6,7 @@ import { decorateAsyncThunk, rejectedReducer } from '../../utils/store';
 const USER_PROFILE_SLICE_NAME = 'userProfile';
 
 const initialState = {
-  profileViewMode: CONSTANTS.TRANSACTION_HISTORY_MODE,
+  profileViewMode: CONSTANTS.USER_INFO_MODE,
   isEdit: false,
   isFetching: false,
   transactionHistory: null,

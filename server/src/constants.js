@@ -1,8 +1,12 @@
 const path = require('path');
 
 module.exports = {
-  TRANSACTION_INCOME: "INCOME",
-  TRANSACTION_CONSUMPTION: "CONSUMPTION",
+  START_USERS: [
+    { ID: 1, NAME: 'buy@gmail.com' },
+    { ID: 2, NAME: 'create@gmail.com' },
+  ],
+  TRANSACTION_INCOME: 'INCOME',
+  TRANSACTION_CONSUMPTION: 'CONSUMPTION',
   JWT_SECRET: 'asdasdasd4as5d4as8d7a8sd4as65d4a8sd7asd4as56d4',
   ACCESS_TOKEN_TIME: 60 * 60,
   SALT_ROUNDS: 5,

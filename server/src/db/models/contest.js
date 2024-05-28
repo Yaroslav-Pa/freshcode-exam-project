@@ -9,9 +9,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ User, Offer }) {
       // define association here
-      Contest.belongsTo(User, { foreignKey: 'userId', sourceKey: 'id' });
+      Contest.belongsTo(User, {
+        foreignKey: 'userId',
+        sourceKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
 
-      Contest.hasMany(Offer, { foreignKey: 'contestId', targetKey: 'id' });
+      Contest.hasMany(Offer, {
+        foreignKey: 'contestId',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
     }
   }
   Contest.init(
@@ -35,6 +45,8 @@ module.exports = (sequelize, DataTypes) => {
           model: 'users',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       contestType: {
         field: 'contest_type',

@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 const bcrypt = require('bcrypt');
-const CONSTANTS = require('../constants');
+const CONSTANTS = require('../../constants');
 
 async function hashPassword (user, options) {
   console.log(user.password);

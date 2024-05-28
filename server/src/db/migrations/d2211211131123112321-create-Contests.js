@@ -88,6 +88,8 @@ module.exports = {
         field: 'order_id',
         allowNull: false,
         type: Sequelize.STRING,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       userId: {
         field: 'user_id',
@@ -97,6 +99,8 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
     });
   },

@@ -36,6 +36,8 @@ module.exports = (sequelize, DataTypes) => {
         field: 'order_id',
         allowNull: false,
         type: DataTypes.STRING,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       userId: {
         field: 'user_id',

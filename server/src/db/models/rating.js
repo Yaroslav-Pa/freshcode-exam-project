@@ -31,12 +31,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
         type: DataTypes.INTEGER,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       userId: {
         field:"user_id",
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       mark: {
         type: DataTypes.FLOAT,

@@ -16,6 +16,8 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       contestId: {
         field:"contest_id",
@@ -25,6 +27,8 @@ module.exports = {
           model: 'contests',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       text: {
         type: Sequelize.STRING,

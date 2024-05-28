@@ -43,11 +43,15 @@ module.exports = (sequelize, DataTypes) => {
         field:"user_id",
         type: DataTypes.INTEGER,
         allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       contestId: {
         field:"contest_id",
         type: DataTypes.INTEGER,
         allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       text: {
         type: DataTypes.STRING,

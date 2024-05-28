@@ -11,6 +11,8 @@ module.exports = {
           model: 'offers',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       userId: {
         field:"user_id",
@@ -21,6 +23,8 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       mark: {
         type: Sequelize.FLOAT,

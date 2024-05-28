@@ -2,8 +2,8 @@ const path = require('path');
 
 module.exports = {
   START_USERS: [
-    { ID: 1, NAME: 'buy@gmail.com' },
-    { ID: 2, NAME: 'create@gmail.com' },
+    { ID: 125555, NAME: 'buy@gmail.com' },
+    { ID: 225556, NAME: 'create@gmail.com' },
   ],
   TRANSACTION_INCOME: 'INCOME',
   TRANSACTION_CONSUMPTION: 'CONSUMPTION',

@@ -1,5 +1,16 @@
 'use strict';
 const { Model } = require('sequelize');
+const bcrypt = require('bcrypt');
+const CONSTANTS = require('../constants');
+
+async function hashPassword (user, options) {
+  console.log(user.password);
+  if(user.changed('password')) {
+    const passwordHash = await bcrypt.hash(user.password, CONSTANTS.SALT_ROUNDS);
+    user.password = passwordHash;
+  }
+}
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -23,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
-
+      hashPassword
       User.hasMany(models.Rating, {
         foreignKey: 'userId',
         targetKey: 'id',
@@ -39,7 +50,12 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'CASCADE',
       });
     }
+
+    async passwordCompare (plaintextPassword) {
+      return bcrypt.compare(plaintextPassword, this.getDataValue('password'));
+    }
   }
+
   User.init(
     {
       id: {
@@ -108,5 +124,9 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+  
+  User.beforeCreate(hashPassword);
+  User.beforeUpdate(hashPassword);
+
   return User;
 };

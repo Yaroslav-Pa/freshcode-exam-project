@@ -1,16 +1,19 @@
 import React from 'react';
-import moment from 'moment';
 import styles from './ContestBox.module.sass';
 import CONSTANTS from '../../constants';
+import { toZonedTime } from 'date-fns-tz';
+import { formatDistanceToNow } from 'date-fns';
 
-const ContestBox = props => {
+const ContestBox = (props) => {
   const getTimeStr = () => {
-    const diff = moment.duration(moment().diff(moment(props.data.createdAt)));
-    let str = '';
-    if (diff._data.days !== 0) str = `${diff._data.days}d `;
-    if (diff._data.hours !== 0) str += `${diff._data.hours}h`;
-    if (str.length === 0) str = 'less than one hour';
-    return str;
+    const diff = formatDistanceToNow(
+      //getting new Date() for system time
+      toZonedTime(props.data.createdAt, CONSTANTS.TIMEZONE)
+    );
+    if (diff.includes('minute')) {
+      return 'less than one hour';
+    }
+    return diff;
   };
 
   const getPreferenceContest = () => {
@@ -20,7 +23,7 @@ const ContestBox = props => {
     return data.typeOfTagline;
   };
 
-  const ucFirstLetter = string =>
+  const ucFirstLetter = (string) =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
   const { id, title, contestType, prize, count, goToExtended } = props.data;
@@ -50,7 +53,7 @@ const ContestBox = props => {
             <div>
               <img
                 src={`${CONSTANTS.STATIC_IMAGES_PATH}smallCheck.png`}
-                alt='check'
+                alt="check"
               />
             </div>
             <span>Guaranteed prize</span>
@@ -58,7 +61,7 @@ const ContestBox = props => {
           <div className={styles.prize}>
             <img
               src={`${CONSTANTS.STATIC_IMAGES_PATH}diamond.png`}
-              alt='diamond'
+              alt="diamond"
             />
             <span>{`$${prize}`}</span>
           </div>
@@ -69,13 +72,14 @@ const ContestBox = props => {
           <div className={styles.entriesCounter}>
             <img
               src={`${CONSTANTS.STATIC_IMAGES_PATH}entrieImage.png`}
-              alt='logo'
+              alt="logo"
             />
             <span>{count}</span>
           </div>
           <span>Entries</span>
         </div>
         <div className={styles.timeContainer}>
+          {/* //TODO можливо цю функцію переробити щоб вона отримувала у пропси час а не хардоджено */}
           <span className={styles.timeContest}>{getTimeStr()}</span>
           <span>Going</span>
         </div>

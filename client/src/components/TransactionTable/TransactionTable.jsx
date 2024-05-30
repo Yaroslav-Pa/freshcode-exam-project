@@ -1,5 +1,7 @@
-import TableRowItem from './TableRowItem/TableRowItem';
 import style from './TransactionTable.module.sass';
+import { toZonedTime } from 'date-fns-tz';
+import { format } from 'date-fns';
+import CONSTANTS from '../../constants';
 
 function TransactionTable({ transactionHistory }) {
   return (
@@ -17,18 +19,21 @@ function TransactionTable({ transactionHistory }) {
         <tbody>
           {transactionHistory
             ?.toReversed()
-            .map(({ id, operationType, sum, createdAt }) => (
-              <tr>
-                <td className={style.tableElement}>{id}</td>
-                <td className={style.tableElement}>
-                  {operationType.toLowerCase()}
-                </td>
-                <td className={style.tableElement}>{sum}</td>
-                <td className={style.tableElement}>
-                  {new Date(createdAt).toUTCString()}
-                </td>
-              </tr>
-            ))}
+            .map(({ id, operationType, sum, createdAt }) => {
+              return (
+                <tr key={id}>
+                  <td>{id}</td>
+                  <td>{operationType.toLowerCase()}</td>
+                  <td>{sum}</td>
+                  <td>
+                    {format(
+                      toZonedTime(createdAt, CONSTANTS.TIMEZONE),
+                      'do MMMM yyyy, HH:mm'
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </section>

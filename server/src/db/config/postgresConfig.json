@@ -1,5 +1,5 @@
 {
-  "_comment": "back to docker - change host to 'db-dev' and password to 'password'",
+  "_comment": "back to docker ? change host to 'db-dev' and password to 'password' : local - 'localhost' 'postgres'",
   "development": {
     "username": "postgres",
     "password": "postgres",

@@ -6,10 +6,9 @@ module.exports.getUserTransactionHistory = async (req, res, next) => {
     const {
       tokenData: { userId },
     } = req;
-
-    const user = await db.User.findByPk(userId);
-
-    const fullHistory = await user.getTransactionHistories({
+    
+    const fullHistory = await db.TransactionHistory.findAll({
+      where: { userId },
       attributes: {
         exclude: ['userId', 'updatedAt'],
       },

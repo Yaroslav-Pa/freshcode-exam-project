@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import CONSTANTS from '../../../../constants';
 import {
   goToExpandedDialog,
@@ -33,14 +32,6 @@ const DialogList = (props) => {
   const onlyBlockDialogs = (chatPreview, userId) =>
     chatPreview.blackList[chatPreview.participants.indexOf(userId)];
 
-  const getTimeStr = (time) => {
-    const currentTime = moment();
-    if (currentTime.isSame(time, 'day')) return moment(time).format('HH:mm');
-    if (currentTime.isSame(time, 'week')) return moment(time).format('dddd');
-    if (currentTime.isSame(time, 'year')) return moment(time).format('MM DD');
-    return moment(time).format('MMMM DD, YYYY');
-  };
-
   const renderPreview = (filterFunc) => {
     const arrayList = [];
     const {
@@ -58,7 +49,6 @@ const DialogList = (props) => {
           chatPreview={chatPreview}
           userId={userId}
           key={index}
-          getTimeStr={getTimeStr}
           changeFavorite={changeFavorite}
           changeBlackList={changeBlackList}
           chatMode={chatMode}

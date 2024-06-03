@@ -2,12 +2,12 @@ import React from 'react';
 import classNames from 'classnames';
 import styles from './DialogBox.module.sass';
 import CONSTANTS from '../../../../constants';
+import { isSameDay, isSameWeek, isSameYear, format } from "date-fns";
 
 const DialogBox = props => {
   const {
     chatPreview,
     userId,
-    getTimeStr,
     changeFavorite,
     changeBlackList,
     catalogOperation,
@@ -25,6 +25,15 @@ const DialogBox = props => {
   } = chatPreview;
   const isFavorite = favoriteList[participants.indexOf(userId)];
   const isBlocked = blackList[participants.indexOf(userId)];
+
+  const getFormatedTimeIfSame = (time) => {
+    const currentTime = new Date();
+    if (isSameDay(time, currentTime)) return format(time, 'HH:mm');
+    if (isSameWeek(time, currentTime)) return format(time, 'EEEE');
+    if (isSameYear(time, currentTime)) return format(time, 'MM dd');
+    return format(time, 'MMMM dd, yyyy');
+  };
+
   return (
     <div
       className={styles.previewChatBox}
@@ -56,7 +65,7 @@ const DialogBox = props => {
           <span className={styles.interlocutorMessage}>{text}</span>
         </div>
         <div className={styles.buttonsContainer}>
-          <span className={styles.time}>{getTimeStr(createAt)}</span>
+          <span className={styles.time}>{getFormatedTimeIfSame(createAt)}</span>
           <i
             onClick={event =>
               changeFavorite(

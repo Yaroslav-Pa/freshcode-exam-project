@@ -1,22 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import moment from 'moment';
 import styles from './ContestSideBar.module.sass';
 import CONSTANTS from '../../constants';
+import { getFormatedGoingTimeStr } from '../../utils/utilTimeFunctions';
 
-const ContestSideBar = props => {
-  const getTimeStr = () => {
-    const diff = moment.duration(
-      moment().diff(moment(props.contestData.createdAt))
-    );
-    let str = '';
-    if (diff._data.days !== 0) str = `${diff._data.days} days `;
-    if (diff._data.hours !== 0) str += `${diff._data.hours} hours`;
-    if (str.length === 0) str = 'less than one hour';
-    return str;
-  };
-
+const ContestSideBar = (props) => {
   const renderContestInfo = () => {
     const { totalEntries } = props;
     const { User, prize } = props.contestData;
@@ -27,7 +15,7 @@ const ContestSideBar = props => {
             <div className={styles.prizeContainer}>
               <img
                 src={`${CONSTANTS.STATIC_IMAGES_PATH}big-diamond.png`}
-                alt='diamond'
+                alt="diamond"
               />
               <span>{`$ ${prize}`}</span>
             </div>
@@ -35,17 +23,19 @@ const ContestSideBar = props => {
               <div className={styles.timeDesc}>
                 <img
                   src={`${CONSTANTS.STATIC_IMAGES_PATH}clock.png`}
-                  alt='clock'
+                  alt="clock"
                 />
                 <span>Going</span>
               </div>
-              <span className={styles.time}>{getTimeStr()}</span>
+              <span className={styles.time}>
+                {getFormatedGoingTimeStr(props.contestData.createdAt)}
+              </span>
             </div>
             <div className={styles.guaranteedPrize}>
               <div>
                 <img
                   src={`${CONSTANTS.STATIC_IMAGES_PATH}smallCheck.png`}
-                  alt='check'
+                  alt="check"
                 />
               </div>
               <span>Guaranteed prize</span>
@@ -71,7 +61,7 @@ const ContestSideBar = props => {
                     ? CONSTANTS.ANONYM_IMAGE_PATH
                     : `${CONSTANTS.publicImagesURL}${User.avatar}`
                 }
-                alt='user'
+                alt="user"
               />
               <div className={styles.customerNameContainer}>
                 <span>{`${User.firstName} ${User.lastName}`}</span>
@@ -87,6 +77,6 @@ const ContestSideBar = props => {
   return renderContestInfo();
 };
 
-const mapStateToProps = state => state.userStore;
+const mapStateToProps = (state) => state.userStore;
 
 export default connect(mapStateToProps, null)(ContestSideBar);

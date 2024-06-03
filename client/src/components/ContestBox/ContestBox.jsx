@@ -1,21 +1,8 @@
 import React from 'react';
 import styles from './ContestBox.module.sass';
 import CONSTANTS from '../../constants';
-import { toZonedTime } from 'date-fns-tz';
-import { formatDistanceToNow } from 'date-fns';
-
+import { getFormatedGoingTimeStr } from '../../utils/utilTimeFunctions';
 const ContestBox = (props) => {
-  const getTimeStr = () => {
-    const diff = formatDistanceToNow(
-      //getting new Date() for system time
-      toZonedTime(props.data.createdAt, CONSTANTS.TIMEZONE)
-    );
-    if (diff.includes('minute')) {
-      return 'less than one hour';
-    }
-    return diff;
-  };
-
   const getPreferenceContest = () => {
     const { data } = props;
     if (data.contestType === CONSTANTS.NAME_CONTEST) return data.typeOfName;
@@ -79,8 +66,7 @@ const ContestBox = (props) => {
           <span>Entries</span>
         </div>
         <div className={styles.timeContainer}>
-          {/* //TODO можливо цю функцію переробити щоб вона отримувала у пропси час а не хардоджено */}
-          <span className={styles.timeContest}>{getTimeStr()}</span>
+          <span className={styles.timeContest}>{getFormatedGoingTimeStr(props.data.createdAt)}</span>
           <span>Going</span>
         </div>
       </div>

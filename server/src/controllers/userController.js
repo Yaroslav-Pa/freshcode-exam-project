@@ -3,7 +3,6 @@ const CONSTANTS = require('../constants');
 const db = require('../db/models');
 const NotUniqueEmail = require('../errors/NotUniqueEmail');
 const NotFound = require('../errors/UserNotFoundError');
-const moment = require('moment');
 const { v4: uuid } = require('uuid');
 const controller = require('../socketInit');
 const userQueries = require('./queries/userQueries');

@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import className from 'classnames';
 import {
   getDialogMessages,
@@ -9,6 +8,7 @@ import {
 import ChatHeader from '../../ChatComponents/ChatHeader/ChatHeader';
 import styles from './Dialog.module.sass';
 import ChatInput from '../../ChatComponents/ChatInut/ChatInput';
+import { format, isSameDay, parseISO } from 'date-fns';
 
 class Dialog extends React.Component {
   componentDidMount() {
@@ -38,15 +38,16 @@ class Dialog extends React.Component {
   renderMainDialog = () => {
     const messagesArray = [];
     const { messages, userId } = this.props;
-    let currentTime = moment();
+    //TODO test this
+    let currentTime = new Date();
     messages.forEach((message, i) => {
-      if (!currentTime.isSame(message.createdAt, 'date')) {
+      if (!isSameDay(currentTime, message.createdAt)) {
         messagesArray.push(
           <div key={message.createdAt} className={styles.date}>
-            {moment(message.createdAt).format('MMMM DD, YYYY')}
+            {format(message.createdAt, 'MMMM dd, yyyy')}
           </div>
         );
-        currentTime = moment(message.createdAt);
+        currentTime = parseISO(message.createdAt);
       }
       messagesArray.push(
         <div
@@ -57,7 +58,7 @@ class Dialog extends React.Component {
         >
           <span>{message.body}</span>
           <span className={styles.messageTime}>
-            {moment(message.createdAt).format('HH:mm')}
+            {format(message.createdAt, 'HH:mm')}
           </span>
           <div ref={this.messagesEnd} />
         </div>

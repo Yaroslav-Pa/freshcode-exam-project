@@ -8,13 +8,15 @@ import TransactionTable from '../TransactionTable/TransactionTable';
 function UserProfileTransactionTable() {
   const dispatch = useDispatch();
 
-  const { isFetching, transactionHistory, error } = useSelector((state) => ({
-    ...state.userProfile,
-  }));
-
   useEffect(() => {
     dispatch(getTransactionHistory());
-  }, []);
+  }, [dispatch]);
+
+  const isFetching = useSelector(({ userProfile }) => userProfile.isFetching);
+  const transactionHistory = useSelector(
+    ({ userProfile }) => userProfile.transactionHistory
+  );
+  const error = useSelector(({ userProfile }) => userProfile.error);
 
   return (
     <section className={styles.container}>
@@ -25,7 +27,7 @@ function UserProfileTransactionTable() {
         </p>
       )}
       {transactionHistory && transactionHistory.length !== 0 ? (
-        <TransactionTable transactionHistory={transactionHistory}/>
+        <TransactionTable transactionHistory={transactionHistory} />
       ) : (
         <p className={styles.ErrorText}>
           Your transaction history is currently empty.

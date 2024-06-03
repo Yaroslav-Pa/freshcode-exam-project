@@ -16,7 +16,8 @@ const initialState = {
 export const getTransactionHistory = decorateAsyncThunk({
   key: `${USER_PROFILE_SLICE_NAME}/getTransactionHistory`,
   thunk: async () => {
-    return await restController.getTransactionHistory();
+    const response = await restController.getTransactionHistory();
+    return response.data;
   },
 });
 
@@ -28,7 +29,7 @@ const extraReducers = (builder) => {
   });
   builder.addCase(getTransactionHistory.fulfilled, (state, { payload }) => {
     state.isFetching = false;
-    state.transactionHistory = payload?.data;
+    state.transactionHistory = payload;
   });
   builder.addCase(getTransactionHistory.rejected, rejectedReducer);
 };

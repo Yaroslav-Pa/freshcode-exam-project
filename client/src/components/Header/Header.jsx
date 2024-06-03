@@ -44,7 +44,9 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
       <div className={styles.loginSignnUpHeaders}>
         <div className={styles.numberContainer}>
           <img src={`${CONSTANTS.STATIC_IMAGES_PATH}phone.png`} alt="phone" />
-          <span>(877)&nbsp;355-3585</span>
+          <a href={`tel:${CONSTANTS.TELEPHONE}`} className={styles.phoneNumb}>
+            {CONSTANTS.TELEPHONE}
+          </a>
         </div>
         <LoginButtons data={data} logOut={logOut} />
       </div>

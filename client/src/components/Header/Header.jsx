@@ -7,6 +7,7 @@ import { clearUserStore } from '../../store/slices/userSlice';
 import { getUser } from '../../store/slices/userSlice';
 import MenuSection from '../MenuSection/MenuSection';
 import LoginButtons from '../LoginButtons/LoginButtons';
+import { Link } from 'react-router-dom/cjs/react-router-dom';
 
 function Header({ data, getUser, isFetching, clearUserStore, history }) {
   useEffect(() => {
@@ -51,11 +52,14 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
         <LoginButtons data={data} logOut={logOut} />
       </div>
       <div className={styles.navContainer}>
-        <img
-          src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
-          className={styles.logo}
-          alt="blue_logo"
-        />
+        <Link to={'/'}>
+          <img
+            src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
+            className={styles.logo}
+            alt="blue_logo"
+          />
+        </Link>
+
         <div className={styles.leftNav}>
           <div className={styles.nav}>
             <ul>{AllMenuSections}</ul>

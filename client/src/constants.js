@@ -2,6 +2,7 @@ const env = process.env.NODE_ENV || 'development';
 const serverIP = 'localhost';
 const serverPort = 5000;
 export default {
+  TELEPHONE: "(877) 355-3585",
   TIMEZONE: Intl.DateTimeFormat().resolvedOptions().timeZone,
   CUSTOMER: 'customer',
   CREATOR: 'creator',

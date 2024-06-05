@@ -2,7 +2,7 @@ const env = process.env.NODE_ENV || 'development';
 const serverIP = 'localhost';
 const serverPort = 5000;
 export default {
-  TELEPHONE: "(877) 355-3585",
+  TELEPHONE: '(877) 355-3585',
   TIMEZONE: Intl.DateTimeFormat().resolvedOptions().timeZone,
   CUSTOMER: 'customer',
   CREATOR: 'creator',
@@ -88,7 +88,13 @@ export default {
       items: ['Terms of Service', 'Privacy Policy', 'Cookie Policy'],
     },
   ],
-  SECTION_LIST : [
+  USER_INFO_LINK_LIST: [
+    { text: 'View Dashboard', url: '/dashboard' },
+    { text: 'My Account', url: '/account' },
+    { text: 'Messages', url: '#' },
+    { text: 'Affiliate Dashboard', url: '#' },
+  ],
+  SECTION_LIST: [
     {
       menuName: 'Name ideas',
       list: [
@@ -146,5 +152,5 @@ export default {
         { name: 'all articles', url: 'http://www.google.com' },
       ],
     },
-  ]
+  ],
 };

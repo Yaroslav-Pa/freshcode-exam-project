@@ -19,7 +19,12 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
   }, []);
 
   const AllMenuSections = CONSTANTS.SECTION_LIST.map(({ menuName, list }) => (
-    <MenuSection menuName={menuName} pagesList={list} role={data?.role} key={menuName}/>
+    <MenuSection
+      menuName={menuName}
+      pagesList={list}
+      role={data?.role}
+      key={menuName}
+    />
   ));
 
   const logOut = () => {
@@ -38,22 +43,24 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
   return (
     <header className={styles.headerContainer}>
       <div className={styles.fixedHeader}>
-        <span className={styles.info}>
+        <p className={styles.info}>
           Squadhelp recognized as one of the Most Innovative Companies by Inc
           Magazine.
-        </span>
+        </p>
         <a href="http://www.google.com">Read Announcement</a>
       </div>
-      <div className={styles.loginSignnUpHeaders}>
+      <section className={styles.loginSignnUpHeaders}>
         <div className={styles.numberContainer}>
           <img src={`${CONSTANTS.STATIC_IMAGES_PATH}phone.png`} alt="phone" />
           <a href={`tel:${CONSTANTS.TELEPHONE}`} className={styles.phoneNumb}>
             {CONSTANTS.TELEPHONE}
           </a>
         </div>
-        <LoginButtons data={data} logOut={logOut} />
-      </div>
-      <div className={styles.navContainer}>
+        <section className={styles.userButtonsContainer}>
+          <LoginButtons data={data} logOut={logOut} />
+        </section>
+      </section>
+      <section className={styles.navContainer}>
         <Link to={'/'}>
           <img
             src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
@@ -67,12 +74,12 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
             <ul className={styles.navItemsList}>{AllMenuSections}</ul>
           </nav>
           {data && data.role !== CONSTANTS.CREATOR && (
-            <div className={styles.startContestBtn} onClick={startContests}>
+            <button className={styles.startContestBtn} onClick={startContests}>
               START CONTEST
-            </div>
+            </button>
           )}
         </div>
-      </div>
+      </section>
     </header>
   );
 }

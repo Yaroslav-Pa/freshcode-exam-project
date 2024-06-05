@@ -24,7 +24,7 @@ function LoginButtons({ data, logOut }) {
             src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
             alt="menu"
           />
-          <ul>
+          <ul className={styles.dropdownMenu}>
             <li>
               <Link to="/dashboard" className={styles.menuText}>
                 View Dashboard

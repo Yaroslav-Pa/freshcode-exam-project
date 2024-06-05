@@ -9,6 +9,8 @@ import MenuSection from '../MenuSection/MenuSection';
 import LoginButtons from '../LoginButtons/LoginButtons';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 
+//TODO if have time: create some king of button to open nav on phones
+
 function Header({ data, getUser, isFetching, clearUserStore, history }) {
   useEffect(() => {
     if (!data) {
@@ -17,7 +19,7 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
   }, []);
 
   const AllMenuSections = CONSTANTS.SECTION_LIST.map(({ menuName, list }) => (
-    <MenuSection menuName={menuName} pagesList={list} />
+    <MenuSection menuName={menuName} pagesList={list} role={data?.role} key={menuName}/>
   ));
 
   const logOut = () => {
@@ -34,7 +36,7 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
     return null;
   }
   return (
-    <div className={styles.headerContainer}>
+    <header className={styles.headerContainer}>
       <div className={styles.fixedHeader}>
         <span className={styles.info}>
           Squadhelp recognized as one of the Most Innovative Companies by Inc
@@ -61,9 +63,9 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
         </Link>
 
         <div className={styles.leftNav}>
-          <div className={styles.nav}>
-            <ul>{AllMenuSections}</ul>
-          </div>
+          <nav className={styles.nav}>
+            <ul className={styles.navItemsList}>{AllMenuSections}</ul>
+          </nav>
           {data && data.role !== CONSTANTS.CREATOR && (
             <div className={styles.startContestBtn} onClick={startContests}>
               START CONTEST
@@ -71,7 +73,7 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
           )}
         </div>
       </div>
-    </div>
+    </header>
   );
 }
 

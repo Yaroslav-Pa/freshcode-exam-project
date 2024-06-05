@@ -142,7 +142,6 @@ export default {
           name: 'poetic devices in business naming',
           url: 'http://www.google.com',
         },
-        { name: 'ultimate naming guide', url: 'http://www.google.com' },
         { name: 'crowded bar theory', url: 'http://www.google.com' },
         { name: 'all articles', url: 'http://www.google.com' },
       ],

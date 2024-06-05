@@ -24,21 +24,18 @@
       color: green
       margin: 5px 10px 0 0
 
-
   span
     font-size: 18px
 
   @media screen and (max-width: 1024px)
     margin: 90px 0 30px 0
-    padding: 0 80px
-
+    padding: 0 60px
 
 .container
   display: flex
   flex-direction: column
   justify-content: flex-start
   align-items: center
-
 
   h2
     text-align: center
@@ -53,18 +50,17 @@
     justify-content: flex-start
     align-items: center
 
-
     .cardContainer
       display: flex
       flex-direction: row
       justify-content: flex-start
       align-items: flex-start
+      padding: 0 20px
       @media (max-width: 720px)
         display: flex
         flex-direction: column
         justify-content: flex-start
         align-items: center
-
 
     .card
       display: flex
@@ -100,7 +96,6 @@
         p
           margin-right: 10px
 
-
   .adv
     display: flex
     flex-direction: row
@@ -132,18 +127,18 @@
         img:last-child
           display: block
 
-
       @media screen and (max-width: 414px)
         img
           max-height: 20px
           max-width: 70px
           margin: 0 30px
+          @media screen and (max-width: 414px)
+            margin: 0
 
         &:hover
           max-height: 20px
           max-width: 70px
           margin: 0 30px
-
 
   .stats
     display: flex
@@ -172,17 +167,15 @@
         font-size: 18px
         font-weight: 400
 
-
     div:last-child
       border-right: 0
 
-    @media screen and (max-width: 414px)
+    @media screen and (max-width: 455px)
       flex-wrap: wrap
 
     div
       margin-bottom: 10px
       border-right: 0
-
 
   .step
     display: flex
@@ -194,25 +187,21 @@
     div
       @include stepCard
 
-    @media screen and (max-width: 823px)
+    @media screen and (max-width: 950px)
       display: flex
       flex-direction: column
       justify-content: flex-start
       align-items: center
 
-
     img
       width: 100%
-
 
 .whiteStep
   @include stepCard
 
-
 .greenStep
   @include stepCard
   color: white
-
 
 @mixin underline
   position: relative
@@ -226,20 +215,17 @@
     right: 0
     width: 100px
 
-
 .blueUnderline
   @include underline
 
   &:after
     background: #455A89
 
-
 .whiteUnderline
   @include underline
 
   &:after
     background: white
-
 
 @mixin innerContainer
   display: flex
@@ -248,7 +234,6 @@
   align-items: center
   width: 100%
   padding: 40px 0 30px 0
-
 
 .stepReverse
   display: flex
@@ -259,6 +244,7 @@
 
   div
     @include stepCard
+    box-sizing: border-box
 
   @media screen and (max-width: 950px)
     padding: 0
@@ -280,21 +266,19 @@
     width: 100%
     @media (max-width: 720px)
       padding: 0
-
+    @media (max-width: 600px)
+      padding: 0 40px
 
   @media screen and (max-width: 414px)
     padding: 0
-
 
 .greyContainer
   @include innerContainer
   background-color: #FAFAFA
 
-
 .whiteContainer
   @include innerContainer
   background-color: white
-
 
 .greenContainer
   @include innerContainer
@@ -307,7 +291,6 @@
 
   h2
     margin-bottom: 40px
-
 
 .headerBar
   display: flex
@@ -332,7 +315,6 @@
     font-weight: 400
     line-height: 25px
 
-
 .headline
   margin: 20px 0
   text-align: center
@@ -351,7 +333,7 @@
     padding: 7px 0
     margin-left: 5px
 
-  transition: width .3s -0.1s
+    transition: width .3s -0.1s
 
   &__static
     position: relative
@@ -366,13 +348,11 @@
       background: #28d2d0
       animation: cd-pulse 3s infinite
 
-
 @keyframes cd-pulse
   0%
     width: 0
   100%
     width: 100%
-
 
 .button
   display: flex
@@ -405,9 +385,6 @@
       color: inherit
       text-decoration: none
 
-
   &:hover
     color: white
     background-color: #28D2D1
-
-

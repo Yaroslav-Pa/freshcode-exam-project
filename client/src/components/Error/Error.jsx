@@ -1,9 +1,8 @@
 import React from 'react';
 import styles from './Error.module.sass';
 
-const Error = props => {
+function Error({ clearError, status, data }) {
   const getMessage = () => {
-    const { status, data } = props;
     switch (status) {
       case 404:
         return data;
@@ -12,7 +11,7 @@ const Error = props => {
       case 409:
         return data;
       case 403:
-        return 'Bank decline transaction';
+        return 'Bank declined transaction';
       case 406:
         return data;
       default:
@@ -20,13 +19,17 @@ const Error = props => {
     }
   };
 
-  const { clearError } = props;
   return (
-    <div className={styles.errorContainer}>
-      <span>{getMessage()}</span>
-      <i className='far fa-times-circle' onClick={() => clearError()} />
-    </div>
+    <section className={styles.errorContainer}>
+      <p className={styles.errorText}>
+        {`Error ${status ?? ''}: ` + getMessage()}
+      </p>
+      <i
+        className={'far fa-times-circle ' + styles.closeIcon}
+        onClick={() => clearError()}
+      />
+    </section>
   );
-};
+}
 
 export default Error;

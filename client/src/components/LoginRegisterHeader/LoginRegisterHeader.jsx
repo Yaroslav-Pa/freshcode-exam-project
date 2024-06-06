@@ -3,6 +3,7 @@ import Logo from '../Logo';
 import CONSTANTS from '../../constants';
 import styles from './LoginRegisterHeader.module.sass';
 
+//TODO* "button" jumps a litle between Login and Regist because of page scroll on Regist
 function LoginRegisterHeader({ buttonText, url }) {
   return (
     <section className={styles.container}>

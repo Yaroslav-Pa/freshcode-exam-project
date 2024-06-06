@@ -5,13 +5,11 @@ import styles from './LoginPage.module.sass';
 import { clearAuthError } from '../../store/slices/authSlice';
 import LoginRegisterHeader from '../../components/LoginRegisterHeader/LoginRegisterHeader';
 
-const LoginPage = (props) => (
+const LoginPage = ({ history }) => (
   <div className={styles.mainContainer}>
     <div className={styles.loginContainer}>
       <LoginRegisterHeader buttonText={'Signup'} url={'/registration'} />
-      <div className={styles.loginFormContainer}>
-        <LoginForm history={props.history} />
-      </div>
+      <LoginForm history={history} />
     </div>
   </div>
 );

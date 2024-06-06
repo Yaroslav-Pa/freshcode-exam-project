@@ -1,14 +1,15 @@
+@import '../../utils/styles/_templates'
+
 .signUpFormContainer
-  width: 60%
   display: flex
   min-width: 280px
-  margin: 0 auto
   flex-direction: column
   justify-content: center
   align-items: center
-  margin-top: 80px
   padding: 10px 20px 30px
   box-sizing: border-box
+  @media(max-width: 500px)
+    width: 60%
 
   .choseRoleContainer
     display: flex
@@ -39,7 +40,6 @@
     @media(max-width: 850px)
       align-self: auto
 
-
   .inscription
     font-size: 16px
     color: white
@@ -54,19 +54,12 @@
     margin-left: 20px
     margin-bottom: 10px
 
-
     .fieldWarning
-      font-size: 15px
-      display: flex
-      flex-direction: row
-      justify-content: center
-      align-items: center
-      color: white
-      border: 1px solid #b72522
+      @extend %formFieldError
       margin-bottom: 15px
-      padding-bottom: 5px
-      padding-top: 5px
-      text-align: center
+
+    .checkBoxText
+      margin-left: 10px
 
     @media(max-width: 850px)
       align-self: auto
@@ -74,7 +67,6 @@
     a
       color: white
       font-size: 16px
-
 
   .error
     text-align: center
@@ -114,17 +106,8 @@
       flex: 1 1
 
       .fieldWarning
-        font-size: 15px
-        display: flex
-        flex-direction: row
-        justify-content: center
-        align-items: center
-        color: white
-        border: 1px solid #b72522
+        @extend %formFieldError
         margin-bottom: 15px
-        padding-bottom: 5px
-        padding-top: 5px
-        text-align: center
 
     .input
       background-color: white
@@ -145,7 +128,6 @@
     .valid
       border: 2px solid green
 
-
   .headerFormContainer
     display: flex
     flex-direction: column
@@ -153,7 +135,6 @@
     align-items: center
     margin-bottom: 18px
     text-align: center
-
 
     h2
       color: white

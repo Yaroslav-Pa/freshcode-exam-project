@@ -15,6 +15,31 @@ function UpdateUserInfoForm({
   clearUserError,
   initialValues,
 }) {
+
+  //TODO! not shure about this
+  const userInfoToChangeArr = [
+    { label: 'First Name', name: 'firstName' },
+    { label: 'Last Name', name: 'lastName' },
+    { label: 'Display Name', name: 'displayName' },
+  ];
+
+  const changeFildsList = userInfoToChangeArr.map(({ label, name }) => (
+    <div className={styles.container}>
+      <span className={styles.label}>{label}</span>
+      <FormInput
+        name={name}
+        type="text"
+        label={label}
+        classes={{
+          container: styles.inputContainer,
+          input: styles.input,
+          warning: styles.error,
+          notValid: styles.notValid,
+        }}
+      />
+    </div>
+  ));
+
   return (
     <Formik
       onSubmit={onSubmit}
@@ -29,48 +54,7 @@ function UpdateUserInfoForm({
             clearError={clearUserError}
           />
         )}
-        <div className={styles.container}>
-          <span className={styles.label}>First Name</span>
-          <FormInput
-            name="firstName"
-            type="text"
-            label="First Name"
-            classes={{
-              container: styles.inputContainer,
-              input: styles.input,
-              warning: styles.error,
-              notValid: styles.notValid,
-            }}
-          />
-        </div>
-        <div className={styles.container}>
-          <span className={styles.label}>Last Name</span>
-          <FormInput
-            name="lastName"
-            type="text"
-            label="LastName"
-            classes={{
-              container: styles.inputContainer,
-              input: styles.input,
-              warning: styles.error,
-              notValid: styles.notValid,
-            }}
-          />
-        </div>
-        <div className={styles.container}>
-          <span className={styles.label}>Display Name</span>
-          <FormInput
-            name="displayName"
-            type="text"
-            label="Display Name"
-            classes={{
-              container: styles.inputContainer,
-              input: styles.input,
-              warning: styles.error,
-              notValid: styles.notValid,
-            }}
-          />
-        </div>
+        {changeFildsList}
         <ImageUpload
           name="file"
           classes={{

@@ -26,9 +26,10 @@ function UserProfileTransactionTable() {
           {error?.message || 'There was a error when fetching data from server'}
         </p>
       )}
-      {transactionHistory && transactionHistory.length !== 0 ? (
+      {transactionHistory && transactionHistory.length !== 0 && (
         <TransactionTable transactionHistory={transactionHistory} />
-      ) : (
+      )}
+      {!error && transactionHistory && transactionHistory.length === 0 && (
         <p className={styles.ErrorText}>
           Your transaction history is currently empty.
         </p>

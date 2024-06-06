@@ -1,6 +1,8 @@
 import * as yup from 'yup';
 import valid from 'card-validator';
 
+//TODO if have time spread to different validator files, dont think its good leave it like this
+
 export default {
   LoginSchem: yup.object().shape({
     email: yup

@@ -4,7 +4,7 @@ import styles from './LoginButtons.module.sass';
 
 function LoginButtons({ data, logOut }) {
   const LinkList = CONSTANTS.USER_INFO_LINK_LIST.map(({ text, url }) => (
-    <li>
+    <li key={text}>
       <Link to={url} className={styles.menuText}>
         {text}
       </Link>

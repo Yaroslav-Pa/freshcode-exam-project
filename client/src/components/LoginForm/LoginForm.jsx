@@ -4,19 +4,18 @@ import { Form, Formik } from 'formik';
 import { checkAuth, clearAuth } from '../../store/slices/authSlice';
 import styles from './LoginForm.module.sass';
 import FormInput from '../FormInput/FormInput';
-import Schems from '../../utils/validators/validationSchems';
+import Schems from '../../utils/validators/registrationAndLoginSchems';
 import Error from '../Error/Error';
 import CONSTANTS from '../../constants';
 
-function LoginForm(props) {
-  useEffect(() => () => props.authClear(), []);
+function LoginForm({ authClear, loginRequest, history, auth, submitting }) {
+  useEffect(() => () => authClear(), []);
 
   const clicked = (values) => {
-    props.loginRequest({ data: values, history: props.history });
+    loginRequest({ data: values, history: history });
   };
 
-  const { error, isFetching } = props.auth;
-  const { submitting, authClear } = props;
+  const { error, isFetching } = auth;
 
   const formInputClasses = {
     container: styles.inputContainer,
@@ -29,7 +28,11 @@ function LoginForm(props) {
   return (
     <div className={styles.loginFormContainer}>
       {error && (
-        <Error data={error.data} status={error.status} clearError={authClear} className={styles.error}/>
+        <Error
+          data={error.data}
+          status={error.status}
+          clearError={authClear}
+        />
       )}
       <h2 className={styles.mainText}>LOGIN TO YOUR ACCOUNT</h2>
       <Formik

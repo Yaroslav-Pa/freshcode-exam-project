@@ -14,7 +14,7 @@ import { scrollToTop } from '../../utils/scrollFunctions';
 function RegistrationForm({
   authClear,
   submitting,
-  auth: { error },
+  auth: { error, isFetching },
   register,
   history,
 }) {
@@ -148,7 +148,9 @@ function RegistrationForm({
             disabled={submitting}
             className={styles.submitContainer}
           >
-            <span className={styles.inscription}>Create Account</span>
+            <span className={styles.inscription}>
+              {isFetching ? 'Submitting...' : 'Create Account'}
+            </span>
           </button>
         </Form>
       </Formik>

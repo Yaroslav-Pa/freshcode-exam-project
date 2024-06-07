@@ -14,6 +14,8 @@ const textList = (arr) =>
     </div>
   ));
 
+//TODO some word where selected in last paragraf of secondColumn
+
 function RegistrationFooter() {
   const [firstColumn, secondColumn] = splitTexts(
     REGISTRATION_FAQ,

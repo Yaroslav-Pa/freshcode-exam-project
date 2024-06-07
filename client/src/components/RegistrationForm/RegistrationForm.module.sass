@@ -123,10 +123,10 @@
         align-self: normal
 
     .notValid
-      border: 2px solid red !important
+      @extend %formFieldNotValid
 
     .valid
-      border: 2px solid green
+      @extend %formFieldValid
 
   .headerFormContainer
     display: flex

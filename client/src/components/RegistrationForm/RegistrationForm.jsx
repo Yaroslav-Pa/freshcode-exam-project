@@ -68,7 +68,7 @@ function RegistrationForm({
         onSubmit={clicked}
         validationSchema={Schems.RegistrationSchem}
       >
-        <Form className={styles.form}>
+        <Form>
           <div className={styles.row}>
             <FormInput
               name="firstName"

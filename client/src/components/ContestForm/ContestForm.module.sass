@@ -1,3 +1,4 @@
+@import '../../utils/styles/_templates'
 .errorContainer
   display: flex
   flex-direction: column
@@ -36,15 +37,14 @@
   justify-content: center
   align-items: flex-start
 
+  .notValid
+    @extend %formFieldNotValid
+
+  .valid
+    @extend %formFieldValid
+
 .warning
-  font-size: 18px
-  display: flex
-  justify-content: center
-  align-items: center
-  border: 2px solid #b72522
-  border-radius: 4px
-  padding: 3px 20px
-  color: #333
+  @extend %formFieldError
 
 .textArea
   width: 550px
@@ -91,7 +91,6 @@
 
   &:focus
     border: 2px solid #28d2d0
-
 
 .formContainer
   display: flex
@@ -149,7 +148,6 @@
     font-weight: 700
     margin-top: 12px
     margin-bottom: 5px
-
 
 .fileUploadContainer
   display: flex

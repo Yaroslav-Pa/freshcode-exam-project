@@ -2,6 +2,7 @@ const env = process.env.NODE_ENV || 'development';
 const serverIP = 'localhost';
 const serverPort = 5000;
 export default {
+  CONTEST_VENTURE_REQUIRED:['tagline', 'logo'],
   TELEPHONE: '(877) 355-3585',
   TIMEZONE: Intl.DateTimeFormat().resolvedOptions().timeZone,
   CUSTOMER: 'customer',

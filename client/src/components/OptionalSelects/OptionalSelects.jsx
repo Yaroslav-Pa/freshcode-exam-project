@@ -53,6 +53,8 @@ const OptionalSelects = (props) => {
                 container: styles.componentInputContainer,
                 input: styles.input,
                 warning: styles.warning,
+                notValid: styles.notValid,
+                valid: styles.valid
               }}
             />
           </div>
@@ -85,6 +87,8 @@ const OptionalSelects = (props) => {
                 container: styles.componentInputContainer,
                 input: styles.input,
                 warning: styles.warning,
+                notValid: styles.notValid,
+                valid: styles.valid
               }}
             />
           </div>

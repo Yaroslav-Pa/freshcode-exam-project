@@ -8,6 +8,7 @@ import { getUser } from '../../store/slices/userSlice';
 import MenuSection from '../MenuSection/MenuSection';
 import LoginButtons from '../LoginButtons/LoginButtons';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
+import Logo from '../Logo';
 
 //TODO if have time: create some king of button to open nav on phones
 
@@ -61,13 +62,7 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
         </section>
       </section>
       <section className={styles.navContainer}>
-        <Link to={'/'}>
-          <img
-            src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
-            className={styles.logo}
-            alt="blue_logo"
-          />
-        </Link>
+        <Logo />
 
         <div className={styles.leftNav}>
           <nav className={styles.nav}>

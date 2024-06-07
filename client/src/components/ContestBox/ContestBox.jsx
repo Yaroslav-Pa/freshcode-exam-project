@@ -13,7 +13,8 @@ const ContestBox = (props) => {
   const ucFirstLetter = (string) =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
-  const { id, title, contestType, prize, count, goToExtended } = props.data;
+  const { id, title, contestType, prize, count, status, goToExtended } =
+    props.data;
   return (
     <div
       className={styles.contestBoxContainer}
@@ -66,8 +67,14 @@ const ContestBox = (props) => {
           <span>Entries</span>
         </div>
         <div className={styles.timeContainer}>
-          <span className={styles.timeContest}>{getFormatedGoingTimeStr(props.data.createdAt)}</span>
-          <span>Going</span>
+          <span className={styles.timeContest}>
+            {getFormatedGoingTimeStr(props.data.createdAt)}
+          </span>
+          <span>
+            {status === CONSTANTS.CONTEST_STATUS_ACTIVE
+              ? 'Going'
+              : status.charAt(0).toUpperCase() + status.slice(1)}
+          </span>
         </div>
       </div>
     </div>

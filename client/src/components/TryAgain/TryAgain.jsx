@@ -1,12 +1,12 @@
 import React from 'react';
 import styles from './TryAgain.module.sass';
 
-const TryAgain = props => {
-  const { getData } = props;
+const TryAgain = ({ getData }) => {
+  console.log('1');
   return (
     <div className={styles.container}>
       <span onClick={() => getData()}>Server Error. Try again</span>
-      <i className='fas fa-redo' onClick={() => getData()} />
+      <i className="fas fa-redo" onClick={() => getData()} />
     </div>
   );
 };

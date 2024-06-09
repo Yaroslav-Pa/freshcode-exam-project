@@ -8,12 +8,12 @@ import {
 } from '../../store/slices/contestsSlice';
 import CONSTANTS from '../../constants';
 import ContestsContainer from '../ContestsContainer/ContestsContainer';
-import ContestBox from '../ContestBox/ContestBox';
 import styles from './CustomerDashboard.module.sass';
 import TryAgain from '../TryAgain/TryAgain';
+import ContestList from '../ContestList/ContestList';
 
 class CustomerDashboard extends React.Component {
-  loadMore = startFrom => {
+  loadMore = (startFrom) => {
     this.props.getContests({
       limit: 8,
       offset: startFrom,
@@ -21,7 +21,8 @@ class CustomerDashboard extends React.Component {
     });
   };
 
-  componentDidMount () {
+  componentDidMount() {
+    this.props.clearContestsList();
     this.getContests();
   }
 
@@ -32,32 +33,17 @@ class CustomerDashboard extends React.Component {
     });
   };
 
-  componentDidUpdate (prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.customerFilter !== prevProps.customerFilter) {
       this.getContests();
     }
   }
 
-  goToExtended = contest_id => {
+  goToExtended = (contest_id) => {
     this.props.history.push(`/contest/${contest_id}`);
   };
 
-  setContestList = () => {
-    const array = [];
-    const { contests } = this.props;
-    for (let i = 0; i < contests.length; i++) {
-      array.push(
-        <ContestBox
-          data={contests[i]}
-          key={contests[i].id}
-          goToExtended={this.goToExtended}
-        />
-      );
-    }
-    return array;
-  };
-
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.clearContestsList();
   }
 
@@ -66,7 +52,7 @@ class CustomerDashboard extends React.Component {
     this.getContests();
   };
 
-  render () {
+  render() {
     const { error, haveMore } = this.props;
     const { customerFilter } = this.props;
     return (
@@ -114,7 +100,7 @@ class CustomerDashboard extends React.Component {
         </div>
         <div className={styles.contestsContainer}>
           {error ? (
-            <TryAgain getData={this.tryToGetContest()} />
+            <TryAgain getData={this.tryToGetContest} />
           ) : (
             <ContestsContainer
               isFetching={this.props.isFetching}
@@ -122,7 +108,11 @@ class CustomerDashboard extends React.Component {
               history={this.props.history}
               haveMore={haveMore}
             >
-              {this.setContestList()}
+              <ContestList
+                contests={this.props.contests}
+                goToExtended={this.goToExtended}
+                isFetching={this.props.isFetching}
+              />
             </ContestsContainer>
           )}
         </div>
@@ -131,13 +121,13 @@ class CustomerDashboard extends React.Component {
   }
 }
 
-const mapStateToProps = state => state.contestsList;
+const mapStateToProps = (state) => state.contestsList;
 
-const mapDispatchToProps = dispatch => ({
-  getContests: data =>
+const mapDispatchToProps = (dispatch) => ({
+  getContests: (data) =>
     dispatch(getContests({ requestData: data, role: CONSTANTS.CUSTOMER })),
   clearContestsList: () => dispatch(clearContestsList()),
-  newFilter: filter => dispatch(setNewCustomerFilter(filter)),
+  newFilter: (filter) => dispatch(setNewCustomerFilter(filter)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomerDashboard);

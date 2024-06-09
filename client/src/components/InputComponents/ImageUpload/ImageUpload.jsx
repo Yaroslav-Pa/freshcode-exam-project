@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useField } from 'formik';
 function ImageUpload ({name, classes}) {
@@ -22,6 +22,12 @@ function ImageUpload ({name, classes}) {
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    if (!meta.value) {
+      setImageSrc('');
+    }
+  }, [meta.value]);
 
   return (
     <div className={uploadContainer}>

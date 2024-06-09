@@ -237,15 +237,19 @@ module.exports.getContests = async (req, res, next) => {
         industry,
         awardSort,
         ownEntries,
+        onlyActiveStatus,
       },
       tokenData: { userId },
     } = req;
+
+    const isActiveStatus = onlyActiveStatus === 'true';
 
     const { where, order } = UtilFunctions.createWhereForAllContests(
       typeIndex,
       contestId,
       industry,
-      awardSort
+      awardSort,
+      isActiveStatus
     );
 
     const isOwnEntries = ownEntries === 'true';

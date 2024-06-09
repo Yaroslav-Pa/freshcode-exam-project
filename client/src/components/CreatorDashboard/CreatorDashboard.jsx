@@ -127,6 +127,7 @@ class CreatorDashboard extends React.Component {
   };
 
   parseParamsToUrl = (creatorFilter) => {
+    // console.log(creatorFilter);
     const obj = {};
     Object.keys(creatorFilter).forEach((el) => {
       if (creatorFilter[el]) obj[el] = creatorFilter[el];
@@ -141,6 +142,7 @@ class CreatorDashboard extends React.Component {
       contestId: obj.contestId ? obj.contestId : '',
       industry: obj.industry ? obj.industry : '',
       awardSort: obj.awardSort || 'asc',
+      onlyActiveStatus: obj.onlyActiveStatus === 'true',
       ownEntries:
         typeof obj.ownEntries === 'undefined' ? false : obj.ownEntries,
     };
@@ -221,6 +223,19 @@ class CreatorDashboard extends React.Component {
               })}
             >
               My Entries
+            </div>
+            <div
+              onClick={() =>
+                this.changePredicate({
+                  name: 'onlyActiveStatus',
+                  value: !creatorFilter.onlyActiveStatus,
+                })
+              }
+              className={classNames(styles.myEntries, {
+                [styles.activeMyEntries]: creatorFilter.onlyActiveStatus,
+              })}
+            >
+              Only Active
             </div>
             <div className={styles.inputContainer}>
               <span>By contest type</span>

@@ -143,16 +143,20 @@ const resolveOffer = async (
       arrayRoomsId.push(offer.userId);
     }
   });
-  controller
-    .getNotificationController()
-    .emitChangeOfferStatus(
-      arrayRoomsId,
-      'Someone of yours offers was rejected',
-      contestId
-    );
+  if (arrayRoomsId.length > 0) {
+    controller
+      .getNotificationController()
+      .emitChangeOfferStatus(
+        arrayRoomsId,
+        'Someone of yours offers was rejected',
+        contestId
+      );
+  }
+  // console.log('Notification sent to rejected offer users:', arrayRoomsId);
   controller
     .getNotificationController()
     .emitChangeOfferStatus(creatorId, 'Someone of your offers WIN', contestId);
+  // console.log('Notification sent to winning offer creatorId:', creatorId);
   return updatedOffers[0].dataValues;
 };
 

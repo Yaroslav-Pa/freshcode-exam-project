@@ -22,7 +22,6 @@ class CustomerDashboard extends React.Component {
   };
 
   componentDidMount() {
-    this.props.clearContestsList();
     this.getContests();
   }
 
@@ -52,6 +51,12 @@ class CustomerDashboard extends React.Component {
     this.getContests();
   };
 
+  handleFilterChange = (filter) => {
+    if (this.props.customerFilter !== filter) {
+      this.props.newFilter(filter);
+    }
+  };
+
   render() {
     const { error, haveMore } = this.props;
     const { customerFilter } = this.props;
@@ -60,7 +65,7 @@ class CustomerDashboard extends React.Component {
         <div className={styles.filterContainer}>
           <div
             onClick={() =>
-              this.props.newFilter(CONSTANTS.CONTEST_STATUS_ACTIVE)
+              this.handleFilterChange(CONSTANTS.CONTEST_STATUS_ACTIVE)
             }
             className={classNames({
               [styles.activeFilter]:
@@ -73,7 +78,7 @@ class CustomerDashboard extends React.Component {
           </div>
           <div
             onClick={() =>
-              this.props.newFilter(CONSTANTS.CONTEST_STATUS_FINISHED)
+              this.handleFilterChange(CONSTANTS.CONTEST_STATUS_FINISHED)
             }
             className={classNames({
               [styles.activeFilter]:
@@ -86,7 +91,7 @@ class CustomerDashboard extends React.Component {
           </div>
           <div
             onClick={() =>
-              this.props.newFilter(CONSTANTS.CONTEST_STATUS_PENDING)
+              this.handleFilterChange(CONSTANTS.CONTEST_STATUS_PENDING)
             }
             className={classNames({
               [styles.activeFilter]:

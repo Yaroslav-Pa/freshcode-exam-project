@@ -26,7 +26,6 @@ class CreatorDashboard extends React.Component {
   }
 
   componentDidMount() {
-    this.props.clearContestsList();
     this.props.getDataForContest();
     if (
       this.parseUrlForParams(this.props.location.search) &&
@@ -135,8 +134,8 @@ class CreatorDashboard extends React.Component {
                   value: !creatorFilter.ownEntries,
                 })
               }
-              className={classNames(styles.myEntries, {
-                [styles.activeMyEntries]: creatorFilter.ownEntries,
+              className={classNames(styles.button, {
+                [styles.activeButton]: creatorFilter.ownEntries,
               })}
             >
               My Entries
@@ -148,8 +147,8 @@ class CreatorDashboard extends React.Component {
                   value: !creatorFilter.onlyActiveStatus,
                 })
               }
-              className={classNames(styles.myEntries, {
-                [styles.activeMyEntries]: creatorFilter.onlyActiveStatus,
+              className={classNames(styles.button, {
+                [styles.activeButton]: creatorFilter.onlyActiveStatus,
               })}
             >
               Only Active

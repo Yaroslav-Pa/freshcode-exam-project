@@ -152,12 +152,12 @@ const resolveOffer = async (
         contestId
       );
   }
-  // console.log('Notification sent to rejected offer users:', arrayRoomsId);
   controller
     .getNotificationController()
     .emitChangeOfferStatus(creatorId, 'Someone of your offers WIN', contestId);
-  // console.log('Notification sent to winning offer creatorId:', creatorId);
-  return updatedOffers[0].dataValues;
+  return updatedOffers.find(
+    (offer) => offer.dataValues.status === CONSTANTS.OFFER_STATUS_WON
+  );
 };
 
 module.exports.setOfferStatus = async (req, res, next) => {

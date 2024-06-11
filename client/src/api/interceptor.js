@@ -25,13 +25,23 @@ instance.interceptors.response.use(
     return response;
   },
   err => {
+    //TODO! choose
+    //* V1
+    // const history = createBrowserHistory();
+    // history.location.pathname
+    //* V2
+    const location = window.location.pathname;
     if (
       err.response.status === 408 &&
-      history.location.pathname !== '/login' &&
-      history.location.pathname !== '/registration' &&
-      history.location.pathname !== '/'
+      location !== '/login' &&
+      location !== '/registration' &&
+      location !== '/'
     ) {
-      history.replace('/login');
+      //*V1
+      // history.replace('/login');
+      // history.go();
+      //*V2
+      window.location.pathname = '/login';
     }
     return Promise.reject(err);
   }

@@ -22,7 +22,7 @@ import ChatContainer from './components/Chat/ChatComponents/ChatContainer/ChatCo
 class App extends Component {
   render () {
     return (
-      <Router history={browserHistory}>
+      <Router>
         <ToastContainer
           position='top-center'
           autoClose={5000}

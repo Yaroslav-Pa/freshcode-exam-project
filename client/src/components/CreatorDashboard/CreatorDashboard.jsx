@@ -14,20 +14,9 @@ import ContestsContainer from '../ContestsContainer/ContestsContainer';
 import styles from './CreatorDashboard.module.sass';
 import TryAgain from '../TryAgain/TryAgain';
 import CONSTANTS from '../../constants';
-import ContestList from '../ContestList/ContestList';
 import IndustryTypeSelect from '../IndustryTypeSelect/IndustryTypeSelect';
 import TypeSelector from '../TypeSelector/TypeSelector';
-
-const types = [
-  '',
-  'name,tagline,logo',
-  'name',
-  'tagline',
-  'logo',
-  'name,tagline',
-  'logo,tagline',
-  'name,logo',
-];
+import { contestList } from '../../utils/contestListFunctions';
 
 class CreatorDashboard extends React.Component {
   componentWillReceiveProps(nextProps, nextContext) {
@@ -117,6 +106,7 @@ class CreatorDashboard extends React.Component {
     });
   };
 
+  //TODO! to Utils (as HOF to pass history)?
   goToExtended = (contestId) => {
     this.props.history.push(`/contest/${contestId}`);
   };
@@ -225,11 +215,7 @@ class CreatorDashboard extends React.Component {
             history={this.props.history}
             haveMore={haveMore}
           >
-            <ContestList
-              contests={this.props.contests}
-              goToExtended={this.goToExtended}
-              isFetching={isFetching}
-            />
+            {contestList(this.props.contests, this.goToExtended)}
           </ContestsContainer>
         )}
       </div>

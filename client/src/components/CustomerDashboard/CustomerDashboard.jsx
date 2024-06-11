@@ -10,7 +10,7 @@ import CONSTANTS from '../../constants';
 import ContestsContainer from '../ContestsContainer/ContestsContainer';
 import styles from './CustomerDashboard.module.sass';
 import TryAgain from '../TryAgain/TryAgain';
-import ContestList from '../ContestList/ContestList';
+import { contestList } from '../../utils/contestListFunctions';
 
 class CustomerDashboard extends React.Component {
   loadMore = (startFrom) => {
@@ -108,11 +108,7 @@ class CustomerDashboard extends React.Component {
               history={this.props.history}
               haveMore={haveMore}
             >
-              <ContestList
-                contests={this.props.contests}
-                goToExtended={this.goToExtended}
-                isFetching={this.props.isFetching}
-              />
+              {contestList(this.props.contests, this.goToExtended)}
             </ContestsContainer>
           )}
         </div>

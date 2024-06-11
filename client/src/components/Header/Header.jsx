@@ -62,7 +62,9 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
         </section>
       </section>
       <section className={styles.navContainer}>
-        <Logo />
+        <div className={styles.logo}>
+          <Logo />
+        </div>
 
         <div className={styles.leftNav}>
           <nav className={styles.nav}>

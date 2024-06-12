@@ -5,7 +5,6 @@ const userQueries = require('../controllers/queries/userQueries');
 
 module.exports.checkAuth = async (req, res, next) => {
   const accessToken = req.headers.authorization;
-  console.log(req.headers.authorization);
   if (!accessToken) {
     return next(new TokenError('need token'));
   }

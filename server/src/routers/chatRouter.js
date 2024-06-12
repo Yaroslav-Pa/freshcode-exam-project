@@ -1,14 +1,27 @@
 const chatRouter = require('express').Router();
 const chatController = require('../controllers/chatController');
+const catalogRouter = require('./catalogRouter');
 
-chatRouter.post('/newMessage', chatController.addMessage);
+// /chats/
+chatRouter.get('/', chatController.getPreview);
 
-chatRouter.post('/getChat', chatController.getChat);
+// /chats/blackList
+chatRouter.put('/blackList', chatController.blackList);
 
-chatRouter.post('/getPreview', chatController.getPreview);
+// /chats/favorite
+chatRouter.put('/favorite', chatController.favoriteChat);
 
-chatRouter.post('/blackList', chatController.blackList);
+chatRouter.use('/catalogs', catalogRouter);
 
-chatRouter.post('/favorite', chatController.favoriteChat);
+// /chats/:chatId/
+chatRouter.post('/:chatId', chatController.addNewChatToCatalog);
+// /chats/:chatId/
+chatRouter.delete('/:chatId', chatController.removeChatFromCatalog);
+
+// /chats/:interlocutorId
+chatRouter.get('/interlocutor/:interlocutorId', chatController.getChat);
+
+// /chats/:interlocutorId
+chatRouter.post('/interlocutor/:interlocutorId', chatController.addMessage);
 
 module.exports = chatRouter;

@@ -11,9 +11,8 @@ module.exports.dataForContest = async (req, res, next) => {
   const response = {};
   try {
     const {
-      body: { characteristic1, characteristic2 },
+      query: { characteristic1, characteristic2 },
     } = req;
-    console.log(req.body, characteristic1, characteristic2);
     const types = [characteristic1, characteristic2, 'industry'].filter(
       Boolean
     );
@@ -42,28 +41,39 @@ module.exports.dataForContest = async (req, res, next) => {
 };
 
 module.exports.downloadFile = async (req, res, next) => {
-  const file = CONSTANTS.CONTESTS_DEFAULT_DIR + req.params.fileName;
-  res.download(file);
+  try {
+    const {
+      params: { fileName },
+    } = req;
+    const file = CONSTANTS.CONTESTS_DEFAULT_DIR + fileName;
+    res.download(file);
+  } catch (error) {
+    next(error.message);
+  }
 };
 
 module.exports.setNewOffer = async (req, res, next) => {
+  const {
+    params: { contestId },
+    body: { offerData, customerId, contestType },
+    tokenData,
+    file,
+  } = req;
   const obj = {};
-  if (req.body.contestType === CONSTANTS.LOGO_CONTEST) {
-    obj.fileName = req.file.filename;
-    obj.originalFileName = req.file.originalname;
+  if (contestType === CONSTANTS.LOGO_CONTEST) {
+    obj.fileName = file.filename;
+    obj.originalFileName = file.originalname;
   } else {
-    obj.text = req.body.offerData;
+    obj.text = offerData;
   }
-  obj.userId = req.tokenData.userId;
-  obj.contestId = req.body.contestId;
+  obj.userId = tokenData.userId;
+  obj.contestId = contestId;
   try {
     const result = await contestQueries.createOffer(obj);
     delete result.contestId;
     delete result.userId;
-    controller
-      .getNotificationController()
-      .emitEntryCreated(req.body.customerId);
-    const User = Object.assign({}, req.tokenData, { id: req.tokenData.userId });
+    controller.getNotificationController().emitEntryCreated(customerId);
+    const User = Object.assign({}, tokenData, { id: tokenData.userId });
     res.send(Object.assign({}, result, { User }));
   } catch (error) {
     return next(new ServerError(error.message));
@@ -161,27 +171,27 @@ const resolveOffer = async (
 };
 
 module.exports.setOfferStatus = async (req, res, next) => {
-  let transaction;
-  if (req.body.command === 'reject') {
+  const {
+    params: { contestId, offerId },
+    body: { command, creatorId, orderId, priority },
+  } = req;
+  if (command === 'reject') {
     try {
-      const offer = await rejectOffer(
-        req.body.offerId,
-        req.body.creatorId,
-        req.body.contestId
-      );
+      const offer = await rejectOffer(offerId, creatorId, contestId);
       res.send(offer);
     } catch (err) {
       next(err);
     }
-  } else if (req.body.command === 'resolve') {
+  } else if (command === 'resolve') {
+    let transaction;
     try {
       transaction = await db.sequelize.transaction();
       const winningOffer = await resolveOffer(
-        req.body.contestId,
-        req.body.creatorId,
-        req.body.orderId,
-        req.body.offerId,
-        req.body.priority,
+        contestId,
+        creatorId,
+        orderId,
+        offerId,
+        priority,
         transaction
       );
       res.send(winningOffer);

@@ -5,8 +5,7 @@ const ServerError = require('../errors/ServerError');
 const CONSTANTS = require('../constants');
 
 module.exports.parseBody = (req, res, next) => {
-  //!напевно навіть не потрібно
-  //? map
+  //TODO? map
   const newContests = JSON.parse(req.body.contests);
   for (let i = 0; i < newContests.length; i++) {
     if (newContests[i].haveFile) {
@@ -20,20 +19,21 @@ module.exports.parseBody = (req, res, next) => {
 };
 
 module.exports.canGetContest = async (req, res, next) => {
-  const {
-    params: { contestId },
-    tokenData: { role, userId },
-  } = req;
   let result = null;
   try {
+    const {
+      params: { contestId },
+      tokenData: { role, userId },
+    } = req;
+    const contestIdInt = +contestId
     if (role === CONSTANTS.CUSTOMER) {
       result = await bd.Contest.findOne({
-        where: { id: contestId, userId },
+        where: { id: contestIdInt, userId },
       });
     } else if (role === CONSTANTS.CREATOR) {
       result = await bd.Contest.findOne({
         where: {
-          id: contestId,
+          id: contestIdInt,
           status: {
             [bd.Sequelize.Op.or]: [
               CONSTANTS.CONTEST_STATUS_ACTIVE,
@@ -67,18 +67,17 @@ module.exports.onlyForCustomer = (req, res, next) => {
 
 module.exports.canSendOffer = async (req, res, next) => {
   const {
-    // params: { contestId },
+    params: { contestId },
     tokenData: { role },
-    //TODO переробити щоб воно не отримувало contestId з body
-    body: { contestId },
   } = req;
+  const contestIdInt = +contestId;
   if (role === CONSTANTS.CUSTOMER) {
     return next(new RightsError());
   }
   try {
     const result = await bd.Contest.findOne({
       where: {
-        id: contestId,
+        id: contestIdInt,
       },
       attributes: ['status'],
     });
@@ -99,10 +98,15 @@ module.exports.canSendOffer = async (req, res, next) => {
 
 module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
   try {
+    const {
+      params: { contestId },
+      tokenData: { userId },
+    } = req;
+    const contestIdInt = +contestId;
     const result = await bd.Contest.findOne({
       where: {
-        userId: req.tokenData.userId,
-        id: req.body.contestId,
+        userId,
+        id: contestIdInt,
         status: CONSTANTS.CONTEST_STATUS_ACTIVE,
       },
     });
@@ -115,12 +119,18 @@ module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
   }
 };
 
+//TODO? не використовується
 module.exports.canUpdateContest = async (req, res, next) => {
   try {
+    const {
+      params: { contestId },
+      tokenData: { userId },
+    } = req;
+    const contestIdInt = +contestId;
     const result = bd.Contest.findOne({
       where: {
-        userId: req.tokenData.userId,
-        id: req.body.contestId,
+        userId,
+        id: contestIdInt,
         status: { [bd.Sequelize.Op.not]: CONSTANTS.CONTEST_STATUS_FINISHED },
       },
     });

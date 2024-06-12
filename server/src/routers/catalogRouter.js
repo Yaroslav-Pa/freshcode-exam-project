@@ -1,20 +1,16 @@
 const catalogRouter = require('express').Router();
 const chatController = require('../controllers/chatController');
-const checkToken = require('../middlewares/checkToken');
 
-catalogRouter.post('/createCatalog', chatController.createCatalog);
+// /chats/catalogs
+catalogRouter
+  .route('/')
+  .get(chatController.getCatalogs)
+  .post(chatController.createCatalog);
 
-catalogRouter.post('/updateNameCatalog', chatController.updateNameCatalog);
-
-catalogRouter.post('/addNewChatToCatalog', chatController.addNewChatToCatalog);
-
-catalogRouter.post(
-  '/removeChatFromCatalog',
-  chatController.removeChatFromCatalog
-);
-
-catalogRouter.post('/deleteCatalog', chatController.deleteCatalog);
-
-catalogRouter.post('/getCatalogs', chatController.getCatalogs);
+// chats/catalogs/:catalogId
+catalogRouter
+  .route('/:catalogId')
+  .put(chatController.updateNameCatalog)
+  .delete(chatController.deleteCatalog);
 
 module.exports = catalogRouter;

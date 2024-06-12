@@ -16,21 +16,25 @@ module.exports.login = async (req, res, next) => {
 
     const isValidPassword = await foundUser.passwordCompare(req.body.password);
 
-    if(!isValidPassword) {
+    if (!isValidPassword) {
       throw new NotFound('user with this data dont exist');
     }
 
-    const accessToken = jwt.sign({
-      firstName: foundUser.firstName,
-      userId: foundUser.id,
-      role: foundUser.role,
-      lastName: foundUser.lastName,
-      avatar: foundUser.avatar,
-      displayName: foundUser.displayName,
-      balance: foundUser.balance,
-      email: foundUser.email,
-      rating: foundUser.rating,
-    }, CONSTANTS.JWT_SECRET, { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME });
+    const accessToken = jwt.sign(
+      {
+        firstName: foundUser.firstName,
+        userId: foundUser.id,
+        role: foundUser.role,
+        lastName: foundUser.lastName,
+        avatar: foundUser.avatar,
+        displayName: foundUser.displayName,
+        balance: foundUser.balance,
+        email: foundUser.email,
+        rating: foundUser.rating,
+      },
+      CONSTANTS.JWT_SECRET,
+      { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME }
+    );
     await userQueries.updateUser({ accessToken }, foundUser.id);
     res.send({ token: accessToken });
   } catch (err) {
@@ -40,17 +44,21 @@ module.exports.login = async (req, res, next) => {
 module.exports.registration = async (req, res, next) => {
   try {
     const newUser = await userQueries.userCreation(req.body);
-    const accessToken = jwt.sign({
-      firstName: newUser.firstName,
-      userId: newUser.id,
-      role: newUser.role,
-      lastName: newUser.lastName,
-      avatar: newUser.avatar,
-      displayName: newUser.displayName,
-      balance: newUser.balance,
-      email: newUser.email,
-      rating: newUser.rating,
-    }, CONSTANTS.JWT_SECRET, { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME });
+    const accessToken = jwt.sign(
+      {
+        firstName: newUser.firstName,
+        userId: newUser.id,
+        role: newUser.role,
+        lastName: newUser.lastName,
+        avatar: newUser.avatar,
+        displayName: newUser.displayName,
+        balance: newUser.balance,
+        email: newUser.email,
+        rating: newUser.rating,
+      },
+      CONSTANTS.JWT_SECRET,
+      { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME }
+    );
     await userQueries.updateUser({ accessToken }, newUser.id);
     res.send({ token: accessToken });
   } catch (err) {
@@ -81,7 +89,10 @@ module.exports.changeMark = async (req, res, next) => {
   let sum = 0;
   let avg = 0;
   let transaction;
-  const { isFirst, offerId, mark, creatorId } = req.body;
+  const {
+    params: { creatorId, offerId },
+    body: { isFirst, mark },
+  } = req;
   const userId = req.tokenData.userId;
   try {
     transaction = await db.sequelize.transaction({
@@ -107,7 +118,7 @@ module.exports.changeMark = async (req, res, next) => {
 
     await userQueries.updateUser({ rating: avg }, creatorId, transaction);
     transaction.commit();
-    controller.getNotificationController().emitChangeMark(creatorId);
+    controller.getNotificationController().emitChangeMark(+creatorId);
     res.send({ userId: creatorId, rating: avg });
   } catch (err) {
     transaction.rollback();

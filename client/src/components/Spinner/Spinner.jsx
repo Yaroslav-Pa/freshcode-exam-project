@@ -6,13 +6,17 @@ import styles from './Spinner.module.sass';
 /* const override = css`
   border-color: #46568a;
 `; */
-
+//TODO! only changed size to {'50px'}, so it will not show warnings
+// it was like this before:
+// sizeUnit='px'
+// // css={override}
+// size={50}
 const SpinnerLoader = () => (
   <div className={styles.loaderContainer}>
     <ClipLoader
-      sizeUnit='px'
+      // sizeUnit='px'
       // css={override}
-      size={50}
+      size={'50px'}
       color='#46568a'
       loading
     />

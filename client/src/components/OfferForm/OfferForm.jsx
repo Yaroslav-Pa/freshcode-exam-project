@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import CONTANTS from '../../constants';
@@ -13,6 +13,8 @@ import Schems from '../../utils/validators/validationSchems';
 import Error from '../Error/Error';
 
 const OfferForm = (props) => {
+  useEffect(() => () => clearOfferError(), []);
+
   const renderOfferInput = () => {
     if (props.contestType === CONTANTS.LOGO_CONTEST) {
       return (

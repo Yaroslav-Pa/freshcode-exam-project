@@ -189,14 +189,36 @@ module.exports.payment = async (req, res, next) => {
 
 module.exports.updateUser = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.avatar = req.file.filename;
+    const { file, body, tokenData } = req;
+    
+    if (file) {
+      body.avatar = file.filename;
     }
+
+    const accessToken = jwt.sign(
+      {
+        firstName: body.firstName,
+        lastName: body.lastName,
+        displayName: body.displayName,
+        avatar: file ? body.avatar : tokenData.avatar,
+
+        userId: tokenData.userId,
+        role: tokenData.role,
+        balance: tokenData.balance,
+        email: tokenData.email,
+        rating: tokenData.rating,
+      },
+      CONSTANTS.JWT_SECRET,
+      { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME }
+    );
+
     const updatedUser = await userQueries.updateUser(
-      req.body,
+      { accessToken, ...body },
       req.tokenData.userId
     );
+
     res.send({
+      token: accessToken,
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       displayName: updatedUser.displayName,

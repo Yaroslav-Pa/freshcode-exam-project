@@ -26,7 +26,9 @@ import Error from '../../components/Error/Error';
 
 class ContestPage extends React.Component {
   componentWillUnmount() {
+    //TODO not shure if its needed
     this.props.clearSetOfferStatusError();
+    
     this.props.changeEditContest(false);
   }
 

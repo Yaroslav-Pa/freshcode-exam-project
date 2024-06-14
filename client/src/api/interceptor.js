@@ -1,6 +1,6 @@
 import axios from 'axios';
 import CONTANTS from '../constants';
-import history from '../browserHistory';
+// import history from '../browserHistory';
 
 const instance = axios.create({
   baseURL: CONTANTS.BASE_URL,
@@ -31,11 +31,14 @@ instance.interceptors.response.use(
     // history.location.pathname
     //* V2
     const location = window.location.pathname;
+    //TODO! howItWorks on Chrome HowItWorks on Edge
     if (
       err.response.status === 408 &&
       location !== '/login' &&
       location !== '/registration' &&
-      location !== '/'
+      location !== '/' &&
+      location !== '/howItWorks' &&
+      location !== '/HowItWorks'
     ) {
       //*V1
       // history.replace('/login');

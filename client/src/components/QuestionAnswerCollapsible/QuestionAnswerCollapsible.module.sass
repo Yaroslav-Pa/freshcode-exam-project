@@ -1,0 +1,67 @@
+.container
+  border: 1px solid #F3F5FE
+  border-radius: 16px
+  background-color: white
+  box-sizing: border-box
+  cursor: pointer
+  width: 100%
+  transition: all ease 0.3s
+
+  &:hover:not(.active)
+    border: 1px solid #307DF6
+    background-color: rgba(48, 125, 246, .1)
+
+.active
+  border: 1px solid #307DF6
+  background-color: #307DF6
+
+.collapsible
+  position: relative
+  font-family: "Product Sans", sans-serif
+  font-size: 19px
+  font-weight: 700
+  color: #19184A
+  padding: 24px
+  padding-right: 38px
+  transition: all ease 0.5s
+  text-align: left
+  border-radius: 16px
+  border: none
+  background: transparent
+  width: 100%
+  line-height: 27px
+  @media screen and (max-width: 770px)
+    font-size: 17px
+
+.activeCollapsible
+  color: #fff
+
+.collapsible:after
+  position: absolute
+  color: #307DF6
+  right: 5%
+  content: '\002B'
+  @media screen and (max-width: 770px)
+    top: 40%
+
+.activeCollapsible:after
+  content: "\2212"
+  color: white
+
+.content
+  box-sizing: border-box
+  padding: 0
+  max-height: 0px
+  overflow: hidden
+  transition: max-height 0.2s ease-out
+  background-color: transparent
+  margin: 0
+  font-size: 16px
+  color: #fff
+  line-height: 24px
+
+.activeContent
+  padding: 20px 24px 30px 24px
+
+  a
+    color: white

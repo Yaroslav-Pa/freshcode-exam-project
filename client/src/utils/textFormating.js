@@ -1,0 +1,1 @@
+export const replaceSpace = (text) => text.split(' ').join('')

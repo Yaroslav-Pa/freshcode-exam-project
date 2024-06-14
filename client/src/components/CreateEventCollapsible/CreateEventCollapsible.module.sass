@@ -1,43 +1,37 @@
 @import '../../utils/styles/_collapsibleTemplates.sass'
+
 .container
   @extend %container
+  border: 1px solid #6179b3
 
 .active
   border: 1px solid #307DF6
-  background-color: #307DF6
 
 .collapsible
   @extend %collapsible
+  color: #6179b3
 
 .activeCollapsible
-  color: #fff
+  border-bottom: 1px solid #307DF6
+  color: #307DF6
+  &:hover
+    background-color: rgba(48, 125, 246, .1)
 
 .collapsible:after
   position: absolute
-  color: #307DF6
+  color: #6179b3
   right: 5%
   content: '\002B'
-  @media screen and (max-width: 770px)
-    top: 40%
 
 .activeCollapsible:after
+  color: #307DF6
   content: "\2212"
-  color: white
 
 .content
   box-sizing: border-box
-  padding: 0
-  max-height: 0px
   overflow: hidden
   transition: max-height 0.2s ease-out
-  background-color: transparent
-  margin: 0
-  font-size: 16px
-  color: #fff
-  line-height: 24px
+  cursor: default
 
 .activeContent
-  padding: 20px 24px 30px 24px
-
-  a
-    color: white
+  padding: 20px

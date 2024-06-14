@@ -1,0 +1,18 @@
+
+@import '../../utils/styles/_templates.sass'
+
+.mainContainer
+  box-sizing: border-box
+  display: flex
+  flex-direction: column
+  padding: 40px 30px
+  margin: 40px auto
+  max-width: 1200px
+  box-shadow: 2px 2px 10px 0px rgba(209,209,209,1)
+  gap: 80px 0
+  border-radius: 16px
+  @media screen and (max-width: 500px)
+    padding: 20px 15px
+
+.emptyText
+  @extend %errorText

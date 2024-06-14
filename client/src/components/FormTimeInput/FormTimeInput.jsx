@@ -2,34 +2,18 @@ import React from 'react';
 import { Field, ErrorMessage } from 'formik';
 import classNames from 'classnames';
 
-const FormInput = ({
-  classes,
-  label,
-  withLable = false,
-  labelText = null,
-  name,
-  ...rest
-}) => (
+const FormTimeInput = ({ classes, label, name, ...rest }) => (
   <Field name={name}>
-    {(props) => {
-      const {
-        field,
-        meta: { touched, error },
-      } = props;
-
+    {({ field, meta: { touched, error } }) => {
       const inputClassName = classNames(classes.input, {
         [classes.notValid]: touched && error,
         [classes.valid]: touched && !error,
       });
       return (
         <div className={classes.container}>
-          {withLable && (
-            <label className={classes.lableOfInput}>
-              {labelText ? labelText : label}
-            </label>
-          )}
+          <label className={classes.lableOfInput}>{label}</label>
           <input
-            type="text"
+            type="datetime-local"
             {...field}
             placeholder={label}
             className={inputClassName}
@@ -47,4 +31,4 @@ const FormInput = ({
   </Field>
 );
 
-export default FormInput;
+export default FormTimeInput;

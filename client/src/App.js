@@ -39,7 +39,7 @@ class App extends Component {
           <Route exact path='/' component={Home} />
           <Route
             exact
-            path='/HowItWorks'
+            path='/howItWorks'
             component={HowItWorks}
           />
           <Route

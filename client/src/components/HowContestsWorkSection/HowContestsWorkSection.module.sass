@@ -1,0 +1,31 @@
+@import '../../utils/styles/_howItWorksPageTemplates.sass'
+
+.workSection
+  @extend %section
+  background: linear-gradient(271.19deg, rgb(68 51 241 / .04) 0%, rgb(98 142 255 / .04) 100%), #FFFFFF
+
+.workContainer
+  @extend %container
+  gap: 75px 0
+
+.workTextContainer
+  @extend %textContainer
+  align-items: center
+  gap: 20px 0
+
+.workImg
+  max-width: 70px
+
+.workMainText
+  @extend %mainText
+  font-size: 1.3rem
+  text-align: center
+
+.workBoxsContainer
+  display: flex
+  flex-direction: row
+  gap: 16px 24px
+  justify-content: center
+  flex-wrap: nowrap
+  @media screen and (max-width: 1050px)
+    flex-wrap: wrap

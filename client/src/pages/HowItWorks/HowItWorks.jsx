@@ -4,6 +4,7 @@ import WaysToUseSection from '../../components/WaysToUseSection/WaysToUseSection
 import HowContestsWorkSection from '../../components/HowContestsWorkSection/HowContestsWorkSection';
 import FAQSection from '../../components/FAQSection/FAQSection';
 import SearchSection from '../../components/SearchSection/SearchSection';
+import Footer from '../../components/Footer/Footer';
 
 const HowItWorks = () => {
   return (
@@ -19,6 +20,7 @@ const HowItWorks = () => {
       <FAQSection />
       {/* Search Section*/}
       <SearchSection />
+      <Footer/>
     </>
   );
 };

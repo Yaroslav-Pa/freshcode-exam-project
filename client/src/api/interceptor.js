@@ -31,14 +31,12 @@ instance.interceptors.response.use(
     // history.location.pathname
     //* V2
     const location = window.location.pathname;
-    //TODO! howItWorks on Chrome HowItWorks on Edge
     if (
       err.response.status === 408 &&
       location !== '/login' &&
       location !== '/registration' &&
       location !== '/' &&
-      location !== '/howItWorks' &&
-      location !== '/HowItWorks'
+      location !== '/howItWorks'
     ) {
       //*V1
       // history.replace('/login');

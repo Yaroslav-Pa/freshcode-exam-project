@@ -7,20 +7,19 @@ import { useEffect } from 'react';
 import { saveEvents } from '../../store/slices/eventSlice';
 import EventsListing from '../../components/EventsListing/EventsListing';
 import { getGetAndUpdateEvents } from '../../utils/eventsFunctions';
+import { selectEvents } from '../../utils/reselect/eventsReselect';
 
 function EventPage() {
-  const { events } = useSelector(({ eventStore: { events } }) => ({
-    events,
-  }));
+  const dispatch = useDispatch();
+  const events = useSelector(selectEvents);
 
   useEffect(() => {
     getGetAndUpdateEvents();
   }, []);
-
-  const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(saveEvents());
-  }, [events]);
+  }, [events, dispatch]);
 
   return (
     <>

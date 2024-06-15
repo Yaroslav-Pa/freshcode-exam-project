@@ -3,15 +3,12 @@ import { MdEventNote } from 'react-icons/md';
 import styles from './EventsLink.module.sass';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
+import { selectCounts } from '../../utils/reselect/eventsReselect';
 
 function EventsLink() {
   const location = useLocation();
-  const { overCount: isOverCount, remindCount: isRemindCount } = useSelector(
-    (state) => ({
-      overCount: state.eventStore.overCount,
-      remindCount: state.eventStore.remindCount,
-    })
-  );
+  const { overCount: isOverCount, remindCount: isRemindCount } =
+    useSelector(selectCounts);
 
   const isRemindCountNotNull = isRemindCount !== 0;
   const isOverCountNotNull = isOverCount !== 0;

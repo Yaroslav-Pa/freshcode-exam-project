@@ -33,9 +33,10 @@ instance.interceptors.response.use(
     const location = window.location.pathname;
     if (
       err.response.status === 408 &&
+      location !== '/' &&
+      location !== '/events' &&
       location !== '/login' &&
       location !== '/registration' &&
-      location !== '/' &&
       location !== '/howItWorks'
     ) {
       //*V1

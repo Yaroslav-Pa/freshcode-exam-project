@@ -45,6 +45,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/howItWorks" component={HowItWorks} />
+        <Route exact path="/events" component={EventPage} />
         <Route
           exact
           path="/login"
@@ -55,7 +56,6 @@ function App() {
           path="/registration"
           component={OnlyNotAuthorizedUserHoc(RegistrationPage)}
         />
-        <Route exact path="/events" component={PrivateHoc(EventPage)} />
         <Route exact path="/payment" component={PrivateHoc(Payment)} />
         <Route
           exact

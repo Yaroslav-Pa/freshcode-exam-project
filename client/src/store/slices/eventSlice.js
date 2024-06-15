@@ -1,21 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit';
 import CONSTANTS from '../../constants';
+import { isAfter } from 'date-fns';
 
 const SLICE_NAME = 'events';
 
 const initialState = {
-  events: [
-    // { name: 'Create contest', time: new Date(), remiderTime: new Date() },
-  ],
+  events: [],
 };
 
 const eventSlice = createSlice({
   name: SLICE_NAME,
   initialState,
   reducers: {
-    clearEvents: () => initialState,
+    checkTime: (state, { payload }) => {
+      state.events.forEach((event) => {
+        if (event?.endTime && event?.remiderTime) {
+          event.isOver = isAfter(payload, event.endTime);
+          event.isRemind = isAfter(payload, event.remiderTime);
+        }
+      });
+    },
     addEvent: (state, { payload }) => {
       state.events.push(payload);
+    },
+    removeEvent: (state, { payload }) => {
+      state.events = state.events.filter(
+        (event) => event?.creationTime !== payload
+      );
     },
     getEvents: (state) => {
       const storedEvents = JSON.parse(
@@ -34,6 +45,13 @@ const eventSlice = createSlice({
 
 const { actions, reducer: eventReducer } = eventSlice;
 
-export const { clearEvents, addEvent, getEvents, saveEvents } = actions;
+export const {
+  clearEvents,
+  addEvent,
+  getEvents,
+  saveEvents,
+  checkTime,
+  removeEvent,
+} = actions;
 
 export default eventReducer;

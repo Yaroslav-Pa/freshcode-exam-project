@@ -16,6 +16,8 @@ function EventsListing({ events }) {
   const [currentTime, setCurrentTime] = useState();
 
   useEffect(() => {
+    //TODO!  massive сrutch for component rerender
+    setCurrentTime(formatISO(new Date()));
     const intervalId = setInterval(
       () => setCurrentTime(formatISO(new Date())),
       1000
@@ -37,16 +39,15 @@ function EventsListing({ events }) {
         </div>
       </div>
       <section className={styles.eventContainer}>
-        {events.length !== 0 &&
-          sortClosestTime(events, currentTime).map((event) => (
-            <Event
-              key={event?.creationTime}
-              {...event}
-              currentTime={currentTime}
-              getTimePercentage={getTimePercentage}
-              getFromatedDate={getFromatedDate}
-            />
-          ))}
+        {sortClosestTime(events, currentTime).map((event) => (
+          <Event
+            key={event?.creationTime}
+            {...event}
+            currentTime={currentTime}
+            getTimePercentage={getTimePercentage}
+            getFromatedDate={getFromatedDate}
+          />
+        ))}
       </section>
     </section>
   );

@@ -41,7 +41,7 @@ function App() {
         draggable
         pauseOnHover
       />
-      <EventsLink/>
+      <EventsLink />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/howItWorks" component={HowItWorks} />

@@ -8,7 +8,7 @@ import {
   startOfDay,
 } from 'date-fns';
 import store from '../store';
-import { checkTime, getEvents } from '../store/slices/eventSlice';
+import { checkTime, getEvents, updateCounters } from '../store/slices/eventSlice';
 
 export const getFromatedDate = (endDate, currentDate = new Date()) => {
   const timeDifference = differenceInMilliseconds(endDate, currentDate);
@@ -53,10 +53,5 @@ export const getGetAndUpdateEvents = () => {
   const dispatch = store.dispatch;
   dispatch(getEvents());
   dispatch(checkTime(formatISO(new Date())));
-};
-export const getCounters = () => {
-  const events = store.getState().eventStore.events;
-  const isOverCount = events.filter((event) => event.isOver).length;
-  const isRemindCount = events.filter((event) => event.isRemind && !event.isOver).length;
-  return { isOverCount, isRemindCount };
+  dispatch(updateCounters());
 };

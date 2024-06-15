@@ -1,37 +1,50 @@
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import { MdEventNote } from 'react-icons/md';
 import styles from './EventsLink.module.sass';
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
-import {
-  getCounters,
-} from '../../utils/eventsFunctions';
+import { useSelector } from 'react-redux';
 
-function EventsLink({ history }) {
-  const [counters, setConters] = useState({});
-  useEffect(() => {
-    setConters(getCounters());
-  }, []);
+function EventsLink() {
+  const location = useLocation();
+  const { overCount: isOverCount, remindCount: isRemindCount } = useSelector(
+    (state) => ({
+      overCount: state.eventStore.overCount,
+      remindCount: state.eventStore.remindCount,
+    })
+  );
+
+  const isRemindCountNotNull = isRemindCount !== 0;
+  const isOverCountNotNull = isOverCount !== 0;
+
   const remindClassnames = classNames({
-    [styles.remindCount]: counters?.isRemindCount !== 0,
+    [styles.remindCount]: isRemindCountNotNull,
   });
   const overClassnames = classNames({
-    [styles.overCount]: counters?.isOverCount !== 0,
+    [styles.overCount]: isOverCountNotNull,
   });
+
+  if (
+    location.pathname === '/events' ||
+    location.pathname === '/payment' ||
+    location.pathname === '/login' ||
+    location.pathname === '/registration'
+  ) {
+    return null;
+  }
 
   return (
     <section className={styles.container}>
-      <button className={styles.button}>
-        <Link to={'/events'}>
+      <Link to={'/events'}>
+        <button className={styles.button}>
           <MdEventNote className={styles.icon} />
-        </Link>
-        {counters?.isOverCount && (
-          <p className={overClassnames}>{counters.isOverCount}</p>
-        )}
-        {counters?.isRemindCount && (
-          <p className={remindClassnames}>{counters.isRemindCount}</p>
-        )}
-      </button>
+          {isOverCountNotNull && (
+            <span className={overClassnames}>{isOverCount}</span>
+          )}
+          {isRemindCountNotNull && (
+            <span className={remindClassnames}>{isRemindCount}</span>
+          )}
+        </button>
+      </Link>
     </section>
   );
 }

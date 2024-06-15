@@ -1,7 +1,15 @@
+import { useEffect, useState } from 'react';
+import Event from '../Event/Event';
 import styles from './EventsListing.module.sass';
 import { BsClockHistory } from 'react-icons/bs';
 
 function EventsListing({ events }) {
+  const [currentTime, setCurrentTime] = useState();
+
+  useEffect(() => {
+    const intervalId = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <section className={styles.mainContainer}>
@@ -13,14 +21,8 @@ function EventsListing({ events }) {
         </div>
       </div>
       <section className={styles.eventContainer}>
-        <div className={styles.event}>
-          <div
-            className={styles.eventProgress}
-            style={{ width: `50%` }}
-          ></div>
-          <h3 className={styles.eventText}>Event name</h3>
-          <p className={styles.eventText}>Remaining time</p>
-        </div>
+        {events.length !== 0 &&
+          events.map((event) => <Event {...event} currentTime={currentTime} />)}
       </section>
     </section>
   );

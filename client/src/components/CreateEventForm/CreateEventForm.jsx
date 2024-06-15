@@ -20,7 +20,7 @@ function CreateEventForm() {
   const dispatch = useDispatch();
 
   const submitHandler = (values, { resetForm }) => {
-    dispatch(addEvent(values));
+    dispatch(addEvent({...values, creationTime: formatISO(new Date())}));
     resetForm();
   };
 
@@ -29,7 +29,7 @@ function CreateEventForm() {
       <Formik
         initialValues={{
           name: '',
-          time: '',
+          endTime: '',
           remiderTime: '',
         }}
         onSubmit={submitHandler}
@@ -46,7 +46,7 @@ function CreateEventForm() {
           />
           <FormTimeInput
             classes={formInputClasses}
-            name="time"
+            name="endTime"
             type="datetime-local"
             label="Event time"
           />

@@ -8,9 +8,9 @@ export const eventCreateValidationSchem = yup.object({
   name: yup
     .string()
     .min(3, 'Event name must be at least 3 characters')
-    .max(50, 'Event name must be 50 characters maximum')
+    .max(100, 'Event name must be 100 characters maximum')
     .required('Event name required'),
-  time: yup
+  endTime: yup
     .date()
     .min(new Date(), 'Event time must be in future')
     .required('Event time required'),
@@ -21,8 +21,8 @@ export const eventCreateValidationSchem = yup.object({
       'is-before',
       'Event reminder  time must be before event time',
       function (value) {
-        const { time } = this.parent;
-        return value < time;
+        const { endTime } = this.parent;
+        return value < endTime;
       }
     )
     .required('Event reminder time required'),

@@ -1,5 +1,14 @@
-import { addMilliseconds, differenceInHours, differenceInMilliseconds, format, formatDistanceToNowStrict, startOfDay } from "date-fns";
-
+import {
+  addMilliseconds,
+  differenceInHours,
+  differenceInMilliseconds,
+  format,
+  formatDistanceToNowStrict,
+  formatISO,
+  startOfDay,
+} from 'date-fns';
+import store from '../store';
+import { checkTime, getEvents } from '../store/slices/eventSlice';
 
 export const getFromatedDate = (endDate, currentDate = new Date()) => {
   const timeDifference = differenceInMilliseconds(endDate, currentDate);
@@ -19,7 +28,11 @@ export const getFromatedDate = (endDate, currentDate = new Date()) => {
   }
 };
 
-export function getTimePercentage(startDate, endDate, currentDate = new Date()) {
+export function getTimePercentage(
+  startDate,
+  endDate,
+  currentDate = new Date()
+) {
   const totalDuration = differenceInMilliseconds(endDate, startDate);
   const elapsedDuration = differenceInMilliseconds(currentDate, startDate);
   const percentage = (elapsedDuration / totalDuration) * 100;
@@ -34,4 +47,16 @@ export const sortClosestTime = (array, currentTime) => {
       differenceInMilliseconds(a.endTime, currentTime) -
       differenceInMilliseconds(b.endTime, currentTime)
   );
+};
+
+export const getGetAndUpdateEvents = () => {
+  const dispatch = store.dispatch;
+  dispatch(getEvents());
+  dispatch(checkTime(formatISO(new Date())));
+};
+export const getCounters = () => {
+  const events = store.getState().eventStore.events;
+  const isOverCount = events.filter((event) => event.isOver).length;
+  const isRemindCount = events.filter((event) => event.isRemind && !event.isOver).length;
+  return { isOverCount, isRemindCount };
 };

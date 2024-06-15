@@ -20,14 +20,12 @@ import browserHistory from './browserHistory';
 import ChatContainer from './components/Chat/ChatComponents/ChatContainer/ChatContainer';
 import HowItWorks from './pages/HowItWorks/HowItWorks';
 import EventPage from './pages/EventPage/EventPage';
-import { useDispatch } from 'react-redux';
-import { getEvents } from './store/slices/eventSlice';
+import EventsLink from './components/EventsLink/EventsLink';
+import { getGetAndUpdateEvents } from './utils/eventsFunctions';
 
 function App() {
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(getEvents());
+    getGetAndUpdateEvents();
   }, []);
 
   return (
@@ -43,6 +41,7 @@ function App() {
         draggable
         pauseOnHover
       />
+      <EventsLink/>
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/howItWorks" component={HowItWorks} />

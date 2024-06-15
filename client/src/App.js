@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
@@ -20,82 +20,81 @@ import browserHistory from './browserHistory';
 import ChatContainer from './components/Chat/ChatComponents/ChatContainer/ChatContainer';
 import HowItWorks from './pages/HowItWorks/HowItWorks';
 import EventPage from './pages/EventPage/EventPage';
-class App extends Component {
-  render() {
-    return (
-      <Router>
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnVisibilityChange
-          draggable
-          pauseOnHover
+import { useDispatch } from 'react-redux';
+import { getEvents } from './store/slices/eventSlice';
+
+function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getEvents());
+  }, []);
+
+  return (
+    <Router>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnVisibilityChange
+        draggable
+        pauseOnHover
+      />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/howItWorks" component={HowItWorks} />
+        <Route
+          exact
+          path="/login"
+          component={OnlyNotAuthorizedUserHoc(LoginPage)}
         />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/howItWorks" component={HowItWorks} />
-          <Route
-            exact
-            path="/login"
-            component={OnlyNotAuthorizedUserHoc(LoginPage)}
-          />
-          <Route
-            exact
-            path="/registration"
-            component={OnlyNotAuthorizedUserHoc(RegistrationPage)}
-          />
-          <Route
-            exact
-            path="/events"
-            component={PrivateHoc(EventPage)}
-          />
-          <Route exact path="/payment" component={PrivateHoc(Payment)} />
-          <Route
-            exact
-            path="/startContest"
-            component={PrivateHoc(StartContestPage)}
-          />
-          <Route
-            exact
-            path="/startContest/nameContest"
-            component={PrivateHoc(ContestCreationPage, {
-              contestType: CONSTANTS.NAME_CONTEST,
-              title: 'Company Name',
-            })}
-          />
-          <Route
-            exact
-            path="/startContest/taglineContest"
-            component={PrivateHoc(ContestCreationPage, {
-              contestType: CONSTANTS.TAGLINE_CONTEST,
-              title: 'TAGLINE',
-            })}
-          />
-          <Route
-            exact
-            path="/startContest/logoContest"
-            component={PrivateHoc(ContestCreationPage, {
-              contestType: CONSTANTS.LOGO_CONTEST,
-              title: 'LOGO',
-            })}
-          />
-          <Route exact path="/dashboard" component={PrivateHoc(Dashboard)} />
-          <Route
-            exact
-            path="/contest/:id"
-            component={PrivateHoc(ContestPage)}
-          />
-          <Route exact path="/account" component={PrivateHoc(UserProfile)} />
-          <Route component={NotFound} />
-        </Switch>
-        <ChatContainer />
-      </Router>
-    );
-  }
+        <Route
+          exact
+          path="/registration"
+          component={OnlyNotAuthorizedUserHoc(RegistrationPage)}
+        />
+        <Route exact path="/events" component={PrivateHoc(EventPage)} />
+        <Route exact path="/payment" component={PrivateHoc(Payment)} />
+        <Route
+          exact
+          path="/startContest"
+          component={PrivateHoc(StartContestPage)}
+        />
+        <Route
+          exact
+          path="/startContest/nameContest"
+          component={PrivateHoc(ContestCreationPage, {
+            contestType: CONSTANTS.NAME_CONTEST,
+            title: 'Company Name',
+          })}
+        />
+        <Route
+          exact
+          path="/startContest/taglineContest"
+          component={PrivateHoc(ContestCreationPage, {
+            contestType: CONSTANTS.TAGLINE_CONTEST,
+            title: 'TAGLINE',
+          })}
+        />
+        <Route
+          exact
+          path="/startContest/logoContest"
+          component={PrivateHoc(ContestCreationPage, {
+            contestType: CONSTANTS.LOGO_CONTEST,
+            title: 'LOGO',
+          })}
+        />
+        <Route exact path="/dashboard" component={PrivateHoc(Dashboard)} />
+        <Route exact path="/contest/:id" component={PrivateHoc(ContestPage)} />
+        <Route exact path="/account" component={PrivateHoc(UserProfile)} />
+        <Route component={NotFound} />
+      </Switch>
+      <ChatContainer />
+    </Router>
+  );
 }
 
 export default App;

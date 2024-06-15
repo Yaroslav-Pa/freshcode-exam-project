@@ -1,53 +1,62 @@
-import {
-  addMilliseconds,
-  differenceInHours,
-  differenceInMilliseconds,
-  format,
-  formatDistanceToNowStrict,
-  startOfDay,
-} from 'date-fns';
 import styles from './Event.module.sass';
 import { toZonedTime } from 'date-fns-tz';
 import CONSTANTS from '../../constants';
+import { IoCloseSharp } from 'react-icons/io5';
+import classNames from 'classnames';
+import { useDispatch } from 'react-redux';
+import { removeEvent } from '../../store/slices/eventSlice';
 
-function Event({ name, endTime, remiderTime, creationTime, currentTime }) {
-  const getFromatedDate = (date, currentDate = new Date()) => {
-    const timeDifference = differenceInMilliseconds(date, currentDate);
-    const hoursDiff = differenceInHours(date, currentDate);
+function Event({
+  name,
+  endTime,
+  creationTime,
+  currentTime,
+  getTimePercentage,
+  getFromatedDate,
+  isOver,
+  isRemind,
+}) {
+  const dispatch = useDispatch();
+  const eventClassnames = classNames(
+    styles.event,
+    { [styles.eventOver]: isOver },
+    { [styles.eventRemind]: isRemind }
+  );
+  const eventProgressClassnames = classNames(
+    styles.progressBar,
+    { [styles.progressOver]: isOver },
+    { [styles.progressRemind]: isRemind }
+  );
+  const timeTextClassnames = classNames(styles.time, {
+    [styles.timeOver]: isOver,
+  });
 
-    if (hoursDiff >= 24) {
-      return formatDistanceToNowStrict(date);
-    } else {
-      const durationDate = addMilliseconds(
-        startOfDay(currentDate),
-        timeDifference
-      );
-
-      return hoursDiff > 0
-        ? format(durationDate, 'HH:mm:ss')
-        : format(durationDate, 'mm:ss');
-    }
-  };
-
-  function getTimePercentage(startDate, endDate, currentDate = new Date()) {
-    const totalDuration = differenceInMilliseconds(endDate, startDate);
-    const elapsedDuration = differenceInMilliseconds(currentDate, startDate);
-    const percentage = (elapsedDuration / totalDuration) * 100;
-    return Math.min(Math.max(percentage, 0), 100);
-  }
-
-  const percentage = getTimePercentage(creationTime, endTime, currentTime);
+  const timeDateText = endTime
+    ? getFromatedDate(toZonedTime(endTime, CONSTANTS.TIMEZONE), currentTime)
+    : '';
+  const percentage =
+    creationTime && endTime
+      ? getTimePercentage(creationTime, endTime, currentTime)
+      : 0;
 
   return (
-    <div className={styles.event}>
+    <div className={eventClassnames}>
       <div
-        className={styles.eventProgress}
-        style={{ width: `${percentage}%` }}
+        className={eventProgressClassnames}
+        style={{
+          width: `${percentage}%`,
+        }}
       ></div>
-      <h3 className={styles.eventText}>{name}</h3>
-      <p className={styles.eventText}>
-        {getFromatedDate(toZonedTime(endTime, CONSTANTS.TIMEZONE), currentTime)}
-      </p>
+      <h3 className={styles.mainText}>{name}</h3>
+      <p className={timeTextClassnames}>{timeDateText}</p>
+      <button
+        className={styles.closeButton}
+        onClick={() => {
+          dispatch(removeEvent(creationTime));
+        }}
+      >
+        <IoCloseSharp className={styles.cross} />
+      </button>
     </div>
   );
 }

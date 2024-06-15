@@ -3,6 +3,8 @@
 
 $remind-color: rgb(255, 233, 153)
 
+$bg-button-color: #e0e0e0
+
 .event
   box-sizing: border-box
   position: relative
@@ -61,14 +63,14 @@ $remind-color: rgb(255, 233, 153)
   position: absolute
 
 .closeButton
-  border: 2px solid #cccccc
+  border: 2px solid $bg-button-color
+  background-color: $bg-button-color
   color: #000000
   padding: 5px
   border-top-right-radius: 16px
   border-bottom-right-radius: 16px
   position: absolute
   right: -50px
-  background-color: transparent
   transition: all .2s
   display: flex
   justify-content: center
@@ -78,7 +80,7 @@ $remind-color: rgb(255, 233, 153)
   right: 0
   max-width: 25px
   &:hover
-    background-color: #cccccc
+    background-color: transparent
 
 @keyframes pulse
   0%

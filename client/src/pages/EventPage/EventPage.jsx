@@ -14,7 +14,6 @@ function EventPage() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log(events);
     dispatch(saveEvents());
   }, [events]);
 

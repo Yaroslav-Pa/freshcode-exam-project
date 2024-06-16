@@ -4,6 +4,7 @@ import SelectInput from '../SelectInput/SelectInput';
 import FormInput from '../FormInput/FormInput';
 import styles from '../ContestForm/ContestForm.module.sass';
 import Spinner from '../Spinner/Spinner';
+import ButtonGroup from '../InputComponents/ButtonGroup/ButtonGroup';
 //TODO default case
 const OptionalSelects = (props) => {
   if (props.isFetching) {
@@ -13,9 +14,18 @@ const OptionalSelects = (props) => {
     case CONSTANTS.NAME_CONTEST: {
       return (
         <>
+          <ButtonGroup
+            name="matchingDomain"
+            buttons={CONSTANTS.BUTTON_GROUP}
+            classes={{
+              header: styles.buttonGroupHeader,
+              container: styles.buttonGroupContainer,
+              warning: styles.warning,
+            }}
+          />
           <SelectInput
             name="typeOfName"
-            header="type of company"
+            header="Type of company"
             classes={{
               inputContainer: styles.selectInputContainer,
               inputHeader: styles.selectHeader,
@@ -54,7 +64,7 @@ const OptionalSelects = (props) => {
                 input: styles.input,
                 warning: styles.warning,
                 notValid: styles.notValid,
-                valid: styles.valid
+                valid: styles.valid,
               }}
             />
           </div>
@@ -88,7 +98,7 @@ const OptionalSelects = (props) => {
                 input: styles.input,
                 warning: styles.warning,
                 notValid: styles.notValid,
-                valid: styles.valid
+                valid: styles.valid,
               }}
             />
           </div>

@@ -1,9 +1,30 @@
+import { values } from 'lodash';
+
 const env = process.env.NODE_ENV || 'development';
 const serverIP = 'localhost';
 const serverPort = 5000;
 export default {
+  BUTTON_GROUP_START_VALUE: 'yesMinorValidations',
+  BUTTON_GROUP: [
+    {
+      value: 'yesMinorValidations',
+      answer: 'Yes',
+      details: 'But minor validations are allowed',
+      isRecommended: true,
+    },
+    {
+      value: 'yesExactly',
+      answer: 'Yes',
+      details: 'The Domain should exactly match the name',
+    },
+    {
+      value: 'noOnlyName',
+      answer: 'No',
+      details: 'I am only looking for a name, not a Domain',
+    },
+  ],
   EVENTS_TOKEN: 'userEvents',
-  CONTEST_VENTURE_REQUIRED:['tagline', 'logo'],
+  CONTEST_VENTURE_REQUIRED: ['tagline', 'logo'],
   TELEPHONE: '(877) 355-3585',
   TIMEZONE: Intl.DateTimeFormat().resolvedOptions().timeZone,
   CUSTOMER: 'customer',
@@ -156,7 +177,7 @@ export default {
     },
   ],
   REGISTRATION_FAQ_SPLIT_INDEX: 2,
-  REGISTRATION_FAQ:[
+  REGISTRATION_FAQ: [
     {
       theme: 'Why should I use Squadhelp?',
       text: 'You always have an option of hiring a consultant or coming up with the name yourself. However, Squadhelp builds great brands that succeed faster by connecting you with the most creative people across the globe. Most importantly, Squadhelp provides you with choice: you get to see ideas from dozens (in some cases, hundreds) of contestants before you select a winner. Typically, you wouldspend far less money with Squadhelp (our contests start at $199) than hiring an agency. Also, you will receive immediate results - most contests begin receiving submissions within minutes of starting.',
@@ -186,7 +207,7 @@ export default {
       text: 'Check out our FAQs or send us a message. For assistance with launching a contest, you can also call us at (877) 355-3585 or schedule a Branding Consultation',
     },
   ],
-  WAYS_TO_USE_BOXES : [
+  WAYS_TO_USE_BOXES: [
     {
       imageUrl: 'https://www.atom.com/html/html/static_images/contests/g1.svg',
       mainText: 'Launch a Contest',
@@ -212,7 +233,7 @@ export default {
       linkText: 'Learn More',
     },
   ],
-  HOW_NAMING_WORKS_BOXES : [
+  HOW_NAMING_WORKS_BOXES: [
     {
       text: 'Fill out your Naming Brief and begin receiving name ideas in minutes',
     },
@@ -226,7 +247,7 @@ export default {
       text: 'Pick a Winner. The winner gets paid for their submission.',
     },
   ],
-  FAQ_SECTIONS : [
+  FAQ_SECTIONS: [
     {
       sectionName: 'Launching A Contest',
       content: [
@@ -353,7 +374,7 @@ export default {
       ],
     },
   ],
-  POPULAR_SEARCHES : [
+  POPULAR_SEARCHES: [
     'Tech',
     'Clothing',
     'Finance',
@@ -362,5 +383,5 @@ export default {
     'Crypto',
     'Short',
     'One Word',
-  ]
+  ],
 };

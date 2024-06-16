@@ -18,6 +18,7 @@ const variableOptions = {
   [CONSTANTS.NAME_CONTEST]: {
     styleName: '',
     typeOfName: '',
+    matchingDomain: CONSTANTS.BUTTON_GROUP_START_VALUE,
   },
   [CONSTANTS.LOGO_CONTEST]: {
     nameVenture: '',

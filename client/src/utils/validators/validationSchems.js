@@ -8,10 +8,10 @@ const Schems = {
   ContestSchem: yup.object({
     nameVenture: yup
       .string()
-      .min(3, "Venture must be at least 3 characters")
+      .min(3, 'Venture must be at least 3 characters')
       .when('contestType', {
-        is: value => CONSTANTS.CONTEST_VENTURE_REQUIRED.includes(value),
-        then: yup.string().required('Venture is required')
+        is: (value) => CONSTANTS.CONTEST_VENTURE_REQUIRED.includes(value),
+        then: yup.string().required('Venture is required'),
       }),
     contestType: yup
       .string()
@@ -46,6 +46,7 @@ const Schems = {
     typeOfName: yup.string().min(1),
     typeOfTagline: yup.string().min(1),
     brandStyle: yup.string().min(1),
+    matchingDomain: yup.string().min(1),
     file: yup.mixed(),
   }),
   filterSchem: yup.object().shape({

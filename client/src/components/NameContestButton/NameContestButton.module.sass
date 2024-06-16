@@ -1,0 +1,56 @@
+$not-active: #f1f1f1
+$not-active-text: #949494
+$active-text: #3c3c3c
+$active: #4d91ff
+
+.button
+  box-sizing: border-box
+  padding: 30px 20px
+  border: 2px solid #f1f1f1
+  border-radius: 10px
+  position: relative
+  display: flex
+  flex-direction: column
+  background-color: transparent
+  gap: 10px 0
+  transition: all .2s
+  flex: 1
+
+.active
+  border: 2px solid #4087f6
+  .answer
+    color: $active-text
+  .recommend
+    color: $active
+    background-color: #deeafe
+
+.answer
+  transition: all .2s
+  font-size: 19px
+  color: $not-active-text
+  font-weight: 700
+
+.description
+  text-align: left
+  font-size: 16px
+  color: $not-active-text
+  font-weight: 400
+
+.check
+  position: absolute
+  right: 10px
+  top: 10px
+  color: $active
+
+.recommend
+  transition: all .2s
+  position: absolute
+  top: -10px
+  left: 50%
+  transform: translateX(-50%)
+  padding: 7px 10px
+  font-weight: 800
+  font-size: 12px
+  border-radius: 10px
+  color: $not-active-text
+  background-color: $not-active

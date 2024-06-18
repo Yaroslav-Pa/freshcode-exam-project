@@ -1,7 +1,7 @@
 CREATE TABLE Catalogs (
   id SERIAL PRIMARY KEY,
   userId INT NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  catalogName TEXT NOT NULL
+  catalogName VARCHAR(255) NOT NULL
 );
 CREATE TABLE Conversations (
   id SERIAL PRIMARY KEY,
@@ -27,3 +27,5 @@ CREATE TABLE Messages (
   createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+DROP TABLE Catalogs, Conversations, Chats, Messages;

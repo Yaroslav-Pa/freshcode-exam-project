@@ -3,10 +3,13 @@ const { Model } = require('sequelize');
 const bcrypt = require('bcrypt');
 const CONSTANTS = require('../../constants');
 
-async function hashPassword (user, options) {
+async function hashPassword(user, options) {
   console.log(user.password);
-  if(user.changed('password')) {
-    const passwordHash = await bcrypt.hash(user.password, CONSTANTS.SALT_ROUNDS);
+  if (user.changed('password')) {
+    const passwordHash = await bcrypt.hash(
+      user.password,
+      CONSTANTS.SALT_ROUNDS
+    );
     user.password = passwordHash;
   }
 }
@@ -18,40 +21,70 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate( models ) {
+    static associate({
+      Offer,
+      Contest,
+      Rating,
+      TransactionHistory,
+      Catalog,
+      Conversation,
+      Message
+    }) {
       // define association here
-
-      User.hasMany(models.Offer, {
+      User.hasMany(Offer, {
         foreignKey: 'userId',
         targetKey: 'id',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
-
-      User.hasMany(models.Contest, {
+      User.hasMany(Contest, {
         foreignKey: 'userId',
         targetKey: 'id',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
-      hashPassword
-      User.hasMany(models.Rating, {
+      hashPassword;
+      User.hasMany(Rating, {
         foreignKey: 'userId',
         targetKey: 'id',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
-
-      User.hasMany(models.TransactionHistory, {
+      User.hasMany(TransactionHistory, {
         foreignKey: 'userId',
         targetKey: 'id',
         as: 'transactionHistories',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
+
+      User.hasMany(Catalog, {
+        foreignKey: 'userId',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+      User.hasMany(Conversation, {
+        foreignKey: 'participant1',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+      User.hasMany(Conversation, {
+        foreignKey: 'participant2',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+      User.hasMany(Message, {
+        foreignKey: 'sender',
+        targetKey: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
     }
 
-    async passwordCompare (plaintextPassword) {
+    async passwordCompare(plaintextPassword) {
       return bcrypt.compare(plaintextPassword, this.getDataValue('password'));
     }
   }
@@ -124,7 +157,7 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-  
+
   User.beforeCreate(hashPassword);
   User.beforeUpdate(hashPassword);
 

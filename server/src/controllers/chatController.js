@@ -35,7 +35,7 @@ module.exports.addMessage = async (req, res, next) => {
       conversation: newConversation.id,
     });
 
-    const preview = {
+    const previewBody = {
       _id: newConversation.id,
       sender: userId,
       text: messageBody,
@@ -47,22 +47,22 @@ module.exports.addMessage = async (req, res, next) => {
         newConversation.favoriteList2,
       ],
     };
+    const responceMessage = {
+      sender: userId,
+      body: messageBody,
+      conversation: newConversation.id,
+      _id: message._id,
+      createdAt: message.createdAt,
+      updatedAt: message.updatedAt,
+      participants,
+    };
 
     controller.getChatController().emitNewMessage(interlocutorIdInt, {
-      message,
+      message: responceMessage,
       preview: {
-        _id: newConversation.id,
-        sender: userId,
-        text: messageBody,
-        createAt: message.createdAt,
-        participants,
-        blackList: [newConversation.blackList1, newConversation.blackList2],
-        favoriteList: [
-          newConversation.favoriteList1,
-          newConversation.favoriteList2,
-        ],
+        ...previewBody,
         interlocutor: {
-          id: userId,
+          id: interlocutorIdInt,
           firstName,
           lastName,
           displayName,
@@ -73,12 +73,9 @@ module.exports.addMessage = async (req, res, next) => {
     });
 
     res.send({
-      message: {
-        ...message.dataValues,
-        participants,
-      },
+      message: responceMessage,
       preview: {
-        ...preview,
+        ...previewBody,
         interlocutor,
       },
     });
@@ -308,7 +305,7 @@ module.exports.createCatalog = async (req, res, next) => {
     next(err);
   }
 };
-//! + 
+//! +
 module.exports.updateNameCatalog = async (req, res, next) => {
   try {
     const {

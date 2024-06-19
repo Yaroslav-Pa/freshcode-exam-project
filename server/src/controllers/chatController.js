@@ -2,6 +2,14 @@ const db = require('../db/models');
 const { Op } = require('sequelize');
 const controller = require('../socketInit');
 const _ = require('lodash');
+const {
+  getConversation,
+  createOrFindConversation,
+  findMessages,
+  findInterlocutor,
+  getInterlocutors,
+  formatInterlocutor,
+} = require('./queries/chatQueries');
 
 //! +
 module.exports.addMessage = async (req, res, next) => {
@@ -14,20 +22,7 @@ module.exports.addMessage = async (req, res, next) => {
   const participants = [userId, interlocutorIdInt].sort((a, b) => a - b);
 
   try {
-    const [newConversation] = await db.Conversation.findOrCreate({
-      where: {
-        participant1: participants[0],
-        participant2: participants[1],
-      },
-      defaults: {
-        participant1: participants[0],
-        participant2: participants[1],
-        blackList1: false,
-        blackList2: false,
-        favoriteList1: false,
-        favoriteList2: false,
-      },
-    });
+    const [newConversation] = await createOrFindConversation(participants);
 
     const message = await db.Message.create({
       sender: userId,
@@ -47,7 +42,7 @@ module.exports.addMessage = async (req, res, next) => {
         newConversation.favoriteList2,
       ],
     };
-    const responceMessage = {
+    const responseMessage = {
       sender: userId,
       body: messageBody,
       conversation: newConversation.id,
@@ -58,7 +53,7 @@ module.exports.addMessage = async (req, res, next) => {
     };
 
     controller.getChatController().emitNewMessage(interlocutorIdInt, {
-      message: responceMessage,
+      message: responseMessage,
       preview: {
         ...previewBody,
         interlocutor: {
@@ -73,7 +68,7 @@ module.exports.addMessage = async (req, res, next) => {
     });
 
     res.send({
-      message: responceMessage,
+      message: responseMessage,
       preview: {
         ...previewBody,
         interlocutor,
@@ -94,36 +89,21 @@ module.exports.getChat = async (req, res, next) => {
   const participants = [userId, interlocutorIdInt].sort((a, b) => a - b);
 
   try {
-    const conversation = await db.Conversation.findOne({
-      where: {
-        participant1: participants[0],
-        participant2: participants[1],
-      },
-    });
+    const conversation = await getConversation(participants);
 
-    const interlocutor = await db.User.findByPk(interlocutorIdInt);
-
-    const formatedInterlocutor = {
-      firstName: interlocutor.firstName,
-      lastName: interlocutor.lastName,
-      displayName: interlocutor.displayName,
-      id: interlocutor.id,
-      avatar: interlocutor.avatar,
-    };
+    const interlocutor = await findInterlocutor(interlocutorIdInt);
+    const formattedInterlocutor = formatInterlocutor(interlocutor);
 
     if (!conversation) {
       return res.send({
         messages: [],
-        interlocutor: formatedInterlocutor,
+        interlocutor: formattedInterlocutor,
       });
     }
 
-    const messages = await db.Message.findAll({
-      where: { conversation: conversation.id },
-      order: [['createdAt', 'ASC']],
-    });
+    const messages = await findMessages(conversation.id);
 
-    res.send({ messages, interlocutor: formatedInterlocutor });
+    res.send({ messages, interlocutor: formattedInterlocutor });
   } catch (err) {
     next(err);
   }
@@ -147,26 +127,12 @@ module.exports.getPreview = async (req, res, next) => {
       ],
     });
 
-    const interlocutors = [];
-    conversations.forEach((conversation) => {
-      interlocutors.push(
-        conversation.participant1 === userId
-          ? conversation.participant2
-          : conversation.participant1
-      );
-    });
-
-    const senders = await db.User.findAll({
-      where: { id: interlocutors },
-      attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
-    });
+    const senders = await getInterlocutors(conversations, userId);
 
     const results = conversations.map((conversation) => {
       const message = conversation.Messages[0];
       const interlocutor = senders.find(
-        (sender) =>
-          sender.id === conversation.participant1 ||
-          sender.id === conversation.participant2
+        (sender) => sender.id === (conversation.participant1 === userId ? conversation.participant2 : conversation.participant1)
       );
 
       return {
@@ -177,13 +143,7 @@ module.exports.getPreview = async (req, res, next) => {
         participants: [conversation.participant1, conversation.participant2],
         blackList: [conversation.blackList1, conversation.blackList2],
         favoriteList: [conversation.favoriteList1, conversation.favoriteList2],
-        interlocutor: {
-          id: interlocutor.id,
-          firstName: interlocutor.firstName,
-          lastName: interlocutor.lastName,
-          displayName: interlocutor.displayName,
-          avatar: interlocutor.avatar,
-        },
+        interlocutor: formatInterlocutor(interlocutor),
       };
     });
 
@@ -202,12 +162,7 @@ module.exports.blackList = async (req, res, next) => {
     } = req;
     const predicate = participants[0] === userId ? 'blackList1' : 'blackList2';
 
-    const conversation = await db.Conversation.findOne({
-      where: {
-        participant1: participants[0],
-        participant2: participants[1],
-      },
-    });
+    const conversation = await getConversation(participants);
 
     if (!conversation) {
       return res.status(404).send({ message: 'Conversation not found' });
@@ -225,17 +180,10 @@ module.exports.blackList = async (req, res, next) => {
       updatedAt: conversation.updatedAt,
     };
 
-    const interlocutorId = participants.find(
-      (participant) => participant !== userId
-    );
+    const interlocutorId = participants.find((participant) => participant !== userId);
 
-    controller
-      .getChatController()
-      .emitChangeBlockStatus(interlocutorId, formattedConversation);
-
-    controller
-      .getChatController()
-      .emitChangeBlockStatus(userId, formattedConversation);
+    controller.getChatController().emitChangeBlockStatus(interlocutorId, formattedConversation);
+    controller.getChatController().emitChangeBlockStatus(userId, formattedConversation);
 
     res.send(formattedConversation);
   } catch (err) {
@@ -250,15 +198,13 @@ module.exports.favoriteChat = async (req, res, next) => {
       body: { participants, favoriteFlag },
       tokenData: { userId },
     } = req;
-    const predicate =
-      participants[0] === userId ? 'favoriteList1' : 'favoriteList2';
+    const predicate = participants[0] === userId ? 'favoriteList1' : 'favoriteList2';
 
-    const conversation = await db.Conversation.findOne({
-      where: {
-        participant1: participants[0],
-        participant2: participants[1],
-      },
-    });
+    const conversation = await getConversation(participants);
+
+    if (!conversation) {
+      return res.status(404).send({ message: 'Conversation not found' });
+    }
 
     conversation[predicate] = favoriteFlag;
     await conversation.save();
@@ -305,6 +251,7 @@ module.exports.createCatalog = async (req, res, next) => {
     next(err);
   }
 };
+
 //! +
 module.exports.updateNameCatalog = async (req, res, next) => {
   try {
@@ -313,6 +260,7 @@ module.exports.updateNameCatalog = async (req, res, next) => {
       body: { catalogName },
       tokenData: { userId },
     } = req;
+
     await db.Catalog.update(
       { catalogName },
       {
@@ -334,17 +282,17 @@ module.exports.updateNameCatalog = async (req, res, next) => {
       },
     });
 
-    const response = {
+    res.send({
       _id: catalog.id,
       userId: catalog.userId,
       catalogName: catalog.catalogName,
       chats: catalog.Chats.map((chat) => chat.conversationId),
-    };
-    res.send(response);
+    });
   } catch (err) {
     next(err);
   }
 };
+
 //! +
 module.exports.addNewChatToCatalog = async (req, res, next) => {
   try {
@@ -361,7 +309,7 @@ module.exports.addNewChatToCatalog = async (req, res, next) => {
       },
     });
 
-    const chat = await db.Chat.create({
+    await db.Chat.create({
       catalogId: catalog.id,
       conversationId: chatId,
     });
@@ -385,6 +333,7 @@ module.exports.addNewChatToCatalog = async (req, res, next) => {
     next(err);
   }
 };
+
 //! +
 module.exports.removeChatFromCatalog = async (req, res, next) => {
   try {
@@ -411,20 +360,18 @@ module.exports.removeChatFromCatalog = async (req, res, next) => {
         attributes: ['conversationId'],
       },
     });
-
-    const response = {
+    
+    res.send({
       _id: catalog.id,
       userId: catalog.userId,
       catalogName: catalog.catalogName,
       chats: catalog.Chats.map((chat) => chat.conversationId),
-    };
-    console.log(response);
-
-    res.send(response);
+    });
   } catch (err) {
     next(err);
   }
 };
+
 //! +
 module.exports.deleteCatalog = async (req, res, next) => {
   try {
@@ -442,6 +389,7 @@ module.exports.deleteCatalog = async (req, res, next) => {
     next(err);
   }
 };
+
 //! +
 module.exports.getCatalogs = async (req, res, next) => {
   try {

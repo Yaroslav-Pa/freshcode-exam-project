@@ -344,10 +344,13 @@ const reducers = {
   },
 
   goToExpandedDialog: (state, { payload }) => {
-    state.interlocutor = { ...state.interlocutor, ...payload.interlocutor };
-    state.chatData = payload.conversationData;
     state.isShow = true;
     state.isExpanded = true;
+    if (state.chatData?._id === payload.conversationData._id) {
+      return state;
+    }
+    state.interlocutor = { ...state.interlocutor, ...payload.interlocutor };
+    state.chatData = payload.conversationData;
     state.messages = [];
   },
 

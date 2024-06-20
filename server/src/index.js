@@ -9,6 +9,7 @@ const controller = require('./socketInit');
 const multerHandlerError = require('./handlerError/multerHandler');
 const handlerError = require('./handlerError/handler');
 const { DEV_FILES_PATH, PROD_FILES_PATH } = require('./constants');
+require('./utils/archivingLogs');
 const env = process.env.NODE_ENV || 'development';
 
 const PORT = process.env.PORT || 3000;

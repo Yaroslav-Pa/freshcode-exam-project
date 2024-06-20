@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
   LOGGER_FILENAME:"errors.log",
+  ARCHIVE_DIR: "logs/archive",
   LOGGER_DIR:"logs",
   START_USERS: [
     { ID: 125555, NAME: 'buy@gmail.com' },

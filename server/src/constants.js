@@ -1,6 +1,8 @@
 const path = require('path');
 
 module.exports = {
+  LOGGER_FILENAME:"errors.log",
+  LOGGER_DIR:"logs",
   START_USERS: [
     { ID: 125555, NAME: 'buy@gmail.com' },
     { ID: 225556, NAME: 'create@gmail.com' },

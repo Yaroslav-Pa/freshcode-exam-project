@@ -28,7 +28,6 @@ class ContestPage extends React.Component {
   componentWillUnmount() {
     //TODO not shure if its needed
     this.props.clearSetOfferStatusError();
-    
     this.props.changeEditContest(false);
   }
 
@@ -42,18 +41,19 @@ class ContestPage extends React.Component {
   };
 
   setOffersList = () => {
+    const { offers, contestData } = this.props.contestByIdStore;
     const array = [];
-    for (let i = 0; i < this.props.contestByIdStore.offers.length; i++) {
+    offers.forEach((offer) => {
       array.push(
         <OfferBox
-          data={this.props.contestByIdStore.offers[i]}
-          key={this.props.contestByIdStore.offers[i].id}
+          data={offer}
+          key={offer.id}
           needButtons={this.needButtons}
           setOfferStatus={this.setOfferStatus}
-          contestType={this.props.contestByIdStore.contestData.contestType}
+          contestType={contestData.contestType}
         />
       );
-    }
+    });
     return array.length !== 0 ? (
       array
     ) : (
@@ -122,7 +122,6 @@ class ContestPage extends React.Component {
       contestByIdStore,
       changeShowImage,
       changeContestViewMode,
-      getData,
       clearSetOfferStatusError,
     } = this.props;
     const {
@@ -135,6 +134,8 @@ class ContestPage extends React.Component {
       offers,
       setOfferStatusError,
     } = contestByIdStore;
+    const isOffersReviewing = contestData.reviewCount > 0;
+    const isOffersFailedReview = contestData.failReviewCount > 0;
     return (
       <div>
         {/* <Chat/> */}
@@ -184,6 +185,28 @@ class ContestPage extends React.Component {
                 />
               ) : (
                 <div className={styles.offersContainer}>
+                  <section className={styles.offersPendingText}>
+                    {(isOffersFailedReview || isOffersReviewing) && (
+                      <div className={styles.offersPendingBox}>
+                        {isOffersReviewing && (
+                          <p>
+                            <span className={styles.pendingText}>
+                              {contestData.reviewCount} offers pending
+                            </span>{' '}
+                            on review
+                          </p>
+                        )}
+                        {isOffersFailedReview && (
+                          <p>
+                            <span className={styles.failedText}>
+                              {contestData.failReviewCount} offers failed
+                            </span>{' '}
+                            review
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </section>
                   {role === CONSTANTS.CREATOR &&
                     contestData.status === CONSTANTS.CONTEST_STATUS_ACTIVE && (
                       <OfferForm

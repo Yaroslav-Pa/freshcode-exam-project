@@ -222,6 +222,14 @@ module.exports.getCustomerContests = async (req, res, next) => {
           model: db.Offer,
           required: false,
           attributes: ['id'],
+          where: {
+            status: {
+              [db.Sequelize.Op.notIn]: [
+                CONSTANTS.OFFER_STATUS.REVIEW,
+                CONSTANTS.OFFER_STATUS.FAIL_REVIEW,
+              ],
+            },
+          },
         },
       ],
     });
@@ -276,15 +284,7 @@ module.exports.getContests = async (req, res, next) => {
         {
           model: db.Offer,
           required: isOwnEntries,
-          where: {
-            ...(isOwnEntries ? { userId } : {}),
-            status: {
-              [db.Sequelize.Op.notIn]: [
-                CONSTANTS.OFFER_STATUS.REVIEW,
-                CONSTANTS.OFFER_STATUS.FAIL_REVIEW,
-              ],
-            },
-          },
+          where: isOwnEntries ? { userId } : {},
           attributes: ['id'],
         },
       ],

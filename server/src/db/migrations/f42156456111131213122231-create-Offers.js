@@ -1,3 +1,4 @@
+const { OFFER_STATUS } = require("../../constants");
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -9,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       userId: {
-        field:"user_id",
+        field: 'user_id',
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -20,7 +21,7 @@ module.exports = {
         onUpdate: 'CASCADE',
       },
       contestId: {
-        field:"contest_id",
+        field: 'contest_id',
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -35,19 +36,25 @@ module.exports = {
         allowNull: true,
       },
       fileName: {
-        field:"file_name",
+        field: 'file_name',
         type: Sequelize.STRING,
         allowNull: true,
       },
       originalFileName: {
-        field:"original_file_name",
+        field: 'original_file_name',
         type: Sequelize.STRING,
         allowNull: true,
       },
       status: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM(
+          OFFER_STATUS.FAIL_REVIEW,
+          OFFER_STATUS.REVIEW,
+          OFFER_STATUS.PENDING,
+          OFFER_STATUS.REJECTED,
+          OFFER_STATUS.RESOLVE
+        ),
         allowNull: true,
-        defaultValue: 'pending',
+        defaultValue: OFFER_STATUS.REVIEW,
       },
     });
   },

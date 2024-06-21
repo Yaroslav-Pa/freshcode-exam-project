@@ -5,6 +5,7 @@ const {
   CUSTOMER,
   CREATOR,
   START_USERS,
+  MODERATOR,
 } = require('../../constants');
 
 /** @type {import('sequelize-cli').Migration} */
@@ -16,8 +17,8 @@ module.exports = {
         first_name: 'buy',
         last_name: 'buy',
         display_name: 'buy',
-        email: START_USERS[0].NAME,
-        password: bcrypt.hashSync(START_USERS[0].NAME, SALT_ROUNDS),
+        email: START_USERS[0].EMAIL,
+        password: bcrypt.hashSync(START_USERS[0].EMAIL, SALT_ROUNDS),
         role: CUSTOMER,
       },
       {
@@ -25,9 +26,18 @@ module.exports = {
         first_name: 'create',
         last_name: 'create',
         display_name: 'create',
-        email: START_USERS[1].NAME,
-        password: bcrypt.hashSync(START_USERS[1].NAME, SALT_ROUNDS),
+        email: START_USERS[1].EMAIL,
+        password: bcrypt.hashSync(START_USERS[1].EMAIL, SALT_ROUNDS),
         role: CREATOR,
+      },
+      {
+        id: START_USERS[2].ID,
+        first_name: 'moderator',
+        last_name: 'moderator',
+        display_name: 'moderator',
+        email: START_USERS[2].EMAIL,
+        password: bcrypt.hashSync(START_USERS[2].EMAIL, SALT_ROUNDS),
+        role: MODERATOR,
       },
     ]);
   },
@@ -35,7 +45,11 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete('users', {
       email: {
-        [Sequelize.Op.in]: ['create@gmail.com', 'buy@gmail.com'],
+        [Sequelize.Op.in]: [
+          START_USERS[0].EMAIL,
+          START_USERS[1].EMAIL,
+          START_USERS[2].EMAIL,
+        ],
       },
     });
   },

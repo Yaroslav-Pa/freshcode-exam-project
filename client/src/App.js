@@ -22,6 +22,8 @@ import HowItWorks from './pages/HowItWorks/HowItWorks';
 import EventPage from './pages/EventPage/EventPage';
 import EventsLink from './components/EventsLink/EventsLink';
 import { getGetAndUpdateEvents } from './utils/eventsFunctions';
+import ModeratorOnlyRoute from './components/ModeratorOnlyRoute/ModeratorOnlyRoute';
+import OfferReview from './pages/OfferReview/OfferReview';
 
 function App() {
   useEffect(() => {
@@ -50,6 +52,11 @@ function App() {
           exact
           path="/login"
           component={OnlyNotAuthorizedUserHoc(LoginPage)}
+        />
+        <Route
+          exact
+          path="/offersReview"
+          component={ModeratorOnlyRoute(OfferReview)}
         />
         <Route
           exact

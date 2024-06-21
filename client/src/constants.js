@@ -27,6 +27,7 @@ export default {
   CONTEST_VENTURE_REQUIRED: ['tagline', 'logo'],
   TELEPHONE: '(877) 355-3585',
   TIMEZONE: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  MODERATOR: 'moderator',
   CUSTOMER: 'customer',
   CREATOR: 'creator',
   CONTEST_STATUS_ACTIVE: 'active',

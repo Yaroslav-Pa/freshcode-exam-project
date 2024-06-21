@@ -51,7 +51,6 @@ class ContestPage extends React.Component {
           needButtons={this.needButtons}
           setOfferStatus={this.setOfferStatus}
           contestType={this.props.contestByIdStore.contestData.contestType}
-          date={new Date()}
         />
       );
     }

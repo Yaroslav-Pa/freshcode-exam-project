@@ -170,7 +170,7 @@ const OfferBox = (props) => {
           ) : (
             <span className={styles.response}>{data.text}</span>
           )}
-          {data.User.id !== id && (
+          {!props.isForModerator && data.User.id !== id && (
             <Rating
               fractions={2}
               fullSymbol={
@@ -200,7 +200,7 @@ const OfferBox = (props) => {
           <i onClick={goChat} className="fas fa-comments" />
         )}
       </div>
-      {props.needButtons(data.status) && (
+      {props.needButtons && props.needButtons(data.status) && (
         <div className={styles.btnsContainer}>
           <div onClick={resolveOffer} className={styles.resolveBtn}>
             Resolve

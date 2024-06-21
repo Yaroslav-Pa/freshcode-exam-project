@@ -70,10 +70,15 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
           <nav className={styles.nav}>
             <ul className={styles.navItemsList}>{AllMenuSections}</ul>
           </nav>
-          {data && data.role !== CONSTANTS.CREATOR && (
+          {data && data.role === CONSTANTS.CUSTOMER && (
             <button className={styles.startContestBtn} onClick={startContests}>
               START CONTEST
             </button>
+          )}
+          {data && data.role === CONSTANTS.MODERATOR && (
+            <Link className={styles.startContestBtn} to={'/offersReview'}>
+              {'Review offers'.toUpperCase()}
+            </Link>
           )}
         </div>
       </section>

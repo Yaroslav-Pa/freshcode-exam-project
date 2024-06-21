@@ -55,13 +55,13 @@ function App() {
         />
         <Route
           exact
-          path="/offersReview"
-          component={ModeratorOnlyRoute(OfferReview)}
+          path="/registration"
+          component={OnlyNotAuthorizedUserHoc(RegistrationPage)}
         />
         <Route
           exact
-          path="/registration"
-          component={OnlyNotAuthorizedUserHoc(RegistrationPage)}
+          path="/offersReview"
+          component={ModeratorOnlyRoute(OfferReview)}
         />
         <Route exact path="/payment" component={PrivateHoc(Payment)} />
         <Route

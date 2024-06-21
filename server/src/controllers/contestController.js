@@ -276,7 +276,15 @@ module.exports.getContests = async (req, res, next) => {
         {
           model: db.Offer,
           required: isOwnEntries,
-          where: isOwnEntries ? { userId } : {},
+          where: {
+            ...(isOwnEntries ? { userId } : {}),
+            status: {
+              [db.Sequelize.Op.notIn]: [
+                CONSTANTS.OFFER_STATUS.REVIEW,
+                CONSTANTS.OFFER_STATUS.FAIL_REVIEW,
+              ],
+            },
+          },
           attributes: ['id'],
         },
       ],
@@ -338,14 +346,31 @@ module.exports.getContestById = async (req, res, next) => {
     });
     //TODO переробити
     contestInfo = contestInfo.get({ plain: true });
-    contestInfo.Offers.forEach((offer) => {
+    let reviewCount = 0;
+    let failReviewCount = 0;
+
+    contestInfo.Offers = contestInfo.Offers.filter((offer) => {
       if (offer.Rating) {
         offer.mark = offer.Rating.mark;
       }
       delete offer.Rating;
-    });
 
-    res.send(contestInfo);
+      if (offer.status === CONSTANTS.OFFER_STATUS.REVIEW) {
+        reviewCount++;
+      } else if (offer.status === CONSTANTS.OFFER_STATUS.FAIL_REVIEW) {
+        failReviewCount++;
+      }
+
+      if (role === CONSTANTS.CREATOR) {
+        return offer;
+      } else {
+        return (
+          offer.status !== CONSTANTS.OFFER_STATUS.REVIEW &&
+          offer.status !== CONSTANTS.OFFER_STATUS.FAIL_REVIEW
+        );
+      }
+    });
+    res.send({ ...contestInfo, reviewCount, failReviewCount });
   } catch (error) {
     next(new ServerError(error.message));
   }

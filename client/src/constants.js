@@ -37,6 +37,8 @@ export default {
   NAME_CONTEST: 'name',
   LOGO_CONTEST: 'logo',
   TAGLINE_CONTEST: 'tagline',
+  OFFER_STATUS_REVIEW:"onReview",
+  OFFER_STATUS_FAIL_REVIEW:"reviewFail",
   OFFER_STATUS_REJECTED: 'rejected',
   OFFER_STATUS_WON: 'won',
   OFFER_STATUS_PENDING: 'pending',

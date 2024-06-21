@@ -22,6 +22,8 @@ const initialState = {
   isShowOnFull: false,
   isShowModal: false,
   imagePath: null,
+  onReview: 0,
+  failedReview: 0,
 };
 
 //---------- getContestById
@@ -43,11 +45,13 @@ const getContestByIdExtraReducers = createExtraReducers({
     state.error = null;
     state.offers = [];
   },
-  fulfilledReducer: (state, { payload: { contestData, offers } }) => {
+  fulfilledReducer: (state, { payload: { contestData, offers, reviewCount, failReviewCount } }) => {
     state.isFetching = false;
     state.contestData = contestData;
     state.error = null;
     state.offers = offers;
+    state.onReview = reviewCount;
+    state.failedReview = failReviewCount;
   },
   rejectedReducer,
 });

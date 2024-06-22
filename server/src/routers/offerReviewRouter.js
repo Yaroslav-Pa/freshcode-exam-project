@@ -4,6 +4,6 @@ const offerController = require('../controllers/offerModerationController');
 offerReviewRouter.get('/', offerController.getAllOffersOnReview);
 
 // offers/:offerId
-offerReviewRouter.put('/:offerId', offerController.updateOfferStatus);
+offerReviewRouter.put('/:offerId', offerController.updateOfferReviewStatus);
 
 module.exports = offerReviewRouter;

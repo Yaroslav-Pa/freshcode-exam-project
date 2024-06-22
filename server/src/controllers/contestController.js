@@ -51,7 +51,7 @@ module.exports.downloadFile = async (req, res, next) => {
   }
 };
 
-module.exports.setNewOffer = async (req, res, next) => {
+module.exports.createNewOffer = async (req, res, next) => {
   const {
     params: { contestId },
     body: { offerData, customerId, contestType },
@@ -169,7 +169,7 @@ const resolveOffer = async (
   );
 };
 
-module.exports.setOfferStatus = async (req, res, next) => {
+module.exports.setFinalStatus = async (req, res, next) => {
   const {
     params: { contestId, offerId },
     body: { command, creatorId, orderId, priority },

@@ -27,7 +27,7 @@ export const getContests = decorateAsyncThunk({
     const { data } =
       role === CONSTANTS.CUSTOMER
         ? await restController.getCustomerContests(requestData)
-        : await restController.getActiveContests(requestData);
+        : await restController.getCreativeContests(requestData);
     return data;
   },
 });

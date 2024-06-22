@@ -59,7 +59,7 @@ const getContestByIdExtraReducers = createExtraReducers({
 export const addOffer = decorateAsyncThunk({
   key: `${CONTEST_BY_ID_SLICE_NAME}/addOffer`,
   thunk: async (payload) => {
-    const { data } = await restController.setNewOffer(payload);
+    const { data } = await restController.createNewOffer(payload);
     return data;
   },
 });
@@ -80,7 +80,7 @@ const addOfferExtraReducers = createExtraReducers({
 export const setOfferStatus = decorateAsyncThunk({
   key: `${CONTEST_BY_ID_SLICE_NAME}/setOfferStatus`,
   thunk: async (payload) => {
-    const { data } = await restController.setOfferStatus(payload);
+    const { data } = await restController.setFinalStatus(payload);
     return data;
   },
 });

@@ -27,7 +27,7 @@ export const getCustomerContests = ({ limit, offset, contestStatus }) =>
     },
   });
 
-export const getActiveContests = (data) =>
+export const getCreativeContests = (data) =>
   http.get('contests/', { params: { ...data } });
 
 export const getContestById = ({ contestId }) =>
@@ -46,12 +46,26 @@ export const dataForContest = (data) =>
     },
   });
 
+//? Moderator offers
+
+export const getOffersOnReview = (data) =>
+  http.get(`moderation/offers/`, {
+    params: {
+      ...data,
+    },
+  });
+
+export const setReviewStatus = ({ offerId, ...data }) =>
+  http.get(`moderation/offers/${offerId}`, {
+    ...data,
+  });
+
 //? Offers
 
-export const setNewOffer = (data) =>
+export const createNewOffer = (data) =>
   http.post(`contests/${data.get('contestId')}/offers/`, data);
 
-export const setOfferStatus = ({ contestId, offerId, ...restData }) =>
+export const setFinalStatus = ({ contestId, offerId, ...restData }) =>
   http.put(`contests/${contestId}/offers/${offerId}`, restData);
 
 //? Chats

@@ -8,14 +8,14 @@ offerRouter.post(
   '/',
   upload.uploadLogoFiles,
   basicMiddlewares.canSendOffer,
-  contestController.setNewOffer
+  contestController.createNewOffer
 );
 
 // contests/:contestId/offers/:offerId
 offerRouter.put(
   '/:offerId',
   basicMiddlewares.onlyForCustomerWhoCreateContest,
-  contestController.setOfferStatus
+  contestController.setFinalStatus
 );
 
 module.exports = offerRouter;

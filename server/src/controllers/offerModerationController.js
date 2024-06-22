@@ -35,7 +35,7 @@ module.exports.getAllOffersOnReview = async (req, res, next) => {
   }
 };
 
-module.exports.updateOfferStatus = async (req, res, next) => {
+module.exports.updateOfferReviewStatus = async (req, res, next) => {
   try {
     const {
       param: { offerId },

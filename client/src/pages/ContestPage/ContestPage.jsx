@@ -23,6 +23,7 @@ import Spinner from '../../components/Spinner/Spinner';
 import TryAgain from '../../components/TryAgain/TryAgain';
 import 'react-18-image-lightbox/style.css';
 import Error from '../../components/Error/Error';
+import { TbPoint } from "react-icons/tb";
 
 class ContestPage extends React.Component {
   componentWillUnmount() {
@@ -134,8 +135,6 @@ class ContestPage extends React.Component {
       offers,
       setOfferStatusError,
     } = contestByIdStore;
-    const isOffersReviewing = contestData.reviewCount > 0;
-    const isOffersFailedReview = contestData.failReviewCount > 0;
     return (
       <div>
         {/* <Chat/> */}
@@ -186,26 +185,24 @@ class ContestPage extends React.Component {
               ) : (
                 <div className={styles.offersContainer}>
                   <section className={styles.offersPendingText}>
-                    {(isOffersFailedReview || isOffersReviewing) && (
-                      <div className={styles.offersPendingBox}>
-                        {isOffersReviewing && (
-                          <p>
-                            <span className={styles.pendingText}>
-                              {contestData.reviewCount} offers pending
-                            </span>{' '}
-                            on review
-                          </p>
-                        )}
-                        {isOffersFailedReview && (
-                          <p>
-                            <span className={styles.failedText}>
-                              {contestData.failReviewCount} offers failed
-                            </span>{' '}
-                            review
-                          </p>
-                        )}
-                      </div>
-                    )}
+                    <div className={styles.offersPendingBox}>
+                      {contestData?.reviewCount > 0 && (
+                        <p>
+                          <span className={styles.pendingText}>
+                            {contestData.reviewCount} offers pending
+                          </span>{' '}
+                          on review 
+                        </p>
+                      )}
+                      {contestData?.failReviewCount > 0 && (
+                        <p>
+                          <span className={styles.failedText}>
+                            {contestData.failReviewCount} offers failed
+                          </span>{' '}
+                          review 
+                        </p>
+                      )}
+                    </div>
                   </section>
                   {role === CONSTANTS.CREATOR &&
                     contestData.status === CONSTANTS.CONTEST_STATUS_ACTIVE && (

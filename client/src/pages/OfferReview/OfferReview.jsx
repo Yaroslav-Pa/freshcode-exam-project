@@ -1,38 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Header from '../../components/Header/Header';
 import styles from './OfferReview.module.sass';
 import OfferOnReview from '../../components/OfferOnReview/OfferOnReview';
 import TryAgain from '../../components/TryAgain/TryAgain';
 import classNames from 'classnames';
-import { getModeratorFunctions } from '../../utils/offerReviewFunctions';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOffers } from '../../store/slices/moderatedOffersSlice';
+import Spinner from '../../components/Spinner/Spinner';
 
 function OfferReview() {
-  const [offers, setOffers] = useState([]);
-  const [error, setError] = useState({ isError: false, message: '' });
-  const [getOffers, setStatus] = getModeratorFunctions(setOffers, setError);
+  const dispatch = useDispatch();
+  const isFetching = useSelector(
+    ({ moderatedOffersStore }) => moderatedOffersStore.isFetching
+  );
+  const error = useSelector(
+    ({ moderatedOffersStore }) => moderatedOffersStore.error
+  );
+  const offers = useSelector(
+    ({ moderatedOffersStore }) => moderatedOffersStore.offers
+  );
+  const haveMore = useSelector(
+    ({ moderatedOffersStore }) => moderatedOffersStore.haveMore
+  );
 
   useEffect(() => {
-    getOffers();
+    dispatch(getOffers());
   }, []);
-  
+
   const reviewingOffersList = offers.map((offer) => (
-    <OfferOnReview key={offer.id} offer={offer} setStatus={setStatus} />
+    <OfferOnReview key={offer.id} offer={offer} />
   ));
 
   const containerClassnames = classNames(styles.container, {
-    [styles.containerError]: error?.isError,
+    [styles.containerError]: error,
   });
 
   const renderErrorOrOffers = () => {
-    if (error?.isError) {
+    if (isFetching) {
+      return <Spinner />;
+    }
+    if (error) {
       return (
         <>
           <TryAgain
             getData={() => {
-              getOffers();
+              dispatch(getOffers());
             }}
           />
-          <p className={styles.emptyText}>{error?.message}</p>
+          <p className={styles.emptyText}>{error?.data}</p>
         </>
       );
     }

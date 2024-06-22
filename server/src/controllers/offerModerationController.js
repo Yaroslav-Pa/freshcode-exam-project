@@ -29,7 +29,7 @@ module.exports.getAllOffersOnReview = async (req, res, next) => {
         },
       ],
     });
-    res.send(offers);
+    res.send({ offers, haveMore: offers.length !== 0 });
   } catch (error) {
     next(new ServerError('Cannot get offers on review'));
   }
@@ -42,7 +42,7 @@ module.exports.updateOfferReviewStatus = async (req, res, next) => {
       body: { status },
     } = req;
 
-    const offer = await db.Offer.update(
+    const [count, [offer]] = await db.Offer.update(
       { status },
       {
         where: { id: offerId },
@@ -51,6 +51,6 @@ module.exports.updateOfferReviewStatus = async (req, res, next) => {
     );
     res.send(offer);
   } catch (error) {
-    next(new ServerError('Cannot get offers on review'));
+    next(new ServerError('Cannot update state of the offer'));
   }
 };

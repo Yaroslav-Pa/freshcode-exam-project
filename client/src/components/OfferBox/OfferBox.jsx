@@ -110,9 +110,11 @@ const OfferBox = (props) => {
   const { avatar, firstName, lastName, email, rating } = props.data.User;
   const offerContainerClassnames = classNames(styles.offerContainer, {
     [styles.offerContainerReview]:
-      props.data.status === CONSTANTS.OFFER_STATUS_REVIEW,
+      props.data.status === CONSTANTS.OFFER_STATUS_REVIEW &&
+      !props.isForModerator,
     [styles.offerContainerFailReview]:
-      props.data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW,
+      props.data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW &&
+      !props.isForModerator,
   });
   return (
     <div className={offerContainerClassnames}>

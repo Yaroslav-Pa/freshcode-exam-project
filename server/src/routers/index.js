@@ -4,6 +4,7 @@ const contestRouter = require('./contestRouter');
 const chatRouter = require('./chatRouter');
 const userRouter = require('./userRouter');
 const { onlyForModerator } = require('../middlewares/basicMiddlewares');
+const offerReviewRouter = require('./offerReviewRouter');
 const router = express.Router();
 
 router.use('/user', userRouter);
@@ -14,6 +15,6 @@ router.use('/contests', contestRouter);
 
 router.use('/chats', chatRouter);
 
-router.use('/offers', onlyForModerator, chatRouter);
+router.use('/offers', onlyForModerator, offerReviewRouter);
 
 module.exports = router;

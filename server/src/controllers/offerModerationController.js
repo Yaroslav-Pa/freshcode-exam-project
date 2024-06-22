@@ -10,11 +10,25 @@ module.exports.getAllOffersOnReview = async (req, res, next) => {
 
     const offers = await db.Offer.findAll({
       where: { status: OFFER_STATUS.REVIEW },
-      limit,
+      //TODO! if limit = undefiend then request will return empty data so need to fix it later
+      limit: limit || null,
       offset: offset || 0,
       order: [['id', 'ASC']],
+      include: [
+        {
+          model: db.User,
+          required: true,
+          attributes: {
+            exclude: ['password', 'role', 'balance', 'accessToken'],
+          },
+        },
+        {
+          model: db.Rating,
+          required: false,
+          attributes: { exclude: ['userId', 'offerId'] },
+        },
+      ],
     });
-
     res.send(offers);
   } catch (error) {
     next(new ServerError('Cannot get offers on review'));

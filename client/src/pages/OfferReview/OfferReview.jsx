@@ -1,63 +1,50 @@
+import { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
-import OfferBox from '../../components/OfferBox/OfferBox';
-import constants from '../../constants';
 import styles from './OfferReview.module.sass';
-const testOffers = [
-  {
-    id: 1,
-    text: '123123',
-    fileName: null,
-    originalFileName: null,
-    status: 'pending',
-    User: {
-      id: 225556,
-      firstName: 'create',
-      lastName: 'create',
-      displayName: 'create',
-      email: 'create@gmail.com',
-      avatar: 'anon.png',
-      rating: 0,
-    },
-  },
-];
+import { getOffersOnReview } from '../../api/rest/restController';
+import OfferOnReview from '../../components/OfferOnReview/OfferOnReview';
+
 function OfferReview() {
+  const [offers, setOffers] = useState([]);
+
+  const getOffers = async () => {
+    try {
+      const { data } = await getOffersOnReview();
+      console.log(data);
+      setOffers(data);
+    } catch (error) {
+      throw new Error('Failed to fetch offers', error);
+    }
+  };
+
+  useEffect(() => {
+    getOffers();
+    console.log(offers);
+  }, []);
+
   const approveOffer = () => {};
   const rejectOffer = () => {};
 
-  const reviewingOffersList = testOffers.map((offer) => (
-    <div className={styles.offerBox} key={offer._id}>
-      <OfferBox
-        isForModerator={true}
-        data={offer}
-        needButtons={false}
-        contestType={offer.fileName !== null ? constants.LOGO_CONTEST : null}
-      />
-      <div className={styles.buttonContainer}>
-        <button
-          className={styles.approveButton}
-          onClick={() => {
-            approveOffer(offer.id);
-          }}
-        >
-          Approve
-        </button>
-        <button
-          className={styles.rejectButton}
-          onClick={() => {
-            rejectOffer(offer.id);
-          }}
-        >
-          Reject
-        </button>
-      </div>
-    </div>
+  const reviewingOffersList = offers.map((offer) => (
+    <OfferOnReview
+      key={offer.id}
+      offer={offer}
+      approveOffer={approveOffer}
+      rejectOffer={rejectOffer}
+    />
   ));
 
   return (
     <>
       <Header />
       <main className={styles.main}>
-        <section className={styles.container}>{reviewingOffersList}</section>
+        <section className={styles.container}>
+          {offers.length !== 0 ? (
+            reviewingOffersList
+          ) : (
+            <p>No offers to review</p>
+          )}
+        </section>
       </main>
     </>
   );

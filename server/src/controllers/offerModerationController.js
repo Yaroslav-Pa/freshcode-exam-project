@@ -38,7 +38,7 @@ module.exports.getAllOffersOnReview = async (req, res, next) => {
 module.exports.updateOfferReviewStatus = async (req, res, next) => {
   try {
     const {
-      param: { offerId },
+      params: { offerId },
       body: { status },
     } = req;
 
@@ -49,7 +49,7 @@ module.exports.updateOfferReviewStatus = async (req, res, next) => {
         returning: true,
       }
     );
-
+    console.log(offer);
     res.send(offer);
   } catch (error) {
     next(new ServerError('Cannot get offers on review'));

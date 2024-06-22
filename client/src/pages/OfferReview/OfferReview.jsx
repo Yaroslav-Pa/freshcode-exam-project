@@ -1,46 +1,20 @@
 import { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
 import styles from './OfferReview.module.sass';
-import {
-  getOffersOnReview,
-  setReviewStatus,
-} from '../../api/rest/restController';
 import OfferOnReview from '../../components/OfferOnReview/OfferOnReview';
 import TryAgain from '../../components/TryAgain/TryAgain';
 import classNames from 'classnames';
-const errorInitState = { isError: false, message: '' };
+import { getModeratorFunctions } from '../../utils/offerReviewFunctions';
 
 function OfferReview() {
   const [offers, setOffers] = useState([]);
-  const [error, setError] = useState(errorInitState);
-
-  const getOffers = async () => {
-    try {
-      setError(errorInitState);
-      const { data } = await getOffersOnReview();
-      setOffers(data);
-    } catch (error) {
-      setError({ isError: true, message: error.response.data });
-    }
-  };
+  const [error, setError] = useState({ isError: false, message: '' });
+  const [getOffers, setStatus] = getModeratorFunctions(setOffers, setError);
 
   useEffect(() => {
     getOffers();
   }, []);
-
-  const setStatus = async (offerId, status) => {
-    try {
-      const res = await setReviewStatus({ offerId, status });
-      if (res.status === 200) {
-        setTimeout(() => {
-          setOffers((offers) => offers.filter((offer) => offer.id !== offerId));
-        }, 500);
-      }
-    } catch (error) {
-      setError({ isError: true, message: error.response.data });
-    }
-  };
-
+  
   const reviewingOffersList = offers.map((offer) => (
     <OfferOnReview key={offer.id} offer={offer} setStatus={setStatus} />
   ));
@@ -49,27 +23,32 @@ function OfferReview() {
     [styles.containerError]: error?.isError,
   });
 
+  const renderErrorOrOffers = () => {
+    if (error?.isError) {
+      return (
+        <>
+          <TryAgain
+            getData={() => {
+              getOffers();
+            }}
+          />
+          <p className={styles.emptyText}>{error?.message}</p>
+        </>
+      );
+    }
+    return offers.length !== 0 ? (
+      reviewingOffersList
+    ) : (
+      <p className={styles.emptyText}>No offers to review</p>
+    );
+  };
+
   return (
     <>
       <Header />
       <main className={styles.main}>
         <section className={containerClassnames}>
-          {!error?.isError &&
-            (offers.length !== 0 ? (
-              reviewingOffersList
-            ) : (
-              <p className={styles.emptyText}>No offers to review</p>
-            ))}
-          {error?.isError && (
-            <>
-              <TryAgain
-                getData={() => {
-                  getOffers();
-                }}
-              />
-              <p className={styles.emptyText}>{error?.message}</p>
-            </>
-          )}
+          {renderErrorOrOffers()}
         </section>
       </main>
     </>

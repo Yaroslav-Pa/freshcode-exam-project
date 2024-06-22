@@ -14,7 +14,7 @@ chatRouter.put('/favorite', chatController.favoriteChat);
 chatRouter.use('/catalogs', catalogRouter);
 
 // /chats/:chatId/
-chatRouter.post('/:chatId', chatController.addNewChatToCatalog);
+chatRouter.put('/:chatId', chatController.addNewChatToCatalog);
 // /chats/:chatId/
 chatRouter.delete('/:chatId', chatController.removeChatFromCatalog);
 

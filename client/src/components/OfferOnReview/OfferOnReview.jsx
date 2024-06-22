@@ -1,10 +1,19 @@
-import CONSTANTS from "../../constants";
-import OfferBox from "../OfferBox/OfferBox";
-import styles from './OfferOnReview.module.sass'
+import { useState } from 'react';
+import CONSTANTS from '../../constants';
+import OfferBox from '../OfferBox/OfferBox';
+import styles from './OfferOnReview.module.sass';
+import classNames from 'classnames';
 
-function OfferOnReview({offer, approveOffer, rejectOffer}) {
+function OfferOnReview({ offer, setStatus }) {
+  const [isApproved, setIsApproved] = useState(false);
+  const [isRejected, setIsRejected] = useState(false);
+
+  const offerBoxClassnames = classNames(styles.offerBox, {
+    [styles.offerRejected]: isRejected,
+    [styles.offerApproved]: isApproved,
+  });
   return (
-    <section className={styles.offerBox} key={offer._id}>
+    <section className={offerBoxClassnames} key={offer._id}>
       <OfferBox
         isForModerator={true}
         data={offer}
@@ -15,7 +24,8 @@ function OfferOnReview({offer, approveOffer, rejectOffer}) {
         <button
           className={styles.approveButton}
           onClick={() => {
-            approveOffer(offer.id);
+            setIsApproved(true);
+            setStatus(offer.id, CONSTANTS.OFFER_STATUS_PENDING);
           }}
         >
           Approve
@@ -23,7 +33,8 @@ function OfferOnReview({offer, approveOffer, rejectOffer}) {
         <button
           className={styles.rejectButton}
           onClick={() => {
-            rejectOffer(offer.id);
+            setIsRejected(true);
+            setStatus(offer.id, CONSTANTS.OFFER_STATUS_FAIL_REVIEW);
           }}
         >
           Reject

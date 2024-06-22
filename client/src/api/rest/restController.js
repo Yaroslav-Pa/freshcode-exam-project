@@ -56,7 +56,7 @@ export const getOffersOnReview = (data) =>
   });
 
 export const setReviewStatus = ({ offerId, ...data }) =>
-  http.get(`moderation/offers/${offerId}`, {
+  http.put(`moderation/offers/${offerId}`, {
     ...data,
   });
 
@@ -80,7 +80,7 @@ export const changeChatFavorite = (data) => http.put('/chats/favorite', data);
 export const changeChatBlock = (data) => http.put('/chats/blackList', data);
 
 export const addChatToCatalog = ({ chatId, ...restData }) =>
-  http.post(`/chats/${chatId}`, restData);
+  http.put(`/chats/${chatId}`, restData);
 export const removeChatFromCatalog = ({ chatId, ...restData }) =>
   http.delete(`/chats/${chatId}`, {
     params: {

@@ -129,13 +129,12 @@ const resolveOffer = async (
     finishedContest.prize
   );
 
+  //TODO! якщо визначити хто вийграв усі інші офери навіть що були заблоковані адміном будуть показані
   const updatedOffers = await contestQueries.updateOfferStatus(
     {
-      status: db.sequelize.literal(` CASE
-            WHEN "id"=${offerId} THEN '${CONSTANTS.OFFER_STATUS_WON}'
-            ELSE '${CONSTANTS.OFFER_STATUS_REJECTED}'
-            END
-    `),
+      status: db.sequelize.literal(
+        `CASE WHEN "id"=${offerId} THEN '${CONSTANTS.OFFER_STATUS.RESOLVE}'::enum_offers_status ELSE '${CONSTANTS.OFFER_STATUS.REJECTED}'::enum_offers_status END`
+      ),
     },
     {
       contestId,
@@ -146,7 +145,7 @@ const resolveOffer = async (
   const arrayRoomsId = [];
   updatedOffers.forEach((offer) => {
     if (
-      offer.status === CONSTANTS.OFFER_STATUS_REJECTED &&
+      offer.status === CONSTANTS.OFFER_STATUS.REJECTED &&
       creatorId !== offer.userId
     ) {
       arrayRoomsId.push(offer.userId);
@@ -165,7 +164,7 @@ const resolveOffer = async (
     .getNotificationController()
     .emitChangeOfferStatus(creatorId, 'Someone of your offers WIN', contestId);
   return updatedOffers.find(
-    (offer) => offer.dataValues.status === CONSTANTS.OFFER_STATUS_WON
+    (offer) => offer.dataValues.status === CONSTANTS.OFFER_STATUS.RESOLVE
   );
 };
 

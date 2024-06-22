@@ -15,7 +15,6 @@ import {
 import Header from '../../components/Header/Header';
 import ContestSideBar from '../../components/ContestSideBar/ContestSideBar';
 import styles from './ContestPage.module.sass';
-import OfferBox from '../../components/OfferBox/OfferBox';
 import OfferForm from '../../components/OfferForm/OfferForm';
 import CONSTANTS from '../../constants';
 import Brief from '../../components/Brief/Brief';
@@ -23,7 +22,7 @@ import Spinner from '../../components/Spinner/Spinner';
 import TryAgain from '../../components/TryAgain/TryAgain';
 import 'react-18-image-lightbox/style.css';
 import Error from '../../components/Error/Error';
-import { TbPoint } from "react-icons/tb";
+import OfferList from '../../components/OfferList/OfferList';
 
 class ContestPage extends React.Component {
   componentWillUnmount() {
@@ -39,29 +38,6 @@ class ContestPage extends React.Component {
   getData = () => {
     const { params } = this.props.match;
     this.props.getData({ contestId: params.id });
-  };
-
-  setOffersList = () => {
-    const { offers, contestData } = this.props.contestByIdStore;
-    const array = [];
-    offers.forEach((offer) => {
-      array.push(
-        <OfferBox
-          data={offer}
-          key={offer.id}
-          needButtons={this.needButtons}
-          setOfferStatus={this.setOfferStatus}
-          contestType={contestData.contestType}
-        />
-      );
-    });
-    return array.length !== 0 ? (
-      array
-    ) : (
-      <div className={styles.notFound}>
-        There is no suggestion at this moment
-      </div>
-    );
   };
 
   needButtons = (offerStatus) => {
@@ -137,7 +113,6 @@ class ContestPage extends React.Component {
     } = contestByIdStore;
     return (
       <div>
-        {/* <Chat/> */}
         {isShowOnFull && (
           <LightBox
             mainSrc={`${CONSTANTS.publicContestsURL}${imagePath}`}
@@ -191,7 +166,7 @@ class ContestPage extends React.Component {
                           <span className={styles.pendingText}>
                             {contestData.reviewCount} offers pending
                           </span>{' '}
-                          on review 
+                          on review
                         </p>
                       )}
                       {contestData?.failReviewCount > 0 && (
@@ -199,7 +174,7 @@ class ContestPage extends React.Component {
                           <span className={styles.failedText}>
                             {contestData.failReviewCount} offers failed
                           </span>{' '}
-                          review 
+                          review
                         </p>
                       )}
                     </div>
@@ -219,7 +194,14 @@ class ContestPage extends React.Component {
                       clearError={clearSetOfferStatusError}
                     />
                   )}
-                  <div className={styles.offers}>{this.setOffersList()}</div>
+                  <div className={styles.offers}>
+                    <OfferList
+                      contestData={this.props.contestByIdStore.contestData}
+                      offers={this.props.contestByIdStore.offers}
+                      needButtons={this.needButtons}
+                      setOfferStatus={this.setOfferStatus}
+                    />
+                  </div>
                 </div>
               )}
             </div>

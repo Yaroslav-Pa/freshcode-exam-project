@@ -56,6 +56,16 @@ module.exports = {
         allowNull: true,
         defaultValue: OFFER_STATUS.REVIEW,
       },
+      createdAt: {
+        field:"created_at",
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        field:"updated_at",
+        allowNull: false,
+        type: Sequelize.DATE
+      }
     });
   },
   down: (queryInterface, Sequelize) => {

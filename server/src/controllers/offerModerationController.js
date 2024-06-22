@@ -49,7 +49,6 @@ module.exports.updateOfferReviewStatus = async (req, res, next) => {
         returning: true,
       }
     );
-    console.log(offer);
     res.send(offer);
   } catch (error) {
     next(new ServerError('Cannot get offers on review'));

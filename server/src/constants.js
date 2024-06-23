@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  EMAIL: { user: 'mailsquadhelp@gmail.com', pass: '1ovtv iapm fagi exnc' },
+  EMAIL: { user: 'mailsquadhelp@gmail.com', pass: 'ovtv iapm fagi exnc' },
   LOGGER_FILENAME: 'errors.log',
   ARCHIVE_DIR: 'logs/archive',
   LOGGER_DIR: 'logs',

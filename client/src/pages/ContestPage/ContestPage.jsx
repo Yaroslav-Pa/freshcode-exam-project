@@ -169,14 +169,15 @@ class ContestPage extends React.Component {
                           on review
                         </p>
                       )}
-                      {contestData?.failReviewCount > 0 && (
-                        <p>
-                          <span className={styles.failedText}>
-                            {contestData.failReviewCount} offers failed
-                          </span>{' '}
-                          review
-                        </p>
-                      )}
+                      {role === CONSTANTS.CREATOR &&
+                        contestData?.failReviewCount > 0 && (
+                          <p>
+                            <span className={styles.failedText}>
+                              {contestData.failReviewCount} offers failed
+                            </span>{' '}
+                            review
+                          </p>
+                        )}
                     </div>
                   </section>
                   {role === CONSTANTS.CREATOR &&

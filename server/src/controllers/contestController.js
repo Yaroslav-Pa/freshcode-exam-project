@@ -129,11 +129,21 @@ const resolveOffer = async (
     finishedContest.prize
   );
 
-  //TODO! якщо визначити хто вийграв усі інші офери навіть що були заблоковані адміном будуть показані
+  //TODO! maybe redo this to normal style, not sequelize.literal
+  //Раніше проблема: якщо визначити хто вийграв - усі інші офери навіть що були заблоковані адміном будуть показані
+  const offerStatusResolve = `'${CONSTANTS.OFFER_STATUS.RESOLVE}'::enum_offers_status`;
+  const offerStatusReject = `'${CONSTANTS.OFFER_STATUS.REJECTED}'::enum_offers_status `;
+  const offerStatusReview = `'${CONSTANTS.OFFER_STATUS.REVIEW}'::enum_offers_status`;
+  const offerStatusFailReview = `'${CONSTANTS.OFFER_STATUS.FAIL_REVIEW}'::enum_offers_status`;
+  
   const updatedOffers = await contestQueries.updateOfferStatus(
     {
       status: db.sequelize.literal(
-        `CASE WHEN "id"=${offerId} THEN '${CONSTANTS.OFFER_STATUS.RESOLVE}'::enum_offers_status ELSE '${CONSTANTS.OFFER_STATUS.REJECTED}'::enum_offers_status END`
+        `CASE 
+        WHEN "id"=${offerId} THEN ${offerStatusResolve} 
+        WHEN "status"=${offerStatusReview} OR "status"=${offerStatusFailReview} THEN ${offerStatusFailReview}
+        ELSE ${offerStatusReject}
+        END`
       ),
     },
     {

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './OfferList.module.sass';
 import OfferBox from '../OfferBox/OfferBox';
-import { sortOffers } from '../../utils/OfferListFunctions';
+import { sortOffers } from '../../utils/offerListFunctions';
 
 const OfferList = ({ offers, contestData, needButtons, setOfferStatus }) => {
   const sortedOffers = sortOffers(offers);

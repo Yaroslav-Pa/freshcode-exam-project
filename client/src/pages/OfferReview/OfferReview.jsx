@@ -5,10 +5,11 @@ import OfferOnReview from '../../components/OfferOnReview/OfferOnReview';
 import TryAgain from '../../components/TryAgain/TryAgain';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-import { getOffers } from '../../store/slices/moderatedOffersSlice';
+import {
+  clearOffers,
+  getOffers,
+} from '../../store/slices/moderatedOffersSlice';
 import Spinner from '../../components/Spinner/Spinner';
-
-//! Залишилось зробити 3) limit offset
 
 function OfferReview() {
   const dispatch = useDispatch();
@@ -26,8 +27,15 @@ function OfferReview() {
   );
 
   useEffect(() => {
+    dispatch(clearOffers());
     dispatch(getOffers());
   }, []);
+
+  useEffect(() => {
+    if (haveMore && offers.length !== 0 && offers.length <= 4) {
+      dispatch(getOffers(offers.length));
+    }
+  }, [offers]);
 
   const reviewingOffersList = offers.map((offer) => (
     <OfferOnReview key={offer.id} offer={offer} />
@@ -38,9 +46,6 @@ function OfferReview() {
   });
 
   const renderErrorOrOffers = () => {
-    if (isFetching) {
-      return <Spinner />;
-    }
     if (error) {
       return (
         <>
@@ -53,11 +58,9 @@ function OfferReview() {
         </>
       );
     }
-    return offers.length !== 0 ? (
-      reviewingOffersList
-    ) : (
-      <p className={styles.emptyText}>No offers to review</p>
-    );
+    return offers.length !== 0
+      ? reviewingOffersList
+      : !isFetching && <p className={styles.emptyText}>No offers to review</p>;
   };
 
   return (
@@ -66,6 +69,7 @@ function OfferReview() {
       <main className={styles.main}>
         <section className={containerClassnames}>
           {renderErrorOrOffers()}
+          {isFetching && <Spinner />}
         </section>
       </main>
     </>

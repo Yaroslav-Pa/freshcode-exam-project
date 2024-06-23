@@ -1,5 +1,5 @@
 import CONSTANTS from "../constants";
-
+//TODO
 export const sortOffers = (offersToSort) => {
   return [...offersToSort].sort((a, b) => {
     if (

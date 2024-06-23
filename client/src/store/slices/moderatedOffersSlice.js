@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as restController from '../../api/rest/restController';
-import { decorateAsyncThunk } from '../../utils/store';
+import { decorateAsyncThunk, pendingReducer } from '../../utils/store';
 
 const MODERATED_OFFERS_SLICE_NAME = 'moderatedOffers';
 
@@ -8,15 +8,16 @@ const initialState = {
   isFetching: false,
   offers: [],
   error: null,
-  hasMore: true,
+  haveMore: true,
 };
 
 export const getOffers = decorateAsyncThunk({
   key: `${MODERATED_OFFERS_SLICE_NAME}/getOffers`,
   thunk: async (offset) => {
+    const nowOffset = offset || 0;
     const { data } = await restController.getOffersOnReview({
-      limit: null,
-      offset: offset || 0,
+      limit: 8 - nowOffset,
+      offset: nowOffset,
     });
     return data;
   },
@@ -31,22 +32,17 @@ export const setStatus = decorateAsyncThunk({
 });
 
 const extraReducers = (builder) => {
-  builder.addCase(getOffers.pending, (state) => {
-    state.isFetching = true;
+  builder.addCase(getOffers.pending, pendingReducer);
+  builder.addCase(getOffers.fulfilled, (state, { payload }) => {
+    state.isFetching = false;
     state.error = null;
-    state.offers = [];
+    state.offers = [...state.offers, ...payload.offers];
+    state.haveMore = payload.haveMore;
+
+    console.log(payload );
+    console.log('getOffers');
+    console.log(state.offers);
   });
-  builder.addCase(
-    getOffers.fulfilled,
-    (state, { payload: { offers, hasMore } }) => {
-      state.isFetching = false;
-      state.error = null;
-      state.offers = [...state.offers, ...offers];
-      state.hasMore = hasMore;
-      console.log('getOffers');
-      console.log(state.offers);
-    }
-  );
   builder.addCase(getOffers.rejected, (state, { payload }) => {
     state.error = payload;
     state.offers = [];
@@ -76,6 +72,9 @@ const reducers = {
     console.log('removedId ' + payload);
     state.offers = state.offers.filter((offer) => offer.id !== payload);
   },
+  clearOffers: (state) => {
+    state.offers = [];
+  },
 };
 
 const moderatedOffersSlice = createSlice({
@@ -87,6 +86,6 @@ const moderatedOffersSlice = createSlice({
 
 const { actions, reducer } = moderatedOffersSlice;
 
-export const { removeOffer } = actions;
+export const { removeOffer, clearOffers } = actions;
 
 export default reducer;

@@ -37,8 +37,8 @@ export default {
   NAME_CONTEST: 'name',
   LOGO_CONTEST: 'logo',
   TAGLINE_CONTEST: 'tagline',
-  OFFER_STATUS_REVIEW:"onReview",
-  OFFER_STATUS_FAIL_REVIEW:"reviewFail",
+  OFFER_STATUS_REVIEW: 'onReview',
+  OFFER_STATUS_FAIL_REVIEW: 'reviewFail',
   OFFER_STATUS_REJECTED: 'rejected',
   OFFER_STATUS_WON: 'won',
   OFFER_STATUS_PENDING: 'pending',
@@ -138,7 +138,7 @@ export default {
     {
       menuName: 'CONTESTS',
       list: [
-        { name: 'How it works', url: '/howItWorks' },
+        { name: 'How it works', url: '/howItWorks', isInnerLink: true },
         { name: 'Pricing', url: 'http://www.google.com' },
         { name: 'Agency service', url: 'http://www.google.com' },
         { name: 'Active contests', url: 'http://www.google.com' },

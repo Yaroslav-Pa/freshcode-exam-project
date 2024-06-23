@@ -7,8 +7,8 @@ import UserInfo from '../../components/UserInfo/UserInfo';
 import { cashOut, clearPaymentStore } from '../../store/slices/paymentSlice';
 import { changeProfileViewMode } from '../../store/slices/userProfileSlice';
 import UserProfileSectionButton from '../../components/UserProfileSectionButton/UserProfileSectionButton';
-import UserProfilePayFormShower from '../../components/UserProfilePayFormShower/UserProfilePayFormShower';
-import UserProfileTransactionTable from '../../components/UserProfileTransactionTable/UserProfileTransactionTable';
+import CashoutFormShower from '../../components/CashoutFormShower/CashoutFormShower';
+import TransactionTableSection from '../../components/TransactionTableSection/TransactionTableSection';
 
 const UserProfile = ({
   role,
@@ -37,27 +37,27 @@ const UserProfile = ({
                 mode={CONSTANTS.CASHOUT_MODE}
               />
             )}
-            <UserProfileSectionButton
-              profileViewMode={profileViewMode}
-              changeProfileViewMode={changeProfileViewMode}
-              text={'View transaction history'}
-              mode={CONSTANTS.TRANSACTION_HISTORY_MODE}
-            />
+            {role !== CONSTANTS.MODERATOR && (
+              <UserProfileSectionButton
+                profileViewMode={profileViewMode}
+                changeProfileViewMode={changeProfileViewMode}
+                text={'View transaction history'}
+                mode={CONSTANTS.TRANSACTION_HISTORY_MODE}
+              />
+            )}
           </div>
         </aside>
         {profileViewMode === CONSTANTS.USER_INFO_MODE && <UserInfo />}
         {profileViewMode === CONSTANTS.CASHOUT_MODE && (
-          <UserProfilePayFormShower {...restProps} />
+          <CashoutFormShower {...restProps} />
         )}
         {profileViewMode === CONSTANTS.TRANSACTION_HISTORY_MODE && (
-          <UserProfileTransactionTable />
+          <TransactionTableSection />
         )}
       </main>
     </>
   );
 };
-
-//TODO! продивитись slice та переробити на хуки (?)
 
 const mapStateToProps = (state) => {
   //TODO? there was a error in this area but it vaporised

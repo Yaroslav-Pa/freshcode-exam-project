@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTransactionHistory } from '../../store/slices/userProfileSlice';
 import SpinnerLoader from '../Spinner/Spinner';
-import styles from './UserProfileTransactionTable.module.sass';
+import styles from './TransactionTableSection.module.sass';
 import TransactionTable from '../TransactionTable/TransactionTable';
 
-function UserProfileTransactionTable() {
+function TransactionTableSection() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,4 +38,4 @@ function UserProfileTransactionTable() {
   );
 }
 
-export default UserProfileTransactionTable;
+export default TransactionTableSection;

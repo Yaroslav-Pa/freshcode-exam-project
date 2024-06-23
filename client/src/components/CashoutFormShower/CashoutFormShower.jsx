@@ -1,8 +1,8 @@
 import Error from '../Error/Error';
 import PayForm from '../PayForm/PayForm';
-import styles from './UserProfilePayFormShower.module.sass';
+import styles from './CashoutFormShower.module.sass';
 
-function UserProfilePayFormShower({
+function CashoutFormShower({
   balance,
   error,
   clearPaymentStore,
@@ -20,9 +20,9 @@ function UserProfilePayFormShower({
   return (
     <section className={styles.container}>
       {parseInt(balance) === 0 ? (
-        <span className={styles.notMoney}>
+        <p className={styles.notMoney}>
           There is no money on your balance
-        </span>
+        </p>
       ) : (
         <div>
           {error && (
@@ -39,4 +39,4 @@ function UserProfilePayFormShower({
   );
 }
 
-export default UserProfilePayFormShower;
+export default CashoutFormShower;

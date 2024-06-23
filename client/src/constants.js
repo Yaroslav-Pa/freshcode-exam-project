@@ -1,9 +1,8 @@
-import { values } from 'lodash';
-
 const env = process.env.NODE_ENV || 'development';
 const serverIP = 'localhost';
 const serverPort = 5000;
-export default {
+
+const CONSTANTS = {
   BUTTON_GROUP_START_VALUE: 'yesMinorValidations',
   BUTTON_GROUP: [
     {
@@ -389,3 +388,5 @@ export default {
     'One Word',
   ],
 };
+
+export default CONSTANTS;

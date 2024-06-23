@@ -1,15 +1,16 @@
 const path = require('path');
 
 module.exports = {
-  LOGGER_FILENAME:"errors.log",
-  ARCHIVE_DIR: "logs/archive",
-  LOGGER_DIR:"logs",
-  OFFER_STATUS:{
-    REVIEW:"onReview",
-    FAIL_REVIEW:"reviewFail",
-    PENDING:"pending",
-    RESOLVE:"won",
-    REJECTED:"rejected",
+  EMAIL: { user: 'mailsquadhelp@gmail.com', pass: '1ovtv iapm fagi exnc' },
+  LOGGER_FILENAME: 'errors.log',
+  ARCHIVE_DIR: 'logs/archive',
+  LOGGER_DIR: 'logs',
+  OFFER_STATUS: {
+    REVIEW: 'onReview',
+    FAIL_REVIEW: 'reviewFail',
+    PENDING: 'pending',
+    RESOLVE: 'won',
+    REJECTED: 'rejected',
   },
   START_USERS: [
     { ID: 125555, EMAIL: 'buy@gmail.com' },

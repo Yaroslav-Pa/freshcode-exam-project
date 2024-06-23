@@ -1,6 +1,12 @@
 const { OFFER_STATUS } = require('../constants');
 const db = require('../db/models');
+const EmailSendError = require('../errors/EmailSendError');
 const ServerError = require('../errors/ServerError');
+const {
+  transporter,
+  mailOptions,
+  mailErrorHandler,
+} = require('../utils/mailer');
 
 module.exports.getAllOffersOnReview = async (req, res, next) => {
   try {
@@ -42,14 +48,38 @@ module.exports.updateOfferReviewStatus = async (req, res, next) => {
       body: { status },
     } = req;
 
-    const [count, [offer]] = await db.Offer.update(
+    const [count, [updatedOffer]] = await db.Offer.update(
       { status },
       {
         where: { id: offerId },
         returning: true,
       }
     );
-    res.send(offer);
+    res.send(updatedOffer);
+
+    const offer = await db.Offer.findOne({
+      where: { id: offerId },
+      include: [
+        {
+          model: db.User,
+          required: true,
+          attributes: {
+            exclude: ['password', 'role', 'balance', 'accessToken'],
+          },
+        },
+      ],
+    });
+
+    transporter.sendMail(
+      mailOptions(
+        offer.User.email,
+        status,
+        `${offer.User.firstName} ${offer.User.lastName}`
+      ),
+      (error) => {
+        mailErrorHandler(error, next);
+      }
+    );
   } catch (error) {
     next(new ServerError('Cannot update state of the offer'));
   }

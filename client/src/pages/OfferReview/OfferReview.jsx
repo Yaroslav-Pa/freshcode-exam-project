@@ -8,6 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getOffers } from '../../store/slices/moderatedOffersSlice';
 import Spinner from '../../components/Spinner/Spinner';
 
+
+
+//! Залишилось зробити 1) відправку по email 2) фікс відображення усіх при вийгриші одного 3) limit offset
+
+
+
+
 function OfferReview() {
   const dispatch = useDispatch();
   const isFetching = useSelector(

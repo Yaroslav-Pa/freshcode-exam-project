@@ -1,15 +1,18 @@
 import ContestBox from '../components/ContestBox/ContestBox';
 
+export const getGoToExtended = (history) => {
+  const goToExtended = (contest_id) => {
+    history.push(`/contest/${contest_id}`);
+  };
+  return goToExtended;
+};
+
 export const contestList = (contests, goToExtended) => {
   const array = [];
-  for (let i = 0; i < contests.length; i++) {
+  contests.forEach((contest) => {
     array.push(
-      <ContestBox
-        data={contests[i]}
-        key={contests[i].id}
-        goToExtended={goToExtended}
-      />
+      <ContestBox data={contest} key={contest.id} goToExtended={goToExtended} />
     );
-  }
+  });
   return array;
 };

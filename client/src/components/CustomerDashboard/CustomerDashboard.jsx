@@ -10,9 +10,25 @@ import CONSTANTS from '../../constants';
 import ContestsContainer from '../ContestsContainer/ContestsContainer';
 import styles from './CustomerDashboard.module.sass';
 import TryAgain from '../TryAgain/TryAgain';
-import { contestList } from '../../utils/contestListFunctions';
+import { contestList, getGoToExtended } from '../../utils/contestListFunctions';
 
 class CustomerDashboard extends React.Component {
+  componentDidMount() {
+    this.getContests();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.customerFilter !== prevProps.customerFilter) {
+      this.getContests();
+    }
+  }
+  
+  componentWillUnmount() {
+    this.props.clearContestsList();
+  }
+
+  goToExtended = getGoToExtended(this.props.history);
+
   loadMore = (startFrom) => {
     this.props.getContests({
       limit: 8,
@@ -21,30 +37,12 @@ class CustomerDashboard extends React.Component {
     });
   };
 
-  componentDidMount() {
-    this.getContests();
-  }
-
   getContests = () => {
     this.props.getContests({
       limit: 8,
       contestStatus: this.props.customerFilter,
     });
   };
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.customerFilter !== prevProps.customerFilter) {
-      this.getContests();
-    }
-  }
-
-  goToExtended = (contest_id) => {
-    this.props.history.push(`/contest/${contest_id}`);
-  };
-
-  componentWillUnmount() {
-    this.props.clearContestsList();
-  }
 
   tryToGetContest = () => {
     this.props.clearContestsList();

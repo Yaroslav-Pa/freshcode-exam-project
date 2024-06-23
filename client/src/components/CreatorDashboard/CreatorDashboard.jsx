@@ -16,7 +16,7 @@ import TryAgain from '../TryAgain/TryAgain';
 import CONSTANTS from '../../constants';
 import IndustryTypeSelect from '../IndustryTypeSelect/IndustryTypeSelect';
 import TypeSelector from '../TypeSelector/TypeSelector';
-import { contestList } from '../../utils/contestListFunctions';
+import { contestList, getGoToExtended } from '../../utils/contestListFunctions';
 
 class CreatorDashboard extends React.Component {
   componentWillReceiveProps(nextProps, nextContext) {
@@ -37,6 +37,8 @@ class CreatorDashboard extends React.Component {
   componentWillUnmount() {
     this.props.clearContestsList();
   }
+
+  goToExtended = getGoToExtended(this.props.history);
 
   getContests = (filter) => {
     this.props.getContests({
@@ -103,11 +105,6 @@ class CreatorDashboard extends React.Component {
       offset: startFrom,
       ...this.getPredicateOfRequest(),
     });
-  };
-
-  //TODO! to Utils (as HOF to pass history)?
-  goToExtended = (contestId) => {
-    this.props.history.push(`/contest/${contestId}`);
   };
 
   tryLoadAgain = () => {

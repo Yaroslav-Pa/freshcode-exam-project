@@ -43,10 +43,7 @@ const getContestByIdExtraReducers = createExtraReducers({
     state.error = null;
     state.offers = [];
   },
-  fulfilledReducer: (
-    state,
-    { payload: { contestData, offers, reviewCount, failReviewCount }, payload }
-  ) => {
+  fulfilledReducer: (state, { payload: { contestData, offers } }) => {
     state.isFetching = false;
     state.contestData = contestData;
     state.error = null;

@@ -283,7 +283,7 @@ module.exports.getContests = async (req, res, next) => {
         {
           model: db.Offer,
           required: isOwnEntries,
-          where: isOwnEntries ? { userId } : {},
+          where: { userId },
           attributes: ['id'],
         },
       ],

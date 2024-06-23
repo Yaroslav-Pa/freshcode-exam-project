@@ -32,7 +32,7 @@ function OfferReview() {
   }, []);
 
   useEffect(() => {
-    if (haveMore && offers.length !== 0 && offers.length <= 4) {
+    if (haveMore && offers.length !== 0 && offers.length < 5) {
       dispatch(getOffers(offers.length));
     }
   }, [offers]);
@@ -68,6 +68,16 @@ function OfferReview() {
       <Header />
       <main className={styles.main}>
         <section className={containerClassnames}>
+          <div className={styles.buttonsContainer}>
+            <button
+              className={styles.refresh}
+              onClick={() => {
+                dispatch(getOffers(offers.length));
+              }}
+            >
+              Refresh
+            </button>
+          </div>
           {renderErrorOrOffers()}
           {isFetching && <Spinner />}
         </section>

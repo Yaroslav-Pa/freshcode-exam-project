@@ -35,7 +35,7 @@ module.exports.getAllOffersOnReview = async (req, res, next) => {
         },
       ],
     });
-    res.send({ offers, haveMore: offers.length !== 0 });
+    res.send({ offers, haveMore: limit ? offers.length === +limit : false });
   } catch (error) {
     next(new ServerError('Cannot get offers on review'));
   }

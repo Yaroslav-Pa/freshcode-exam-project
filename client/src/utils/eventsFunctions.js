@@ -40,9 +40,7 @@ export function getTimePercentage(
 }
 
 export const sortClosestTime = (array, currentTime) => {
-  const copy = [...array];
-
-  return copy.sort(
+  return [...array].sort(
     (a, b) =>
       differenceInMilliseconds(a.endTime, currentTime) -
       differenceInMilliseconds(b.endTime, currentTime)

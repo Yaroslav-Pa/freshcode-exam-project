@@ -14,7 +14,7 @@ import Logo from '../Logo';
 
 function Header({ data, getUser, isFetching, clearUserStore, history }) {
   useEffect(() => {
-    if (!data) {
+    if (!data && localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
       getUser();
     }
   }, []);

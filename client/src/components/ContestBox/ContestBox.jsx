@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ContestBox.module.sass';
 import CONSTANTS from '../../constants';
-import { getFormatedGoingTimeStr } from '../../utils/utilTimeFunctions';
+import { getFormatedGoingTimeStr } from '../../utils/contestFunctions';
 const ContestBox = (props) => {
   const getPreferenceContest = () => {
     const { data } = props;
@@ -13,7 +13,7 @@ const ContestBox = (props) => {
   const ucFirstLetter = (string) =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
-  const { id, title, contestType, prize, count, status, goToExtended } =
+  const { id, title, contestType, prize, count, status } =
     props.data;
   return (
     <div

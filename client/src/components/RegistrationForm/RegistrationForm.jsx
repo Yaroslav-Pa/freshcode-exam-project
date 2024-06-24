@@ -9,7 +9,7 @@ import RoleInput from '../RoleInput/RoleInput';
 import AgreeTermOfServiceInput from '../AgreeTermOfServiceInput/AgreeTermOfServiceInput';
 import CONSTANTS from '../../constants';
 import Schems from '../../utils/validators/registrationAndLoginSchems';
-import { scrollToTop } from '../../utils/scrollFunctions';
+import { scrollToTop } from '../../utils/scrollAndFormatFunctions';
 
 function RegistrationForm({
   authClear,

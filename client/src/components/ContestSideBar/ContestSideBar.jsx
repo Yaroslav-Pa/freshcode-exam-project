@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styles from './ContestSideBar.module.sass';
 import CONSTANTS from '../../constants';
-import { getFormatedGoingTimeStr } from '../../utils/utilTimeFunctions';
+import { getFormatedGoingTimeStr } from '../../utils/contestFunctions';
 
 const ContestSideBar = (props) => {
   const renderContestInfo = () => {

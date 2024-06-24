@@ -16,7 +16,7 @@ import TryAgain from '../TryAgain/TryAgain';
 import CONSTANTS from '../../constants';
 import IndustryTypeSelect from '../IndustryTypeSelect/IndustryTypeSelect';
 import TypeSelector from '../TypeSelector/TypeSelector';
-import { contestList, getGoToExtended } from '../../utils/contestListFunctions';
+import { contestList, getGoToExtended } from '../../utils/contestFunctions';
 
 class CreatorDashboard extends React.Component {
   componentWillReceiveProps(nextProps, nextContext) {

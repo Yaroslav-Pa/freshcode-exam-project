@@ -210,7 +210,7 @@ const CONSTANTS = {
       text: 'Check out our FAQs or send us a message. For assistance with launching a contest, you can also call us at (877) 355-3585 or schedule a Branding Consultation',
     },
   ],
-  NAMING_CONTESTS_IMAGE_PATH:'/staticImages/howItWorks/app-trophy.svg',
+  NAMING_CONTESTS_IMAGE_PATH:'/staticImages/howItWorks/icon-trophy.svg',
   HERO_SECTION_IMAGE_PATH:'/staticImages/howItWorks/app-user.svg',
   WAYS_TO_USE_BOXES: [
     {

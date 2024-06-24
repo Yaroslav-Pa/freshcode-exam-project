@@ -9,6 +9,7 @@ import MenuSection from '../MenuSection/MenuSection';
 import LoginButtons from '../LoginButtons/LoginButtons';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import Logo from '../Logo';
+import { controller } from '../../api/ws/socketController';
 
 //TODO if have time: create some king of button to open nav on phones
 
@@ -29,6 +30,7 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
   ));
 
   const logOut = () => {
+    controller.unsubsctibe(data.id);
     localStorage.clear();
     clearUserStore();
     history.replace('/login');

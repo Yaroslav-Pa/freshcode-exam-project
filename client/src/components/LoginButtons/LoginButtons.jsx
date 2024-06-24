@@ -3,21 +3,16 @@ import CONSTANTS from '../../constants';
 import styles from './LoginButtons.module.sass';
 
 function LoginButtons({ data, logOut }) {
-  const LinkList = CONSTANTS.USER_INFO_LINK_LIST.map(({ text, url }) => {
-    if (
-      data?.role === CONSTANTS.MODERATOR &&
-      CONSTANTS.UNAVAILABLE_PAGES_MODERATOR.includes(url)
-    ) {
-      return null;
-    }
-    return (
+  const LinkList = CONSTANTS.USER_INFO_LINK_LIST.map(({ text, url }) =>
+    data?.role === CONSTANTS.MODERATOR &&
+    CONSTANTS.UNAVAILABLE_PAGES_MODERATOR.includes(url) ? null : (
       <li key={text}>
         <Link to={url} className={styles.menuText}>
           {text}
         </Link>
       </li>
-    );
-  });
+    )
+  );
 
   if (data) {
     return (

@@ -316,8 +316,10 @@ const reducers = {
       if (isEqual(preview.participants, payload.participants))
         preview.blackList = payload.blackList;
     });
-    state.chatData = payload;
     state.messagesPreview = messagesPreview;
+
+    if (isEqual(payload?.participants, state.chatData?.participants))
+      state.chatData = payload;
   },
 
   addMessage: (state, { payload }) => {
@@ -336,7 +338,9 @@ const reducers = {
       messagesPreview.push(preview);
     }
     state.messagesPreview = messagesPreview;
-    state.messages = [...state.messages, payload.message];
+
+    if (isEqual(state.chatData?.participants, payload.message?.participants))
+      state.messages = [...state.messages, payload.message];
   },
 
   backToDialogList: (state) => {

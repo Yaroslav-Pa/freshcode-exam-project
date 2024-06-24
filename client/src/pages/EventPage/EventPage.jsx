@@ -19,7 +19,7 @@ function EventPage() {
   
   useEffect(() => {
     dispatch(saveEvents());
-  }, [events, dispatch]);
+  }, [events]);
 
   return (
     <>

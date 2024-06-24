@@ -1,3 +1,4 @@
+import CONSTANTS from '../../constants';
 import styles from './HeroSection.module.sass';
 import { FaPlay } from 'react-icons/fa';
 
@@ -21,7 +22,7 @@ const HeroSection = () => {
         </div>
         <img
           className={styles.heroImage}
-          src="https://www.atom.com/resources/assets/svg/illustrations/app-user.svg"
+          src={CONSTANTS.HERO_SECTION_IMAGE_PATH}
           alt="appUser"
         />
       </div>

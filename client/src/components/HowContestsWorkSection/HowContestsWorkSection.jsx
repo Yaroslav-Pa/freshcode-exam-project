@@ -17,7 +17,7 @@ function HowContestsWorkSection() {
       <div className={styles.workContainer}>
         <div className={styles.workTextContainer}>
           <img
-            src="https://www.atom.com/resources/assets/svg/icons/icon-27.svg"
+            src={CONSTANTS.NAMING_CONTESTS_IMAGE_PATH}
             alt="workImg"
             className={styles.workImg}
           />

@@ -210,9 +210,11 @@ const CONSTANTS = {
       text: 'Check out our FAQs or send us a message. For assistance with launching a contest, you can also call us at (877) 355-3585 or schedule a Branding Consultation',
     },
   ],
+  NAMING_CONTESTS_IMAGE_PATH:'/staticImages/howItWorks/app-trophy.svg',
+  HERO_SECTION_IMAGE_PATH:'/staticImages/howItWorks/app-user.svg',
   WAYS_TO_USE_BOXES: [
     {
-      imageUrl: 'https://www.atom.com/html/html/static_images/contests/g1.svg',
+      imageUrl: `/staticImages/howItWorks/icon-lightning.svg`,
       mainText: 'Launch a Contest',
       descriptionText:
         'Work with hundreds of creative experts to get custom name suggestions for your business or brand. All names are auto-checked for URL availability.',
@@ -220,7 +222,7 @@ const CONSTANTS = {
       linkText: 'Launch a Contest',
     },
     {
-      imageUrl: 'https://www.atom.com/html/html/static_images/contests/g2.svg',
+      imageUrl: `/staticImages/howItWorks/icon-pc.svg`,
       mainText: 'Explore Names For Sale',
       descriptionText:
         'Our branding team has curated thousands of pre-made names that you can purchase instantly. All names include a matching URL and a complimentary Logo Design',
@@ -228,7 +230,7 @@ const CONSTANTS = {
       linkText: 'Explore Names For Sale',
     },
     {
-      imageUrl: 'https://www.atom.com/html/html/static_images/contests/g3.svg',
+      imageUrl: `/staticImages/howItWorks/icon-lightbulb.svg`,
       mainText: 'Agency-level Managed Contests',
       descriptionText:
         'Our Managed contests combine the power of crowdsourcing with the rich experience of our branding consultants. Get a complete agency-level experience at a fraction of Agency costs',

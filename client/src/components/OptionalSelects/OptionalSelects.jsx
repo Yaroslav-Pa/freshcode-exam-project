@@ -14,15 +14,6 @@ const OptionalSelects = (props) => {
     case CONSTANTS.NAME_CONTEST: {
       return (
         <>
-          <ButtonGroup
-            name="matchingDomain"
-            buttons={CONSTANTS.BUTTON_GROUP}
-            classes={{
-              header: styles.buttonGroupHeader,
-              container: styles.buttonGroupContainer,
-              warning: styles.warning,
-            }}
-          />
           <SelectInput
             name="typeOfName"
             header="Type of company"
@@ -44,6 +35,15 @@ const OptionalSelects = (props) => {
               warning: styles.warning,
             }}
             optionsArray={props.dataForContest.data.nameStyle}
+          />
+          <ButtonGroup
+            name="matchingDomain"
+            buttons={CONSTANTS.BUTTON_GROUP}
+            classes={{
+              header: styles.buttonGroupHeader,
+              container: styles.buttonGroupContainer,
+              warning: styles.warning,
+            }}
           />
         </>
       );
@@ -117,7 +117,7 @@ const OptionalSelects = (props) => {
       );
     }
     default:
-      throw new RangeError('No such case in contestType');
+      return;
   }
 };
 

@@ -1,18 +1,5 @@
-const db = require('../../db/models');
-const ServerError = require('../../errors/ServerError');
-
-module.exports.updateCount = (contests) => {
-  //! inTesting
-  //!fix була проблема у тому що воно ломається якщо приходить пустий масив
-  //TODO? перерoбити цю логіку бо dataValues.count це буквально копія dataValues.Offers.length
-  // console.log(contests);
-  const clone = structuredClone(contests);
-  clone.dataValues.count = clone.dataValues.Offers.length;
-  // console.log(clone);
-  return clone;
-};
-
-//* не дивився нижче
+const db = require('../db/models');
+const ServerError = require('../errors/ServerError');
 
 module.exports.updateContest = async (data, predicate, transaction) => {
   const [updatedCount, [updatedContest]] = await db.Contest.update(data, {

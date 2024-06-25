@@ -4,7 +4,8 @@ import WebSocket from './WebSocket';
 import Notification from '../../../components/Notification/Notification';
 
 class NotificationSocket extends WebSocket {
-
+  //TODO! delete console.log
+  
   anotherSubscribes = () => {
     this.onEntryCreated();
     this.onChangeMark();
@@ -18,7 +19,7 @@ class NotificationSocket extends WebSocket {
   };
 
   onChangeOfferStatus = () => {
-    this.socket.on('changeOfferStatus', message => {
+    this.socket.on('changeOfferStatus', (message) => {
       toast(
         <Notification message={message.message} contestId={message.contestId} />
       );
@@ -31,11 +32,13 @@ class NotificationSocket extends WebSocket {
     });
   };
 
-  subscribe = id => {
+  subscribe = (id) => {
+    console.log(`subscribe ${id}`);
     this.socket.emit('subscribe', id);
   };
 
-  unsubsctibe = id => {
+  unsubsctibe = (id) => {
+    console.log(`'unsubscribe ${id}`);
     this.socket.emit('unsubscribe', id);
   };
 }

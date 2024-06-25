@@ -1,6 +1,6 @@
-const db = require('../../db/models');
-const NotFound = require('../../errors/UserNotFoundError');
-const ServerError = require('../../errors/ServerError');
+const db = require('../db/models');
+const NotFound = require('../errors/UserNotFoundError');
+const ServerError = require('../errors/ServerError');
 
 module.exports.updateUser = async (data, userId, transaction) => {
   const [updatedCount, [updatedUser]] = await db.User.update(data, {

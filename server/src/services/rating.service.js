@@ -1,5 +1,5 @@
-const db = require('../../db/models');
-const ServerError = require('../../errors/ServerError');
+const db = require('../db/models');
+const ServerError = require('../errors/ServerError');
 
 module.exports.updateRating = async (data, predicate, transaction) => {
   const [updatedCount, [updatedRating]] = await db.Rating.update(data, {

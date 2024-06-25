@@ -13,7 +13,7 @@ const {
   formatConversationForPreview,
   findAllConversationWithUser,
   createPreviewBodyAndResponseMessage,
-} = require('./queries/chatQueries');
+} = require('../services/chat.service');
 
 module.exports.addMessage = async (req, res, next) => {
   try {

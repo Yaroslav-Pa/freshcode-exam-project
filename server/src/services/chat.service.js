@@ -1,4 +1,4 @@
-const db = require('../../db/models');
+const db = require('../db/models');
 const _ = require('lodash');
 const { Op } = require('sequelize');
 
@@ -11,7 +11,16 @@ const getConversation = async (participants) => {
   });
 };
 
-const createOrFindConversation = async (participants) => {
+const findInterlocutor = async (interlocutorId) => {
+  return await db.User.findByPk(interlocutorId, {
+    attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
+  });
+};
+
+module.exports.getInterlocutorId = (participants, userId) =>
+  _.head(_.filter(participants, (id) => id !== userId));
+
+module.exports.createOrFindConversation = async (participants) => {
   return await db.Conversation.findOrCreate({
     where: {
       participant1: participants[0],
@@ -28,20 +37,14 @@ const createOrFindConversation = async (participants) => {
   });
 };
 
-const findMessages = async (conversationId) => {
+module.exports.findMessages = async (conversationId) => {
   return await db.Message.findAll({
     where: { conversation: conversationId },
     order: [['createdAt', 'ASC']],
   });
 };
 
-const findInterlocutor = async (interlocutorId) => {
-  return await db.User.findByPk(interlocutorId, {
-    attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
-  });
-};
-
-const getInterlocutors = async (conversations, userId) => {
+module.exports.getInterlocutors = async (conversations, userId) => {
   const interlocutors = conversations.map((conversation) =>
     conversation.participant1 === userId
       ? conversation.participant2
@@ -54,14 +57,14 @@ const getInterlocutors = async (conversations, userId) => {
   });
 };
 
-const formatCatalog = (catalog) => ({
+module.exports.formatCatalog = (catalog) => ({
   _id: catalog.id,
   userId: catalog.userId,
   catalogName: catalog.catalogName,
   chats: catalog?.Chats?.map((chat) => chat.conversationId) || [],
 });
 
-const getCatalogWithChats = async (catalogId, userId) =>
+module.exports.getCatalogWithChats = async (catalogId, userId) =>
   await db.Catalog.findOne({
     where: {
       id: catalogId,
@@ -73,7 +76,7 @@ const getCatalogWithChats = async (catalogId, userId) =>
     },
   });
 
-const formatConversation = (conversation, participants) => ({
+module.exports.formatConversation = (conversation, participants) => ({
   _id: conversation.id,
   participants,
   blackList: [conversation.blackList1, conversation.blackList2],
@@ -82,20 +85,28 @@ const formatConversation = (conversation, participants) => ({
   updatedAt: conversation.updatedAt,
 });
 
-const getConversationAndInterlocutor = async (participants, interlocutorId) => {
+module.exports.getConversationAndInterlocutor = async (
+  participants,
+  interlocutorId
+) => {
   const conversation = await getConversation(participants);
   const interlocutor = await findInterlocutor(interlocutorId);
   return [conversation, interlocutor];
 };
-const getInterlocutorId = (participants, userId) =>
-  _.head(_.filter(participants, (id) => id !== userId));
+
 //TODO maybe redo later, but I think its ok
-const formatConversationForPreview = (conversations, senders, userId) => {
+module.exports.formatConversationForPreview = (
+  conversations,
+  senders,
+  userId
+) => {
   return conversations.map((conversation) => {
     const message = conversation.Messages[0];
-    const interlocutorId = getInterlocutorId(
-      [conversation.participant1, conversation.participant2],
-      userId
+    const interlocutorId = _.head(
+      _.filter(
+        [conversation.participant1, conversation.participant2],
+        (id) => id !== userId
+      )
     );
     const interlocutor = senders.find((sender) => sender.id === interlocutorId);
 
@@ -112,7 +123,7 @@ const formatConversationForPreview = (conversations, senders, userId) => {
   });
 };
 
-const findAllConversationWithUser = async (userId) =>
+module.exports.findAllConversationWithUser = async (userId) =>
   await db.Conversation.findAll({
     where: {
       [Op.or]: [{ participant1: userId }, { participant2: userId }],
@@ -126,7 +137,7 @@ const findAllConversationWithUser = async (userId) =>
     ],
   });
 
-const createPreviewBodyAndResponseMessage = (
+module.exports.createPreviewBodyAndResponseMessage = (
   message,
   conversation,
   participants
@@ -150,20 +161,4 @@ const createPreviewBodyAndResponseMessage = (
     participants,
   };
   return [previewBody, responseMessage];
-};
-
-module.exports = {
-  createPreviewBodyAndResponseMessage,
-  findAllConversationWithUser,
-  formatConversationForPreview,
-  getInterlocutorId,
-  getConversationAndInterlocutor,
-  formatConversation,
-  getCatalogWithChats,
-  formatCatalog,
-  getConversation,
-  createOrFindConversation,
-  findMessages,
-  findInterlocutor,
-  getInterlocutors,
 };

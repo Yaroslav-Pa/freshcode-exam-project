@@ -1,56 +1,42 @@
 const db = require('../db/models');
-const { Op } = require('sequelize');
 const controller = require('../socketInit');
 const _ = require('lodash');
 const {
-  getConversation,
   createOrFindConversation,
   findMessages,
-  findInterlocutor,
   getInterlocutors,
-  formatInterlocutor,
+  formatCatalog,
+  getCatalogWithChats,
+  formatConversation,
+  getConversationAndInterlocutor,
+  getInterlocutorId,
+  formatConversationForPreview,
+  findAllConversationWithUser,
+  createPreviewBodyAndResponseMessage,
 } = require('./queries/chatQueries');
 
-//! +
 module.exports.addMessage = async (req, res, next) => {
-  const {
-    params: { interlocutorId },
-    body: { messageBody, interlocutor },
-    tokenData: { userId, firstName, lastName, displayName, avatar, email },
-  } = req;
-  const interlocutorIdInt = +interlocutorId;
-  const participants = [userId, interlocutorIdInt].sort((a, b) => a - b);
-
   try {
-    const [newConversation] = await createOrFindConversation(participants);
+    const {
+      params: { interlocutorId },
+      body: { messageBody, interlocutor },
+      tokenData: { userId, firstName, lastName, displayName, avatar, email },
+    } = req;
+    const interlocutorIdInt = +interlocutorId;
+    const participants = [userId, interlocutorIdInt].sort((a, b) => a - b);
 
+    const [newConversation] = await createOrFindConversation(participants);
     const message = await db.Message.create({
       sender: userId,
       body: messageBody,
       conversation: newConversation.id,
     });
 
-    const previewBody = {
-      _id: newConversation.id,
-      sender: userId,
-      text: messageBody,
-      createAt: message.createdAt,
-      participants,
-      blackList: [newConversation.blackList1, newConversation.blackList2],
-      favoriteList: [
-        newConversation.favoriteList1,
-        newConversation.favoriteList2,
-      ],
-    };
-    const responseMessage = {
-      sender: userId,
-      body: messageBody,
-      conversation: newConversation.id,
-      _id: message._id,
-      createdAt: message.createdAt,
-      updatedAt: message.updatedAt,
-      participants,
-    };
+    const [previewBody, responseMessage] = createPreviewBodyAndResponseMessage(
+      message,
+      newConversation,
+      participants
+    );
 
     controller.getChatController().emitNewMessage(interlocutorIdInt, {
       message: responseMessage,
@@ -79,154 +65,106 @@ module.exports.addMessage = async (req, res, next) => {
   }
 };
 
-//! creating erros 
 module.exports.getChat = async (req, res, next) => {
-  const {
-    params: { interlocutorId },
-    tokenData: { userId },
-  } = req;
-  const interlocutorIdInt = +interlocutorId;
-  const participants = [userId, interlocutorIdInt].sort((a, b) => a - b);
-
   try {
-    const conversation = await getConversation(participants);
+    const {
+      params: { interlocutorId },
+      tokenData: { userId },
+    } = req;
+    const interlocutorIdInt = +interlocutorId;
+    const participants = [userId, interlocutorIdInt].sort((a, b) => a - b);
 
-    const interlocutor = await findInterlocutor(interlocutorIdInt);
-    const formattedInterlocutor = formatInterlocutor(interlocutor); //TODO???!
+    const [conversation, interlocutor] = await getConversationAndInterlocutor(
+      participants,
+      interlocutorIdInt
+    );
 
     if (!conversation) {
       return res.send({
         messages: [],
-        interlocutor: formattedInterlocutor,
+        interlocutor,
       });
     }
 
     const messages = await findMessages(conversation.id);
 
-    res.send({ messages, interlocutor: formattedInterlocutor });
+    res.send({ messages, interlocutor });
   } catch (err) {
     next(err);
   }
 };
 
-//! +
 module.exports.getPreview = async (req, res, next) => {
   try {
     const { userId } = req.tokenData;
-
-    const conversations = await db.Conversation.findAll({
-      where: {
-        [Op.or]: [{ participant1: userId }, { participant2: userId }],
-      },
-      include: [
-        {
-          model: db.Message,
-          limit: 1,
-          order: [['createdAt', 'DESC']],
-        },
-      ],
-    });
-
+    const conversations = await findAllConversationWithUser(userId);
     const senders = await getInterlocutors(conversations, userId);
 
-    const results = conversations.map((conversation) => {
-      const message = conversation.Messages[0];
-      const interlocutor = senders.find(
-        (sender) => sender.id === (conversation.participant1 === userId ? conversation.participant2 : conversation.participant1)
-      );
-
-      return {
-        _id: conversation.id,
-        sender: message.sender,
-        text: message.body,
-        createAt: message.createdAt,
-        participants: [conversation.participant1, conversation.participant2],
-        blackList: [conversation.blackList1, conversation.blackList2],
-        favoriteList: [conversation.favoriteList1, conversation.favoriteList2],
-        interlocutor: formatInterlocutor(interlocutor), //TODO???!
-      };
-    });
-
-    res.send(results);
+    res.send(formatConversationForPreview(conversations, senders, userId));
   } catch (err) {
     next(err);
   }
 };
 
-//! +
 module.exports.blackList = async (req, res, next) => {
   try {
     const {
       body: { participants, blackListFlag },
       tokenData: { userId },
     } = req;
+    const interlocutorId = getInterlocutorId(participants, userId);
+    const [conversation, interlocutor] = await getConversationAndInterlocutor(
+      participants,
+      interlocutorId
+    );
+
     const predicate = participants[0] === userId ? 'blackList1' : 'blackList2';
-
-    const interlocutorId = _.head(_.filter(participants, id => id !== userId));
-
-    const conversation = await getConversation(participants);
-    const interlocutor = await findInterlocutor(interlocutorId);
-
-    if (!conversation) {
-      return res.status(404).send({ message: 'Conversation not found' });
-    }
-
     conversation[predicate] = blackListFlag;
     await conversation.save();
 
-    const formattedConversation = {
-      _id: conversation.id,
-      participants: [conversation.participant1, conversation.participant2],
-      blackList: [conversation.blackList1, conversation.blackList2],
-      favoriteList: [conversation.favoriteList1, conversation.favoriteList2],
-      createdAt: conversation.createdAt,
-      updatedAt: conversation.updatedAt,
-    };
+    const formattedConversation = formatConversation(
+      conversation,
+      participants
+    );
 
-    controller.getChatController().emitChangeBlockStatus(interlocutorId, formattedConversation);
-    controller.getChatController().emitChangeBlockStatus(userId, formattedConversation); //TODO???!
+    controller
+      .getChatController()
+      .emitChangeBlockStatus(interlocutorId, formattedConversation);
 
-    res.send({ conversation:formattedConversation, interlocutor});
+    res.send({ conversation: formattedConversation, interlocutor });
   } catch (err) {
     next(err);
   }
 };
 
-//! +
 module.exports.favoriteChat = async (req, res, next) => {
   try {
     const {
       body: { participants, favoriteFlag },
       tokenData: { userId },
     } = req;
-    const predicate = participants[0] === userId ? 'favoriteList1' : 'favoriteList2';
-    const interlocutorId = _.head(_.filter(participants, id => id !== userId));
+    const interlocutorId = getInterlocutorId(participants, userId);
+    const [conversation, interlocutor] = await getConversationAndInterlocutor(
+      participants,
+      interlocutorId
+    );
 
-    const conversation = await getConversation(participants);
-    const interlocutor = await findInterlocutor(interlocutorId);
-
-    if (!conversation) {
-      return res.status(404).send({ message: 'Conversation not found' });
-    }
-
+    const predicate =
+      participants[0] === userId ? 'favoriteList1' : 'favoriteList2';
     conversation[predicate] = favoriteFlag;
     await conversation.save();
 
-    const formattedConversation = {
-      _id: conversation.id,
-      participants,
-      blackList: [conversation.blackList1, conversation.blackList2],
-      favoriteList: [conversation.favoriteList1, conversation.favoriteList2],
-      createdAt: conversation.createdAt,
-      updatedAt: conversation.updatedAt,
-    };
-    res.send({ conversation:formattedConversation, interlocutor});
+    res.send({
+      conversation: formatConversation(conversation, participants),
+      interlocutor,
+    });
   } catch (err) {
     res.send(err);
   }
 };
 
-//! +
+//? Catalogs
+
 module.exports.createCatalog = async (req, res, next) => {
   try {
     const {
@@ -246,9 +184,7 @@ module.exports.createCatalog = async (req, res, next) => {
 
     await catalog.save();
     res.send({
-      _id: catalog.id,
-      userId: catalog.userId,
-      catalogName: catalog.catalogName,
+      ...formatCatalog(catalog),
       chats: [chatId],
     });
   } catch (err) {
@@ -256,7 +192,6 @@ module.exports.createCatalog = async (req, res, next) => {
   }
 };
 
-//! +
 module.exports.updateNameCatalog = async (req, res, next) => {
   try {
     const {
@@ -275,29 +210,14 @@ module.exports.updateNameCatalog = async (req, res, next) => {
       }
     );
 
-    const catalog = await db.Catalog.findOne({
-      where: {
-        id: catalogId,
-        userId,
-      },
-      include: {
-        model: db.Chat,
-        attributes: ['conversationId'],
-      },
-    });
+    const catalog = await getCatalogWithChats(catalogId, userId);
 
-    res.send({
-      _id: catalog.id,
-      userId: catalog.userId,
-      catalogName: catalog.catalogName,
-      chats: catalog.Chats.map((chat) => chat.conversationId),
-    });
+    res.send(formatCatalog(catalog));
   } catch (err) {
     next(err);
   }
 };
 
-//! +
 module.exports.addNewChatToCatalog = async (req, res, next) => {
   try {
     const {
@@ -306,39 +226,19 @@ module.exports.addNewChatToCatalog = async (req, res, next) => {
       tokenData: { userId },
     } = req;
 
-    const catalog = await db.Catalog.findOne({
-      where: {
-        id: catalogId,
-        userId,
-      },
-    });
-
     await db.Chat.create({
-      catalogId: catalog.id,
+      catalogId: catalogId,
       conversationId: chatId,
     });
 
-    const updatedCatalog = await db.Catalog.findOne({
-      where: { id: catalogId },
-      include: [
-        {
-          model: db.Chat,
-          attributes: ['conversationId'],
-        },
-      ],
-    });
+    const updatedCatalog = await getCatalogWithChats(catalogId, userId);
 
-    res.send({
-      id: updatedCatalog.id,
-      name: updatedCatalog.name,
-      chats: updatedCatalog.Chats.map((chat) => chat.conversationId),
-    });
+    res.send(formatCatalog(updatedCatalog));
   } catch (err) {
     next(err);
   }
 };
 
-//! +
 module.exports.removeChatFromCatalog = async (req, res, next) => {
   try {
     const {
@@ -354,29 +254,14 @@ module.exports.removeChatFromCatalog = async (req, res, next) => {
       },
     });
 
-    const catalog = await db.Catalog.findOne({
-      where: {
-        id: catalogId,
-        userId,
-      },
-      include: {
-        model: db.Chat,
-        attributes: ['conversationId'],
-      },
-    });
-    
-    res.send({
-      _id: catalog.id,
-      userId: catalog.userId,
-      catalogName: catalog.catalogName,
-      chats: catalog.Chats.map((chat) => chat.conversationId),
-    });
+    const catalog = await getCatalogWithChats(catalogId, userId);
+
+    res.send(formatCatalog(catalog));
   } catch (err) {
     next(err);
   }
 };
 
-//! +
 module.exports.deleteCatalog = async (req, res, next) => {
   try {
     const {
@@ -394,7 +279,6 @@ module.exports.deleteCatalog = async (req, res, next) => {
   }
 };
 
-//! +
 module.exports.getCatalogs = async (req, res, next) => {
   try {
     const { userId } = req.tokenData;
@@ -407,13 +291,7 @@ module.exports.getCatalogs = async (req, res, next) => {
       },
     });
 
-    const response = catalogs.map((catalog) => ({
-      _id: catalog.id,
-      userId: catalog.userId,
-      catalogName: catalog.catalogName,
-      chats: catalog.Chats.map((chat) => chat.conversationId),
-    }));
-
+    const response = catalogs.map((catalog) => formatCatalog(catalog));
     res.send(response);
   } catch (err) {
     next(err);

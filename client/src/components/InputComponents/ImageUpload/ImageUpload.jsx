@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useField } from 'formik';
-function ImageUpload ({name, classes}) {
+function ImageUpload({ name, classes }) {
   const [{ value, ...field }, meta, helpers] = useField(name);
   const { uploadContainer, inputContainer, imgStyle } = classes;
   const [imageSrc, setImageSrc] = useState('');
 
   const onChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target?.files[0];
     const imageType = /image.*/;
 
-    if (!file.type.match(imageType)) {
+    if (!file.type?.match(imageType)) {
       e.target.value = '';
     } else {
       helpers.setValue(file);
@@ -26,6 +26,7 @@ function ImageUpload ({name, classes}) {
   useEffect(() => {
     if (!meta.value) {
       setImageSrc('');
+      document.getElementById('fileInput').value = '';
     }
   }, [meta.value]);
 
@@ -52,6 +53,6 @@ function ImageUpload ({name, classes}) {
       )}
     </div>
   );
-};
+}
 
 export default ImageUpload;

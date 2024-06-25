@@ -125,11 +125,13 @@ const changeChatFavoriteExtraReducers = createExtraReducers({
   thunk: changeChatFavorite,
   fulfilledReducer: (state, { payload }) => {
     const { messagesPreview } = state;
+    const {conversation, interlocutor} = payload;
     messagesPreview.forEach((preview) => {
-      if (isEqual(preview.participants, payload.participants))
-        preview.favoriteList = payload.favoriteList;
+      if (isEqual(preview.participants, conversation.participants))
+        preview.favoriteList = conversation.favoriteList;
     });
-    state.chatData = payload;
+    state.chatData = conversation;
+    state.interlocutor = interlocutor;
     state.messagesPreview = messagesPreview;
   },
   rejectedReducer: (state, { payload }) => {
@@ -150,11 +152,13 @@ const changeChatBlockExtraReducers = createExtraReducers({
   thunk: changeChatBlock,
   fulfilledReducer: (state, { payload }) => {
     const { messagesPreview } = state;
+    const {conversation, interlocutor} = payload;
     messagesPreview.forEach((preview) => {
-      if (isEqual(preview.participants, payload.participants))
-        preview.blackList = payload.blackList;
+      if (isEqual(preview.participants, conversation.participants))
+        preview.blackList = conversation.blackList;
     });
-    state.chatData = payload;
+    state.chatData = conversation;
+    state.interlocutor = interlocutor;
     state.messagesPreview = messagesPreview;
   },
   rejectedReducer: (state, { payload }) => {

@@ -92,7 +92,7 @@ module.exports.getChat = async (req, res, next) => {
     const conversation = await getConversation(participants);
 
     const interlocutor = await findInterlocutor(interlocutorIdInt);
-    const formattedInterlocutor = formatInterlocutor(interlocutor);
+    const formattedInterlocutor = formatInterlocutor(interlocutor); //TODO???!
 
     if (!conversation) {
       return res.send({
@@ -143,7 +143,7 @@ module.exports.getPreview = async (req, res, next) => {
         participants: [conversation.participant1, conversation.participant2],
         blackList: [conversation.blackList1, conversation.blackList2],
         favoriteList: [conversation.favoriteList1, conversation.favoriteList2],
-        interlocutor: formatInterlocutor(interlocutor),
+        interlocutor: formatInterlocutor(interlocutor), //TODO???!
       };
     });
 
@@ -162,7 +162,10 @@ module.exports.blackList = async (req, res, next) => {
     } = req;
     const predicate = participants[0] === userId ? 'blackList1' : 'blackList2';
 
+    const interlocutorId = _.head(_.filter(participants, id => id !== userId));
+
     const conversation = await getConversation(participants);
+    const interlocutor = await findInterlocutor(interlocutorId);
 
     if (!conversation) {
       return res.status(404).send({ message: 'Conversation not found' });
@@ -180,12 +183,10 @@ module.exports.blackList = async (req, res, next) => {
       updatedAt: conversation.updatedAt,
     };
 
-    const interlocutorId = participants.find((participant) => participant !== userId);
-
     controller.getChatController().emitChangeBlockStatus(interlocutorId, formattedConversation);
-    controller.getChatController().emitChangeBlockStatus(userId, formattedConversation);
+    controller.getChatController().emitChangeBlockStatus(userId, formattedConversation); //TODO???!
 
-    res.send(formattedConversation);
+    res.send({ conversation:formattedConversation, interlocutor});
   } catch (err) {
     next(err);
   }
@@ -199,8 +200,10 @@ module.exports.favoriteChat = async (req, res, next) => {
       tokenData: { userId },
     } = req;
     const predicate = participants[0] === userId ? 'favoriteList1' : 'favoriteList2';
+    const interlocutorId = _.head(_.filter(participants, id => id !== userId));
 
     const conversation = await getConversation(participants);
+    const interlocutor = await findInterlocutor(interlocutorId);
 
     if (!conversation) {
       return res.status(404).send({ message: 'Conversation not found' });
@@ -209,14 +212,15 @@ module.exports.favoriteChat = async (req, res, next) => {
     conversation[predicate] = favoriteFlag;
     await conversation.save();
 
-    res.send({
+    const formattedConversation = {
       _id: conversation.id,
       participants,
       blackList: [conversation.blackList1, conversation.blackList2],
       favoriteList: [conversation.favoriteList1, conversation.favoriteList2],
       createdAt: conversation.createdAt,
       updatedAt: conversation.updatedAt,
-    });
+    };
+    res.send({ conversation:formattedConversation, interlocutor});
   } catch (err) {
     res.send(err);
   }

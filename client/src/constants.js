@@ -389,6 +389,17 @@ const CONSTANTS = {
     'Short',
     'One Word',
   ],
+  USER_INFO_TO_CHANGE : [
+    { label: 'First Name', name: 'firstName' },
+    { label: 'Last Name', name: 'lastName' },
+    { label: 'Display Name', name: 'displayName' },
+  ],
+  MAX_LENGTH:{
+    USER_INPUTS: 20,
+    USER_EMAIL: 30,
+    CONTEST_TITLE: 50,
+    OTHER: 255,
+  }
 };
 
 export default CONSTANTS;

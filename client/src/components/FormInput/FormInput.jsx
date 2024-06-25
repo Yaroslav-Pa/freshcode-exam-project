@@ -1,12 +1,14 @@
 import React from 'react';
 import { Field, ErrorMessage } from 'formik';
 import classNames from 'classnames';
+import CONSTANTS from '../../constants';
 
 const FormInput = ({
   classes,
   label,
   withLable = false,
   labelText = null,
+  maxLength = CONSTANTS.MAX_LENGTH.OTHER,
   name,
   ...rest
 }) => (
@@ -34,6 +36,7 @@ const FormInput = ({
             placeholder={label}
             className={inputClassName}
             autoComplete="on"
+            maxLength={maxLength}
             {...rest}
           />
 

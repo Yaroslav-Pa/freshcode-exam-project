@@ -87,6 +87,7 @@ const ContestForm = (props) => {
             <div className={styles.inputContainer}>
               <span className={styles.inputHeader}>Title of contest</span>
               <FormInput
+                maxLength={CONSTANTS.MAX_LENGTH.CONTEST_TITLE}
                 name="title"
                 type="text"
                 label="Title"

@@ -71,12 +71,14 @@ function RegistrationForm({
         <Form>
           <div className={styles.row}>
             <FormInput
+              maxLength={CONSTANTS.MAX_LENGTH.USER_INPUTS}
               name="firstName"
               classes={formInputClasses}
               type="text"
               label="First name"
             />
             <FormInput
+              maxLength={CONSTANTS.MAX_LENGTH.USER_INPUTS}
               name="lastName"
               classes={formInputClasses}
               type="text"
@@ -85,12 +87,14 @@ function RegistrationForm({
           </div>
           <div className={styles.row}>
             <FormInput
+              maxLength={CONSTANTS.MAX_LENGTH.USER_INPUTS}
               name="displayName"
               classes={formInputClasses}
               type="text"
               label="Display Name"
             />
             <FormInput
+              maxLength={CONSTANTS.MAX_LENGTH.USER_EMAIL}
               name="email"
               classes={formInputClasses}
               type="text"

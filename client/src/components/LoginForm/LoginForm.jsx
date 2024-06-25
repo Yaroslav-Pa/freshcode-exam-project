@@ -46,6 +46,7 @@ function LoginForm({ authClear, loginRequest, history, auth, submitting }) {
         <Form className={styles.form}>
           <FormInput
             classes={formInputClasses}
+            maxLength={CONSTANTS.MAX_LENGTH.USER_EMAIL}
             name="email"
             type="text"
             label="Email Address"

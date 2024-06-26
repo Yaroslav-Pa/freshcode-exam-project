@@ -102,7 +102,7 @@ class Chat extends React.Component {
           [styles.showChat]: isShow,
         })}
       >
-        {error && <ChatError getData={getPreviewChat} />}
+        {error && <ChatError getData={getPreviewChat} error={error}/>}
         {isShowCatalogCreation && <CatalogCreation />}
         {isExpanded ? <Dialog userId={id} /> : this.renderDialogList()}
         <div className={styles.toggleChat} onClick={() => changeShow()}>

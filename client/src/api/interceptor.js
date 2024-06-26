@@ -25,24 +25,11 @@ instance.interceptors.response.use(
     return response;
   },
   (err) => {
-    //TODO! choose
-    //* V1
-    // const history = createBrowserHistory();
-    // history.location.pathname
-    //* V2
     const location = window.location.pathname;
     if (
-      err.response.status === 408 &&
-      location !== '/' &&
-      location !== '/events' &&
-      location !== '/login' &&
-      location !== '/registration' &&
-      location !== '/howItWorks'
+      err.response.status === CONSTANTS.TOKEN_ERROR.STATUS &&
+      !CONSTANTS.PUBLIC_LOCATIONS.includes(location)
     ) {
-      //*V1
-      // history.replace('/login');
-      // history.go();
-      //*V2
       window.location.pathname = '/login';
     }
     return Promise.reject(err);

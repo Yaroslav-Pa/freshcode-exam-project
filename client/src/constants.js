@@ -210,8 +210,8 @@ const CONSTANTS = {
       text: 'Check out our FAQs or send us a message. For assistance with launching a contest, you can also call us at (877) 355-3585 or schedule a Branding Consultation',
     },
   ],
-  NAMING_CONTESTS_IMAGE_PATH:'/staticImages/howItWorks/icon-trophy.svg',
-  HERO_SECTION_IMAGE_PATH:'/staticImages/howItWorks/app-user.svg',
+  NAMING_CONTESTS_IMAGE_PATH: '/staticImages/howItWorks/icon-trophy.svg',
+  HERO_SECTION_IMAGE_PATH: '/staticImages/howItWorks/app-user.svg',
   WAYS_TO_USE_BOXES: [
     {
       imageUrl: `/staticImages/howItWorks/icon-lightning.svg`,
@@ -389,17 +389,22 @@ const CONSTANTS = {
     'Short',
     'One Word',
   ],
-  USER_INFO_TO_CHANGE : [
+  USER_INFO_TO_CHANGE: [
     { label: 'First Name', name: 'firstName' },
     { label: 'Last Name', name: 'lastName' },
     { label: 'Display Name', name: 'displayName' },
   ],
-  MAX_LENGTH:{
+  MAX_LENGTH: {
     USER_INPUTS: 20,
     USER_EMAIL: 30,
     CONTEST_TITLE: 50,
     OTHER: 255,
-  }
+  },
+  TOKEN_ERROR: {
+    DATA: 'token error',
+    STATUS: 408,
+  },
+  PUBLIC_LOCATIONS: ['/', '/events', '/login', '/registration', '/howItWorks'],
 };
 
 export default CONSTANTS;

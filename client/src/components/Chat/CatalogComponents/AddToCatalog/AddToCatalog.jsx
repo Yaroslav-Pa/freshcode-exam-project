@@ -34,10 +34,10 @@ const AddToCatalog = (props) => {
     <>
       {selectArray.length !== 0 ? (
         <Formik onSubmit={click} initialValues={{ catalogId: '' }}>
-          <Form className={styles.form}>
+          <Form>
             <SelectInput
               name="catalogId"
-              header="name of catalog"
+              header="Catalog name"
               classes={{
                 inputContainer: styles.selectInputContainer,
                 inputHeader: styles.selectHeader,
@@ -46,11 +46,11 @@ const AddToCatalog = (props) => {
               optionsArray={selectArray}
               valueArray={getValueArray()}
             />
-            <button type="submit">Add</button>
+            <button className={styles.button} type="submit">Add</button>
           </Form>
         </Formik>
       ) : (
-        <div className={styles.notFound}>
+        <div>
           You have not created any directories.
         </div>
       )}

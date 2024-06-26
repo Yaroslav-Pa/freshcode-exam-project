@@ -42,9 +42,11 @@ const DialogList = (props) => {
       goToExpandedDialog,
       chatMode,
       removeChat,
-      interlocutor,
     } = props;
-    preview.forEach((chatPreview, index) => {
+    const sortedPreview = [...preview].sort((a, b) => {
+      return new Date(b.createAt) - new Date(a.createAt);
+    });
+    sortedPreview.forEach((chatPreview, index) => {
       const dialogNode = (
         <DialogBox
           interlocutor={chatPreview.interlocutor}

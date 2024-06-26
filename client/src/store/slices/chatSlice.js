@@ -27,6 +27,7 @@ const initialState = {
   isRenameCatalog: false,
   isShowChatsInCatalog: false,
   catalogCreationMode: CONSTANTS.ADD_CHAT_TO_OLD_CATALOG,
+  isNewMessages: false,
 };
 
 //---------- getPreviewChat
@@ -125,7 +126,7 @@ const changeChatFavoriteExtraReducers = createExtraReducers({
   thunk: changeChatFavorite,
   fulfilledReducer: (state, { payload }) => {
     const { messagesPreview } = state;
-    const {conversation, interlocutor} = payload;
+    const { conversation, interlocutor } = payload;
     messagesPreview.forEach((preview) => {
       if (isEqual(preview.participants, conversation.participants))
         preview.favoriteList = conversation.favoriteList;
@@ -152,7 +153,7 @@ const changeChatBlockExtraReducers = createExtraReducers({
   thunk: changeChatBlock,
   fulfilledReducer: (state, { payload }) => {
     const { messagesPreview } = state;
-    const {conversation, interlocutor} = payload;
+    const { conversation, interlocutor } = payload;
     messagesPreview.forEach((preview) => {
       if (isEqual(preview.participants, conversation.participants))
         preview.blackList = conversation.blackList;
@@ -341,6 +342,7 @@ const reducers = {
     if (isNew) {
       messagesPreview.push(preview);
     }
+    state.isNewMessages = true;
     state.messagesPreview = messagesPreview;
 
     if (isEqual(state.chatData?.participants, payload.message?.participants))
@@ -372,6 +374,9 @@ const reducers = {
   changeChatShow: (state) => {
     state.isShowCatalogCreation = false;
     state.isShow = !state.isShow;
+    if(!state.isShow){
+      state.isNewMessages = false;
+    }
   },
 
   setPreviewChatMode: (state, { payload }) => {

@@ -17,6 +17,7 @@ import CatalogListContainer from '../../CatalogComponents/CatalogListContainer/C
 import CatalogCreation from '../../CatalogComponents/CatalogCreation/CatalogCreation';
 import CatalogListHeader from '../../CatalogComponents/CatalogListHeader/CatalogListHeader';
 import ChatError from '../../../ChatError/ChatError';
+import NewMessagePoint from '../../../NewMessagePoint/NewMessagePoint';
 
 class Chat extends React.Component {
   componentDidMount() {
@@ -107,6 +108,7 @@ class Chat extends React.Component {
         {isExpanded ? <Dialog userId={id} /> : this.renderDialogList()}
         <div className={styles.toggleChat} onClick={() => changeShow()}>
           {isShow ? 'Hide Chat' : 'Show Chat'}
+          <NewMessagePoint isNewMessage={this.props.chatStore.isNewMessages && !this.props.chatStore.isShow} top='-6px' />
         </div>
       </div>
     );

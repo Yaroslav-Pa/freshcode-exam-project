@@ -39,7 +39,7 @@ class Chat extends React.Component {
       CATALOG_PREVIEW_CHAT_MODE,
     } = CONSTANTS;
     return (
-      <div>
+      <section className={styles.mainSection}>
         {isShowChatsInCatalog && <CatalogListHeader />}
         {!isShowChatsInCatalog && (
           <div className={styles.chatHeader}>
@@ -48,38 +48,38 @@ class Chat extends React.Component {
         )}
         {!isShowChatsInCatalog && (
           <div className={styles.buttonsContainer}>
-            <span
+            <button
               onClick={() => setChatPreviewMode(NORMAL_PREVIEW_CHAT_MODE)}
               className={classNames(styles.button, {
                 [styles.activeButton]: chatMode === NORMAL_PREVIEW_CHAT_MODE,
               })}
             >
-              Normal
-            </span>
-            <span
+              All
+            </button>
+            <button
               onClick={() => setChatPreviewMode(FAVORITE_PREVIEW_CHAT_MODE)}
               className={classNames(styles.button, {
                 [styles.activeButton]: chatMode === FAVORITE_PREVIEW_CHAT_MODE,
               })}
             >
               Favorite
-            </span>
-            <span
+            </button>
+            <button
               onClick={() => setChatPreviewMode(BLOCKED_PREVIEW_CHAT_MODE)}
               className={classNames(styles.button, {
                 [styles.activeButton]: chatMode === BLOCKED_PREVIEW_CHAT_MODE,
               })}
             >
               Blocked
-            </span>
-            <span
+            </button>
+            <button
               onClick={() => setChatPreviewMode(CATALOG_PREVIEW_CHAT_MODE)}
               className={classNames(styles.button, {
                 [styles.activeButton]: chatMode === CATALOG_PREVIEW_CHAT_MODE,
               })}
             >
-              Catalog
-            </span>
+              Catalogs
+            </button>
           </div>
         )}
         {chatMode === CATALOG_PREVIEW_CHAT_MODE ? (
@@ -87,7 +87,7 @@ class Chat extends React.Component {
         ) : (
           <DialogListContainer userId={id} />
         )}
-      </div>
+      </section>
     );
   };
 

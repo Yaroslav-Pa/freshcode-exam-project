@@ -35,6 +35,7 @@ class CatalogListContainer extends React.Component {
             userId={id}
             preview={this.getDialogsPreview()}
             removeChat={this.removeChatFromCatalog}
+            isLonger={true}
           />
         ) : (
           <CatalogList catalogList={catalogList} />

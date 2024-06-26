@@ -6,6 +6,7 @@ import CONSTANTS from '../../constants';
 const FormInput = ({
   classes,
   label,
+  withError = true,
   withLable = false,
   labelText = null,
   maxLength = CONSTANTS.MAX_LENGTH.OTHER,
@@ -40,11 +41,13 @@ const FormInput = ({
             {...rest}
           />
 
-          <ErrorMessage
-            name={name}
-            component="span"
-            className={classes.warning}
-          />
+          {withError && (
+            <ErrorMessage
+              name={name}
+              component="span"
+              className={classes.warning}
+            />
+          )}
         </div>
       );
     }}

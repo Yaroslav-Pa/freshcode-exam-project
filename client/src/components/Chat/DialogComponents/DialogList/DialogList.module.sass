@@ -17,7 +17,7 @@
   align-items: center
 
 .previewContainer
-  height: 300px
+  max-height: 290px
   overflow: auto
 
   &::-webkit-scrollbar
@@ -29,11 +29,17 @@
   &::-webkit-scrollbar-thumb
     background: #6b89b0
 
-  .notFound
-    width: 100%
-    display: inline-block
-    margin-top: 5px
-    font-size: 16px
-    font-weight: 500
-    color: #4e618d
-    text-align: center
+.longerPreviewContainer
+  max-height: 330px
+
+.notFound
+  width: 100%
+  display: inline-block
+  margin-top: 15px
+  font-size: 16px
+  font-weight: 500
+  color: #4e618d
+  text-align: center
+
+.loverNotFound
+  margin-top: 35px

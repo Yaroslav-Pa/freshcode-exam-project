@@ -28,16 +28,14 @@
 
     img
       position: absolute
-      margin-left: 20px
       cursor: pointer
-      top: -15px
-      left: -8px
-      transition: transform 0.2s ease
-      transform: rotate(150deg)
+      top: -16px
+      left: -10px
+      transition: all 0.2s ease
+      transform: rotate(-5deg)
 
       &:hover
-        width: 35px
-        height: 35px
+        left: -5px
 
     .container
       display: flex
@@ -52,14 +50,14 @@
         justify-content: center
         align-items: center
         color: white
-        border: 1px solid #b72522
+        border: 2px solid #b72522
         margin-bottom: 15px
         padding-bottom: 5px
         padding-top: 5px
         text-align: center
 
       .notValid
-        border: 1px solid red !important
+        border: 2px solid red !important
 
       .input
         height: 20px
@@ -69,9 +67,9 @@
         border: 2px solid #d0d0d0
 
         &:focus
-          transition: border 0.5s
+          transition: border .1s
           border-color: #28d2d0
 
         &:hover
-          transition: border 0.5s
+          transition: border .1s
           border-color: #28d2d0

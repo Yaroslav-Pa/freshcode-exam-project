@@ -45,6 +45,7 @@ const CatalogListHeader = (props) => {
           >
             <Form>
               <FormInput
+                withError={false}
                 name="catalogName"
                 classes={{
                   container: styles.inputContainer,

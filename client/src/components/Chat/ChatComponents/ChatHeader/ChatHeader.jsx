@@ -36,15 +36,14 @@ const ChatHeader = (props) => {
     <div className={styles.chatHeader}>
       <div
         className={styles.buttonContainer}
-        onClick={() => backToDialogList()}
       >
-        <img
-          src={`${CONSTANTS.STATIC_IMAGES_PATH}arrow-left-thick.png`}
-          alt="back"
+        <i
+          className={'fas fa-long-arrow-alt-left ' + styles.back}
+          onClick={() => backToDialogList()}
         />
       </div>
-      <div className={styles.infoContainer}>
-        <div>
+      <section className={styles.infoContainer}>
+        <div className={styles.container}>
           <img
             src={
               avatar === 'anon.png'
@@ -53,10 +52,10 @@ const ChatHeader = (props) => {
             }
             alt="user"
           />
-          <span>{firstName}</span>
-        </div>
+          <p className={styles.name}>{firstName}</p>
+        </div >
         {chatData && (
-          <div>
+          <div className={styles.container}>
             <i
               onClick={(event) =>
                 changeFavorite(
@@ -67,7 +66,7 @@ const ChatHeader = (props) => {
                   event
                 )
               }
-              className={classNames({
+              className={classNames(styles.icons, {
                 'far fa-heart': !isFavorite(chatData, userId),
                 'fas fa-heart': isFavorite(chatData, userId),
               })}
@@ -82,14 +81,14 @@ const ChatHeader = (props) => {
                   event
                 )
               }
-              className={classNames({
+              className={classNames(styles.icons, {
                 'fas fa-user-lock': !isBlocked(chatData, userId),
                 'fas fa-unlock': isBlocked(chatData, userId),
               })}
             />
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 };

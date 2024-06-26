@@ -32,13 +32,13 @@ const CatalogList = (props) => {
       );
     });
     return elementList.length ? (
-      elementList
+      <div className={styles.listContainer}>{elementList}</div>
     ) : (
-      <span className={styles.notFound}>Not found</span>
+      <p className={styles.notFound}>Not found</p>
     );
   };
 
-  return <div className={styles.listContainer}>{getListCatalog()}</div>;
+  return getListCatalog();
 };
 
 const mapDispatchToProps = (dispatch) => ({

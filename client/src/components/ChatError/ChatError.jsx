@@ -6,7 +6,7 @@ const ChatError = props => {
   return (
     <div className={styles.errorContainer} onClick={() => getData()}>
       <div className={styles.container}>
-        <span>Server Error</span>
+        <p>Server Error</p>
         <i className='fas fa-redo' />
       </div>
     </div>

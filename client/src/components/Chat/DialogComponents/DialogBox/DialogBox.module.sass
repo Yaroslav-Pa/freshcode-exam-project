@@ -5,32 +5,32 @@
   align-items: center
   height: 60px
   cursor: pointer
+  gap: 0 10px
+  padding: 0 15px 0 10px
   border-bottom: 1px solid #4e618d
 
   &:hover
-    background-color: #e5e5e5
+    background-color: #b4ffb42c
 
   .infoContainer
     display: flex
     justify-content: space-between
     flex: 1
     align-items: flex-start
-    padding: 0 15px
-    padding-right: 10px
+    padding: 0
     overflow: hidden
-    padding-bottom: 5px
 
     .buttonsContainer
       align-self: center
       display: flex
       justify-content: flex-end
       align-items: center
+      gap: 0 5px
 
       .time
         margin-right: 10px
 
       i
-        margin-right: 5px
         font-size: 16px
         transition: font-size 0.2s ease
 
@@ -48,6 +48,7 @@
       flex-direction: column
       align-items: flex-start
       justify-content: space-between
+      gap: 5px 0
 
       .interlocutorMessage
         overflow: hidden
@@ -70,4 +71,3 @@
     border-radius: 50%
     width: 46px
     height: 46px
-    margin-left: 10px

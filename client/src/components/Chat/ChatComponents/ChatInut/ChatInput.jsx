@@ -26,6 +26,7 @@ const ChatInput = (props) => {
       >
         <Form className={styles.form}>
           <FormInput
+            withError={false}
             name="message"
             type="text"
             label="message"

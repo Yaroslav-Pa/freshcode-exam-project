@@ -17,13 +17,14 @@
 
   i
     cursor: pointer
-    font-size: 24px
+    font-size: 28px
     color: white
-    transition: font-size 0.2s
+    transition: all .1s
 
     &:hover
-      transition: font-size 0.2s
-      font-size: 28px
+      margin-top: 2px
+      font-size: 30px
+      color: red
 
   .infoContainer
     margin-left: 25px
@@ -33,15 +34,17 @@
     span
       font-size: 18px
       color: white
+      max-width: 191px
+      overflow: hidden
+      text-overflow: ellipsis
 
     i
       font-size: 12px
-      transition: font-size 0.2s
+      transition: font-size 0.1s
       margin-left: 5px
 
       &:hover
         font-size: 14px
-        transition: font-size 0.2s
 
   .changeContainer
     display: flex
@@ -69,10 +72,10 @@
         justify-content: center
         align-items: center
         color: white
-        border: 1px solid #b72522
         text-align: center
 
       .input
+        box-sizing: border-box
         margin: 0 15px
         background-color: white
         border: none
@@ -82,6 +85,11 @@
         font-size: 16px
         padding: 4px
         outline: none
+        border: 2px solid white
+        transition: border .1s
+
+        &:focus
+          border-color: #28d24d
 
       .notValid
-        border: 0.5px solid red !important
+        border-color: red !important

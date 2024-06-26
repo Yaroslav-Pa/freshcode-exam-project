@@ -21,7 +21,6 @@ function UserInfo({
     formData.append('displayName', values.displayName);
     updateUser(formData);
   };
-  //TODO! relockate to constants?
   const userInfoArr = [
     { label: 'First Name', info: firstName },
     { label: 'Last Name', info: lastName },

@@ -18,7 +18,7 @@ function UpdateUserInfoForm({
 }) {
 
   const changeFildsList = CONSTANTS.USER_INFO_TO_CHANGE.map(({ label, name }) => (
-    <div className={styles.container}>
+    <section className={styles.container} key={label}>
       <span className={styles.label}>{label}</span>
       <FormInput
         name={name}
@@ -32,7 +32,7 @@ function UpdateUserInfoForm({
           notValid: styles.notValid,
         }}
       />
-    </div>
+    </section>
   ));
 
   return (

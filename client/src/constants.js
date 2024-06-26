@@ -404,7 +404,7 @@ const CONSTANTS = {
     DATA: 'token error',
     STATUS: 408,
   },
-  PUBLIC_LOCATIONS: ['/', '/events', '/login', '/registration', '/howItWorks'],
+  PUBLIC_LOCATIONS: ['/', '/events', '/login', '/registration', '/howItWorks']
 };
 
 export default CONSTANTS;

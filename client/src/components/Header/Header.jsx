@@ -10,10 +10,11 @@ import LoginButtons from '../LoginButtons/LoginButtons';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import Logo from '../Logo';
 import { controller } from '../../api/ws/socketController';
+import { clearChatDataToInitial } from '../../store/slices/chatSlice';
 
 //TODO if have time: create some king of button to open nav on phones
 
-function Header({ data, getUser, isFetching, clearUserStore, history }) {
+function Header({ data, getUser, isFetching, clearUserStore, clearChatData, history }) {
   useEffect(() => {
     if (!data && localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
       getUser();
@@ -33,6 +34,7 @@ function Header({ data, getUser, isFetching, clearUserStore, history }) {
     controller.unsubsctibe(data.id);
     localStorage.clear();
     clearUserStore();
+    clearChatData();
     history.replace('/login');
   };
 
@@ -92,6 +94,7 @@ const mapStateToProps = (state) => state.userStore;
 const mapDispatchToProps = (dispatch) => ({
   getUser: () => dispatch(getUser()),
   clearUserStore: () => dispatch(clearUserStore()),
+  clearChatData: () => dispatch(clearChatDataToInitial()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

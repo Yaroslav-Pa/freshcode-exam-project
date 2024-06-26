@@ -29,9 +29,9 @@ const DialogBox = props => {
   const getFormatedTimeIfSame = (time) => {
     const currentTime = new Date();
     if (isSameDay(time, currentTime)) return format(time, 'HH:mm');
-    if (isSameWeek(time, currentTime)) return format(time, 'EEEE');
-    if (isSameYear(time, currentTime)) return format(time, 'MM dd');
-    return format(time, 'MMMM dd, yyyy');
+    if (isSameWeek(time, currentTime)) return format(time, 'E');
+    if (isSameYear(time, currentTime)) return format(time, 'MMM dd');
+    return format(time, 'MMM dd, y');
   };
 
   return (

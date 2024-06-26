@@ -1,7 +1,8 @@
 import axios from 'axios';
 import CONSTANTS from '../constants';
 // import history from '../browserHistory';
-
+//TODO it would be nice to do something similar like in chats
+// toast('Apologies, session token timed out. Please re-enter to continue.');
 const instance = axios.create({
   baseURL: CONSTANTS.BASE_URL,
 });

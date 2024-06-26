@@ -25,6 +25,10 @@ module.exports.addMessage = async (req, res, next) => {
     const interlocutorIdInt = +interlocutorId;
     const participants = [userId, interlocutorIdInt].sort((a, b) => a - b);
 
+    if (interlocutorIdInt === userId) {
+      throw new Error('User cant send messages to himself');
+    }
+
     const [newConversation] = await createOrFindConversation(participants);
     const message = await db.Message.create({
       sender: userId,
@@ -43,7 +47,7 @@ module.exports.addMessage = async (req, res, next) => {
       preview: {
         ...previewBody,
         interlocutor: {
-          id: interlocutorIdInt,
+          id: userId,
           firstName,
           lastName,
           displayName,

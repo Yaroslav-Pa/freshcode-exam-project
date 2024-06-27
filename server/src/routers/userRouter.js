@@ -4,7 +4,6 @@ const validators = require('../middlewares/validators');
 const userController = require('../controllers/userController');
 const basicMiddlewares = require('../middlewares/basicMiddlewares');
 const upload = require('../utils/fileUpload');
-const hashPass = require('../middlewares/hashPassMiddle');
 const transactionHistoryRouter = require('./transactionHistoryRouter');
 
 // /user/
@@ -14,7 +13,6 @@ userRouter.get('/', checkToken.checkAuth);
 userRouter.post(
   '/registration',
   validators.validateRegistrationData,
-  hashPass,
   userController.registration
 );
 

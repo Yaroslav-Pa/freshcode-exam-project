@@ -32,6 +32,7 @@ instance.interceptors.response.use(
       !CONSTANTS.PUBLIC_LOCATIONS.includes(location)
     ) {
       window.location.pathname = '/login';
+      window.localStorage.removeItem(CONSTANTS.ACCESS_TOKEN);
     }
     return Promise.reject(err);
   }

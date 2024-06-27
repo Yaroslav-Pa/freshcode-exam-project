@@ -1,17 +1,13 @@
 const fs = require('fs');
-const path = require('path');
 const multer = require('multer');
 const env = process.env.NODE_ENV || 'development';
-const { DEV_FILES_PATH, PROD_FILES_PATH } = require('../constants');
-
-const devImagesPath = path.resolve(DEV_FILES_PATH, 'images');
-const devContestsPath = path.resolve(DEV_FILES_PATH, 'contests');
+const { PROD_FILES_PATH, DEV_IMAGES_PATH, DEV_CONTESTS_PATH } = require('../constants');
 
 const imagesPath =
-  env === 'production' ? `${PROD_FILES_PATH}/images` : devImagesPath;
+  env === 'production' ? `${PROD_FILES_PATH}/images` : DEV_IMAGES_PATH;
 
 const contestsPath =
-  env === 'production' ? `${PROD_FILES_PATH}/contests` : devContestsPath;
+  env === 'production' ? `${PROD_FILES_PATH}/contests` : DEV_CONTESTS_PATH;
 
 if (!fs.existsSync(imagesPath)) {
   fs.mkdirSync(imagesPath, {

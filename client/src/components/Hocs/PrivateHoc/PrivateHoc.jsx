@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { getUser } from '../../../store/slices/userSlice';
 import Spinner from '../../Spinner/Spinner';
+import CONSTANTS from '../../../constants';
+//TODO test, dont allow to view even if technikly allowed 
 
 const PrivateHoc = (Component, props) => {
   class Hoc extends React.Component {
     componentDidMount() {
-      if (!this.props.data) {
+      if (!this.props.data && localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
         this.props.getUser();
       }
     }

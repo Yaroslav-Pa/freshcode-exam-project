@@ -1,8 +1,8 @@
 import axios from 'axios';
 import CONSTANTS from '../constants';
-// import history from '../browserHistory';
-//TODO it would be nice to do something similar like in chats
-// toast('Apologies, session token timed out. Please re-enter to continue.');
+import { redirectToLogin } from '../utils/redirectFunctions';
+import history from '../browserHistory';
+
 const instance = axios.create({
   baseURL: CONSTANTS.BASE_URL,
 });
@@ -31,8 +31,7 @@ instance.interceptors.response.use(
       err.response.status === CONSTANTS.TOKEN_ERROR.STATUS &&
       !CONSTANTS.PUBLIC_LOCATIONS.includes(location)
     ) {
-      window.location.pathname = '/login';
-      window.localStorage.removeItem(CONSTANTS.ACCESS_TOKEN);
+      redirectToLogin(history);
     }
     return Promise.reject(err);
   }

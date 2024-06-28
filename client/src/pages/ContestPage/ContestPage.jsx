@@ -23,10 +23,10 @@ import TryAgain from '../../components/TryAgain/TryAgain';
 import 'react-18-image-lightbox/style.css';
 import Error from '../../components/Error/Error';
 import OfferList from '../../components/OfferList/OfferList';
+import ContestOffersStatusText from '../../components/ContestOffersStatusText/ContestOffersStatusText';
 
 class ContestPage extends React.Component {
   componentWillUnmount() {
-    //TODO not shure if its needed
     this.props.clearSetOfferStatusError();
     this.props.changeEditContest(false);
   }
@@ -159,27 +159,7 @@ class ContestPage extends React.Component {
                 />
               ) : (
                 <div className={styles.offersContainer}>
-                  <section className={styles.offersPendingText}>
-                    <div className={styles.offersPendingBox}>
-                      {contestData?.reviewCount > 0 && (
-                        <p>
-                          <span className={styles.pendingText}>
-                            {contestData.reviewCount} offers pending
-                          </span>{' '}
-                          on review
-                        </p>
-                      )}
-                      {role === CONSTANTS.CREATOR &&
-                        contestData?.failReviewCount > 0 && (
-                          <p>
-                            <span className={styles.failedText}>
-                              {contestData.failReviewCount} offers failed
-                            </span>{' '}
-                            review
-                          </p>
-                        )}
-                    </div>
-                  </section>
+                  <ContestOffersStatusText contestData={contestData} role={role}/>
                   {role === CONSTANTS.CREATOR &&
                     contestData.status === CONSTANTS.CONTEST_STATUS_ACTIVE && (
                       <OfferForm

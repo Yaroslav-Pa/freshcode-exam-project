@@ -11,28 +11,26 @@ import ChatInput from '../../ChatComponents/ChatInut/ChatInput';
 import { format, isSameDay, parseISO } from 'date-fns';
 
 class Dialog extends React.Component {
-  componentDidMount() {
-    this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
-    this.scrollToBottom();
-  }
-
   messagesEnd = React.createRef();
 
   scrollToBottom = () => {
     this.messagesEnd.current.scrollIntoView({ behavior: 'smooth' });
   };
-
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.interlocutor?.id !== this.props.interlocutor?.id)
-      this.props.getDialog({ interlocutorId: nextProps.interlocutor.id });
+  
+  componentDidMount() {
+    this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
+    this.scrollToBottom();
   }
 
   componentWillUnmount() {
     this.props.clearMessageList();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     if (this.messagesEnd.current) this.scrollToBottom();
+    if (this.props.interlocutor?.id !== prevProps.interlocutor?.id) {
+      this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
+    }
   }
 
   renderMainDialog = () => {

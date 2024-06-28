@@ -10,17 +10,12 @@ const HowItWorks = () => {
   return (
     <>
       <Header />
-      {/* Hero Section */}
       <HeroSection />
-      {/* Ways To Use Section */}
       <WaysToUseSection />
-      {/* HowContestsWorkSection */}
       <HowContestsWorkSection />
-      {/* Frequently Asked Questions */}
       <FAQSection />
-      {/* Search Section*/}
       <SearchSection />
-      <Footer/>
+      <Footer />
     </>
   );
 };

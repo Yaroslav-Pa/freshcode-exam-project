@@ -1,9 +1,9 @@
 import Header from '../../components/Header/Header';
-import HeroSection from '../../components/HeroSection/HeroSection';
-import WaysToUseSection from '../../components/WaysToUseSection/WaysToUseSection';
-import HowContestsWorkSection from '../../components/HowContestsWorkSection/HowContestsWorkSection';
-import FAQSection from '../../components/FAQSection/FAQSection';
-import SearchSection from '../../components/SearchSection/SearchSection';
+import HeroSection from '../../components/HowItWorksSections/HeroSection/HeroSection';
+import WaysToUseSection from '../../components/HowItWorksSections/WaysToUseSection/WaysToUseSection';
+import HowContestsWorkSection from '../../components/HowItWorksSections/HowContestsWorkSection/HowContestsWorkSection';
+import FAQSection from '../../components/HowItWorksSections/FAQSection/FAQSection';
+import SearchSection from '../../components/HowItWorksSections/SearchSection/SearchSection';
 import Footer from '../../components/Footer/Footer';
 
 const HowItWorks = () => {

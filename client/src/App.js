@@ -7,22 +7,21 @@ import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import Payment from './pages/Payment/Payment';
 import StartContestPage from './pages/StartContestPage/StartContestPage';
 import Dashboard from './pages/Dashboard/Dashboard';
-import PrivateHoc from './components/PrivateHoc/PrivateHoc';
+import PrivateHoc from './components/Hocs/PrivateHoc/PrivateHoc';
 import NotFound from './components/NotFound/NotFound';
 import Home from './pages/Home/Home';
-import OnlyNotAuthorizedUserHoc from './components/OnlyNotAuthorizedUserHoc/OnlyNotAuthorizedUserHoc';
+import OnlyNotAuthorizedUserHoc from './components/Hocs/OnlyNotAuthorizedUserHoc/OnlyNotAuthorizedUserHoc';
 import ContestPage from './pages/ContestPage/ContestPage';
 import UserProfile from './pages/UserProfile/UserProfile';
 import 'react-toastify/dist/ReactToastify.css';
 import ContestCreationPage from './pages/ContestCreation/ContestCreationPage';
 import CONSTANTS from './constants';
-// import browserHistory from './browserHistory';
 import ChatContainer from './components/Chat/ChatComponents/ChatContainer/ChatContainer';
 import HowItWorks from './pages/HowItWorks/HowItWorks';
 import EventPage from './pages/EventPage/EventPage';
-import EventsLink from './components/EventsLink/EventsLink';
+import EventsLink from './components/EventComponents/EventsLink/EventsLink';
 import { getGetAndUpdateEvents } from './utils/eventsFunctions';
-import ModeratorOnlyRoute from './components/ModeratorOnlyRoute/ModeratorOnlyRoute';
+import ModeratorOnlyRoute from './components/Hocs/ModeratorOnlyRoute/ModeratorOnlyRoute';
 import OfferReview from './pages/OfferReview/OfferReview';
 
 function App() {

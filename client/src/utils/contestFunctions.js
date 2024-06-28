@@ -1,5 +1,5 @@
 import CONSTANTS from "../constants";
-import ContestBox from '../components/ContestBox/ContestBox';
+import ContestBox from '../components/Contest/ContestBox/ContestBox';
 import { formatDistanceToNow } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 

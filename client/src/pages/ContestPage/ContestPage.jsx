@@ -13,7 +13,7 @@ import {
   changeShowImage,
 } from '../../store/slices/contestByIdSlice';
 import Header from '../../components/Header/Header';
-import ContestSideBar from '../../components/ContestSideBar/ContestSideBar';
+import ContestSideBar from '../../components/Contest/ContestSideBar/ContestSideBar';
 import styles from './ContestPage.module.sass';
 import OfferForm from '../../components/OfferForm/OfferForm';
 import CONSTANTS from '../../constants';
@@ -23,7 +23,7 @@ import TryAgain from '../../components/TryAgain/TryAgain';
 import 'react-18-image-lightbox/style.css';
 import Error from '../../components/Error/Error';
 import OfferList from '../../components/OfferList/OfferList';
-import ContestOffersStatusText from '../../components/ContestOffersStatusText/ContestOffersStatusText';
+import ContestOffersStatusText from '../../components/Contest/ContestOffersStatusText/ContestOffersStatusText';
 
 class ContestPage extends React.Component {
   componentWillUnmount() {

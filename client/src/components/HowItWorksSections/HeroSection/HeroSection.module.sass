@@ -1,0 +1,53 @@
+@import '../../../utils/styles/_howItWorksPageTemplates.sass'
+
+.heroSection
+  padding: 60px 0 30px
+  background: #fbfbff
+  margin: 0 auto
+
+.fullHeroContainer
+  padding: 0 12px
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  max-width: 1040px
+  margin: 0 auto
+  align-items: center
+  @media(max-width: 990px)
+    flex-direction: column-reverse
+    gap: 40px 0
+
+.leftContainer
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  gap: 40px 0
+  max-width: 490px
+  @media(max-width: 990px)
+    align-items: center
+
+.textContainer
+  @extend %textContainer
+  @media(max-width: 990px)
+    align-items: center
+
+.heroMainText
+  @extend %mainText
+  @media(max-width: 990px)
+    text-align: center
+    font-size: 24px
+
+.descriptionText
+  @extend %descriptionText
+  @media(max-width: 990px)
+    text-align: center
+
+.tag
+  @extend %tag
+
+.heroImage
+  max-height: 450px
+  max-width: 450px
+
+.button
+  @extend %button

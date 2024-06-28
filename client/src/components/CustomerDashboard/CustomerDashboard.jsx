@@ -7,7 +7,7 @@ import {
   setNewCustomerFilter,
 } from '../../store/slices/contestsSlice';
 import CONSTANTS from '../../constants';
-import ContestsContainer from '../ContestsContainer/ContestsContainer';
+import ContestsContainer from '../Contest/ContestsContainer/ContestsContainer';
 import styles from './CustomerDashboard.module.sass';
 import TryAgain from '../TryAgain/TryAgain';
 import { contestList, getGoToExtended } from '../../utils/contestFunctions';

@@ -5,7 +5,7 @@ import Header from '../../components/Header/Header';
 import styles from './EventPage.module.sass';
 import { useEffect } from 'react';
 import { saveEvents } from '../../store/slices/eventSlice';
-import EventsListing from '../../components/EventsListing/EventsListing';
+import EventsListing from '../../components/EventComponents/EventsListing/EventsListing';
 import { getGetAndUpdateEvents } from '../../utils/eventsFunctions';
 import { selectEvents } from '../../utils/reselect/eventsReselect';
 

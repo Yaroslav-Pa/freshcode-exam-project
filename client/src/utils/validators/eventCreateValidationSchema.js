@@ -1,9 +1,5 @@
 import * as yup from 'yup';
 
-// name: '',
-// time: '',
-// remiderTime: '',
-
 export const eventCreateValidationSchem = yup.object({
   name: yup
     .string()

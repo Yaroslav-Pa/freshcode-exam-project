@@ -3,14 +3,13 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
 import classNames from 'classnames';
-import isEqual from 'lodash/isEqual';
 import {
   getContests,
   clearContestsList,
   setNewCreatorFilter,
 } from '../../store/slices/contestsSlice';
 import { getDataForContest } from '../../store/slices/dataForContestSlice';
-import ContestsContainer from '../ContestsContainer/ContestsContainer';
+import ContestsContainer from '../Contest/ContestsContainer/ContestsContainer';
 import styles from './CreatorDashboard.module.sass';
 import TryAgain from '../TryAgain/TryAgain';
 import CONSTANTS from '../../constants';

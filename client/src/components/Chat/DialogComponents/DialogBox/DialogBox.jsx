@@ -2,9 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 import styles from './DialogBox.module.sass';
 import CONSTANTS from '../../../../constants';
-import { isSameDay, isSameWeek, isSameYear, format } from "date-fns";
+import { isSameDay, isSameWeek, isSameYear, format } from 'date-fns';
+import NewMessagePoint from '../../../NewMessagePoint/NewMessagePoint';
 
-const DialogBox = props => {
+const DialogBox = (props) => {
   const {
     chatPreview,
     userId,
@@ -22,6 +23,7 @@ const DialogBox = props => {
     _id,
     text,
     createAt,
+    isNewMessage,
   } = chatPreview;
   const isFavorite = favoriteList[participants.indexOf(userId)];
   const isBlocked = blackList[participants.indexOf(userId)];
@@ -35,7 +37,7 @@ const DialogBox = props => {
   };
 
   return (
-    <div
+    <section
       className={styles.previewChatBox}
       onClick={() =>
         goToExpandedDialog({
@@ -49,25 +51,27 @@ const DialogBox = props => {
         })
       }
     >
-      <img
-        src={
-          interlocutor.avatar === 'anon.png'
-            ? CONSTANTS.ANONYM_IMAGE_PATH
-            : `${CONSTANTS.publicImagesURL}${interlocutor.avatar}`
-        }
-        alt='user'
-      />
+      <div className={styles.userIconContainer}>
+        <img
+          className={styles.userIcon}
+          src={
+            interlocutor.avatar === 'anon.png'
+              ? CONSTANTS.ANONYM_IMAGE_PATH
+              : `${CONSTANTS.publicImagesURL}${interlocutor.avatar}`
+          }
+          alt="user"
+        />
+        <NewMessagePoint isNewMessage={isNewMessage} />
+      </div>
       <div className={styles.infoContainer}>
         <div className={styles.interlocutorInfo}>
-          <span className={styles.interlocutorName}>
-            {interlocutor.firstName}
-          </span>
-          <span className={styles.interlocutorMessage}>{text}</span>
+          <p className={styles.interlocutorName}>{interlocutor.firstName}</p>
+          <p className={styles.interlocutorMessage}>{text}</p>
         </div>
         <div className={styles.buttonsContainer}>
-          <span className={styles.time}>{getFormatedTimeIfSame(createAt)}</span>
+          <p className={styles.time}>{getFormatedTimeIfSame(createAt)}</p>
           <i
-            onClick={event =>
+            onClick={(event) =>
               changeFavorite(
                 {
                   participants,
@@ -82,7 +86,7 @@ const DialogBox = props => {
             })}
           />
           <i
-            onClick={event =>
+            onClick={(event) =>
               changeBlackList(
                 {
                   participants,
@@ -97,7 +101,7 @@ const DialogBox = props => {
             })}
           />
           <i
-            onClick={event => catalogOperation(event, _id)}
+            onClick={(event) => catalogOperation(event, _id)}
             className={classNames({
               'far fa-plus-square':
                 chatMode !== CONSTANTS.CATALOG_PREVIEW_CHAT_MODE,
@@ -107,7 +111,7 @@ const DialogBox = props => {
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

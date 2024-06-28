@@ -42,7 +42,18 @@ export const getPreviewChat = decorateAsyncThunk({
 const getPreviewChatExtraReducers = createExtraReducers({
   thunk: getPreviewChat,
   fulfilledReducer: (state, { payload }) => {
-    state.messagesPreview = payload;
+    const existingPreviewMap = new Map();
+    state.messagesPreview.forEach((preview) => {
+      existingPreviewMap.set(preview._id, preview);
+    });
+    const updatedPreviews = payload.map((newPreview) => {
+      const existingPreview = existingPreviewMap.get(newPreview._id);
+      return {
+        ...newPreview,
+        isNewMessage: existingPreview ? existingPreview.isNewMessage : false,
+      };
+    });
+    state.messagesPreview = updatedPreviews;
     state.error = null;
   },
   rejectedReducer: (state, { payload }) => {
@@ -330,23 +341,27 @@ const reducers = {
   addMessage: (state, { payload }) => {
     const { message, preview } = payload;
     const { messagesPreview } = state;
+    const isInCurrentChat = isEqual(
+      state.chatData?.participants,
+      payload.message?.participants
+    );
     let isNew = true;
     messagesPreview.forEach((preview) => {
       if (isEqual(preview.participants, message.participants)) {
         preview.text = message.body;
         preview.sender = message.sender;
         preview.createAt = message.createdAt;
+        if (!state.isExpanded || !isInCurrentChat) preview.isNewMessage = true;
         isNew = false;
       }
     });
     if (isNew) {
-      messagesPreview.push(preview);
+      messagesPreview.push({ ...preview, isNewMessage: true });
     }
-    state.isNewMessages = true;
+    if (!state.isExpanded || !isInCurrentChat) state.isNewMessages = true;
     state.messagesPreview = messagesPreview;
 
-    if (isEqual(state.chatData?.participants, payload.message?.participants))
-      state.messages = [...state.messages, payload.message];
+    if (isInCurrentChat) state.messages = [...state.messages, payload.message];
   },
 
   backToDialogList: (state) => {
@@ -374,9 +389,6 @@ const reducers = {
   changeChatShow: (state) => {
     state.isShowCatalogCreation = false;
     state.isShow = !state.isShow;
-    if(!state.isShow){
-      state.isNewMessages = false;
-    }
   },
 
   setPreviewChatMode: (state, { payload }) => {
@@ -407,6 +419,19 @@ const reducers = {
   },
   clearChatDataToInitial: (state) => {
     return initialState;
+  },
+  setNewMessageOff: (state, { payload }) => {
+    let newMessagesCount = 0;
+    state.messagesPreview.forEach((preview) => {
+      if (preview._id === payload) {
+        preview.isNewMessage = false;
+      } else if (preview.isNewMessage === true) {
+        newMessagesCount++;
+      }
+    });
+    if (newMessagesCount === 0) {
+      state.isNewMessages = false;
+    }
   },
 };
 
@@ -447,6 +472,7 @@ export const {
   changeRenameCatalogMode,
   clearChatError,
   clearChatDataToInitial,
+  setNewMessageOff,
 } = actions;
 
 export default reducer;

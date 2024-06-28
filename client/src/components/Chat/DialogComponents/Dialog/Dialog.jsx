@@ -4,6 +4,7 @@ import className from 'classnames';
 import {
   getDialogMessages,
   clearMessageList,
+  setNewMessageOff,
 } from '../../../../store/slices/chatSlice';
 import ChatHeader from '../../ChatComponents/ChatHeader/ChatHeader';
 import styles from './Dialog.module.sass';
@@ -19,6 +20,7 @@ class Dialog extends React.Component {
   
   componentDidMount() {
     this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
+    this.props.setNewMessageOff(this.props.chatData?._id);
     this.scrollToBottom();
   }
 
@@ -29,7 +31,7 @@ class Dialog extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.messagesEnd.current) this.scrollToBottom();
     if (this.props.interlocutor?.id !== prevProps.interlocutor?.id) {
-      this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
+      this.props.getDialog({ interlocutorId: this.props.interlocutor?.id });
     }
   }
 
@@ -99,6 +101,7 @@ const mapStateToProps = (state) => state.chatStore;
 const mapDispatchToProps = (dispatch) => ({
   getDialog: (data) => dispatch(getDialogMessages(data)),
   clearMessageList: () => dispatch(clearMessageList()),
+  setNewMessageOff: (id) => dispatch(setNewMessageOff(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dialog);

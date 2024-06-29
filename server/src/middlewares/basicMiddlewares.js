@@ -1,4 +1,4 @@
-const bd = require('../db/models');
+const db = require('../db/models');
 const NotFound = require('../errors/UserNotFoundError');
 const RightsError = require('../errors/RightsError');
 const ServerError = require('../errors/ServerError');
@@ -25,15 +25,15 @@ module.exports.canGetContest = async (req, res, next) => {
     } = req;
     const contestIdInt = +contestId;
     if (role === CONSTANTS.CUSTOMER) {
-      result = await bd.Contest.findOne({
+      result = await db.Contest.findOne({
         where: { id: contestIdInt, userId },
       });
     } else if (role === CONSTANTS.CREATOR) {
-      result = await bd.Contest.findOne({
+      result = await db.Contest.findOne({
         where: {
           id: contestIdInt,
           status: {
-            [bd.Sequelize.Op.or]: [
+            [db.Sequelize.Op.or]: [
               CONSTANTS.CONTEST_STATUS_ACTIVE,
               CONSTANTS.CONTEST_STATUS_FINISHED,
             ],
@@ -81,7 +81,7 @@ module.exports.canSendOffer = async (req, res, next) => {
     return next(new RightsError());
   }
   try {
-    const result = await bd.Contest.findOne({
+    const result = await db.Contest.findOne({
       where: {
         id: contestIdInt,
       },
@@ -109,7 +109,7 @@ module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
       tokenData: { userId },
     } = req;
     const contestIdInt = +contestId;
-    const result = await bd.Contest.findOne({
+    const result = await db.Contest.findOne({
       where: {
         userId,
         id: contestIdInt,
@@ -133,11 +133,11 @@ module.exports.canUpdateContest = async (req, res, next) => {
       tokenData: { userId },
     } = req;
     const contestIdInt = +contestId;
-    const result = bd.Contest.findOne({
+    const result = db.Contest.findOne({
       where: {
         userId,
         id: contestIdInt,
-        status: { [bd.Sequelize.Op.not]: CONSTANTS.CONTEST_STATUS_FINISHED },
+        status: { [db.Sequelize.Op.not]: CONSTANTS.CONTEST_STATUS_FINISHED },
       },
     });
     if (!result) {

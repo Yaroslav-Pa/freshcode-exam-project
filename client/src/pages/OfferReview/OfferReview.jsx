@@ -10,21 +10,22 @@ import {
   getOffers,
 } from '../../store/slices/moderatedOffersSlice';
 import Spinner from '../../components/Spinner/Spinner';
+import Lightbox from 'react-18-image-lightbox';
+import CONSTANTS from '../../constants';
+import { changeShowImage } from '../../store/slices/contestByIdSlice';
+import {
+  selectContestById,
+  selectModeratedOffers,
+} from '../../utils/reselect/moderatorReselect';
 
 function OfferReview() {
   const dispatch = useDispatch();
-  const isFetching = useSelector(
-    ({ moderatedOffersStore }) => moderatedOffersStore.isFetching
+
+  const { isFetching, error, offers, haveMore } = useSelector(
+    selectModeratedOffers
   );
-  const error = useSelector(
-    ({ moderatedOffersStore }) => moderatedOffersStore.error
-  );
-  const offers = useSelector(
-    ({ moderatedOffersStore }) => moderatedOffersStore.offers
-  );
-  const haveMore = useSelector(
-    ({ moderatedOffersStore }) => moderatedOffersStore.haveMore
-  );
+
+  const { isShowOnFull, imagePath } = useSelector(selectContestById);
 
   useEffect(() => {
     dispatch(clearOffers());
@@ -65,6 +66,14 @@ function OfferReview() {
 
   return (
     <>
+      {isShowOnFull && (
+        <Lightbox
+          mainSrc={`${CONSTANTS.publicContestsURL}${imagePath}`}
+          onCloseRequest={() =>
+            dispatch(changeShowImage({ isShowOnFull: false, imagePath: null }))
+          }
+        />
+      )}
       <Header />
       <main className={styles.main}>
         <section className={containerClassnames}>

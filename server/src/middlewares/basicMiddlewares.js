@@ -5,19 +5,17 @@ const ServerError = require('../errors/ServerError');
 const CONSTANTS = require('../constants');
 
 module.exports.parseBody = (req, res, next) => {
-  //TODO? map
   const newContests = JSON.parse(req.body.contests);
-  for (let i = 0; i < newContests.length; i++) {
-    if (newContests[i].haveFile) {
+  newContests.forEach((contest) => {
+    if (contest.haveFile) {
       const file = req.files.splice(0, 1);
-      newContests[i].fileName = file[0].filename;
-      newContests[i].originalFileName = file[0].originalname;
+      contest.fileName = file[0].filename;
+      contest.originalFileName = file[0].originalname;
     }
-  }
+  });
   req.body.contests = newContests;
   next();
 };
-
 module.exports.canGetContest = async (req, res, next) => {
   let result = null;
   try {
@@ -25,7 +23,7 @@ module.exports.canGetContest = async (req, res, next) => {
       params: { contestId },
       tokenData: { role, userId },
     } = req;
-    const contestIdInt = +contestId
+    const contestIdInt = +contestId;
     if (role === CONSTANTS.CUSTOMER) {
       result = await bd.Contest.findOne({
         where: { id: contestIdInt, userId },

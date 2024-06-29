@@ -8,7 +8,7 @@ import Error from '../../components/Error/Error';
 import Logo from '../../components/Logo';
 
 const Payment = (props) => {
-  const pay = (values) => {
+  const pay = async (values) => {
     const { contests } = props.contestCreationStore;
     const contestArray = [];
     Object.keys(contests).forEach((key) =>
@@ -16,9 +16,20 @@ const Payment = (props) => {
     );
     const { number, expiry, cvc } = values;
     const data = new FormData();
-    contestArray.forEach((contest) => {
-      data.append('files', contest.file);
+    const arrayFiles = [];
+    for (let contest of contestArray) {
+      if (contest.file) {
+        try {
+          const file = await (await fetch(contest.file.url)).blob();
+          arrayFiles.push({ name: contest.file.name, file });
+        } catch (error) {
+          console.error('Error fetching the file blob:', error);
+        }
+      }
       contest.haveFile = !!contest.file;
+    }
+    arrayFiles.forEach(({ file, name }) => {
+      data.append(`files`, file, name);
     });
     data.append('number', number);
     data.append('expiry', expiry);

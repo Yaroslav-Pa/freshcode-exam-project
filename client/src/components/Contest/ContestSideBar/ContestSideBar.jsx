@@ -25,7 +25,14 @@ const ContestSideBar = (props) => {
                   src={`${CONSTANTS.STATIC_IMAGES_PATH}clock.png`}
                   alt="clock"
                 />
-                <span>Going</span>
+                <span>
+                  {props.contestData.status ===
+                    CONSTANTS.CONTEST_STATUS_ACTIVE && 'Going'}
+                  {props.contestData.status ===
+                    CONSTANTS.CONTEST_STATUS_FINISHED && 'Finshed'}
+                  {props.contestData.status ===
+                    CONSTANTS.CONTEST_STATUS_PENDING && 'Pending'}
+                </span>
               </div>
               <span className={styles.time}>
                 {getFormatedGoingTimeStr(props.contestData.createdAt)}

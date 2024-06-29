@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
@@ -18,15 +18,20 @@ import TypeSelector from '../TypeSelector/TypeSelector';
 import { contestList, getGoToExtended } from '../../utils/contestFunctions';
 
 function CreatorDashboard(props) {
+  const prevSearchRef = useRef(props.location.search);
+
   useEffect(() => {
-    if (props.location.search) {
-      parseUrlForParams(props.location.search);
+    if (prevSearchRef.current !== props.location.search) {
+      prevSearchRef.current = props.location.search;
+      if (props.location.search) {
+        parseUrlForParams(props.location.search);
+      }
     }
   }, [props.location.search]);
 
   useEffect(() => {
     props.getDataForContest();
-    getContests(props.creatorFilter);
+    if (!props.contests.length) getContests(props.creatorFilter);
     return () => {
       props.clearContestsList();
     };

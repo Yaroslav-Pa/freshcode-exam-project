@@ -159,7 +159,10 @@ class ContestPage extends React.Component {
                 />
               ) : (
                 <div className={styles.offersContainer}>
-                  <ContestOffersStatusText contestData={contestData} role={role}/>
+                  <ContestOffersStatusText
+                    contestData={contestData}
+                    role={role}
+                  />
                   {role === CONSTANTS.CREATOR &&
                     contestData.status === CONSTANTS.CONTEST_STATUS_ACTIVE && (
                       <OfferForm

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './OfferList.module.sass';
 import OfferBox from '../OfferBox/OfferBox';
 import { sortOffers } from '../../utils/contestFunctions';
+import CONSTANTS from '../../constants';
 
 const OfferList = ({ offers, contestData, needButtons, setOfferStatus }) => {
   const sortedOffers = sortOffers(offers);
@@ -17,7 +18,11 @@ const OfferList = ({ offers, contestData, needButtons, setOfferStatus }) => {
       />
     ))
   ) : (
-    <div className={styles.notFound}>There is no suggestion at this moment</div>
+    <div className={styles.notFound}>
+      {contestData.status !== CONSTANTS.CONTEST_STATUS_FINISHED
+        ? 'There is no suggestion at this moment'
+        : "You didn't participate in this contest"}
+    </div>
   );
 };
 

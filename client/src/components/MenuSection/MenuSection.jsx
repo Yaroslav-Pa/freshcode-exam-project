@@ -17,7 +17,7 @@ function MenuSection({ menuName, pagesList, role = null }) {
       {...data}
       linkStyle={linkStyle}
       index={index}
-      key={data.name + data.url}
+      key={data.text + data.url}
     />
   ));
 

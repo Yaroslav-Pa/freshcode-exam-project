@@ -1,9 +1,11 @@
 @import '../../../utils/styles/_howItWorksPageTemplates.sass'
 
 .heroSection
-  padding: 60px 0 30px
+  padding: 60px 20px 30px
   background: #fbfbff
   margin: 0 auto
+  @media screen and (max-width: 990px)
+    padding: 60px 0px 30px
 
 .fullHeroContainer
   padding: 0 12px
@@ -13,7 +15,7 @@
   max-width: 1040px
   margin: 0 auto
   align-items: center
-  @media(max-width: 990px)
+  @media screen and (max-width: 990px)
     flex-direction: column-reverse
     gap: 40px 0
 
@@ -23,23 +25,23 @@
   align-items: flex-start
   gap: 40px 0
   max-width: 490px
-  @media(max-width: 990px)
+  @media screen and (max-width: 990px)
     align-items: center
 
 .textContainer
   @extend %textContainer
-  @media(max-width: 990px)
+  @media screen and (max-width: 990px)
     align-items: center
 
 .heroMainText
   @extend %mainText
-  @media(max-width: 990px)
+  @media screen and (max-width: 990px)
     text-align: center
     font-size: 24px
 
 .descriptionText
   @extend %descriptionText
-  @media(max-width: 990px)
+  @media screen and (max-width: 990px)
     text-align: center
 
 .tag

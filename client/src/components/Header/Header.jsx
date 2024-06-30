@@ -12,7 +12,6 @@ import Logo from '../Logo';
 import { controller } from '../../api/ws/socketController';
 import { clearChatDataToInitial } from '../../store/slices/chatSlice';
 import TEXT_CONTANTS from '../../textConstanst';
-import { formatISO } from 'date-fns';
 import { checkTime } from '../../store/slices/eventSlice';
 
 function Header({
@@ -29,10 +28,12 @@ function Header({
     if (!data && localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
       getUser();
     }
-    if (eventCount) {
-      checkTime(new Date());
-    }
   }, []);
+  useEffect(() => {
+    if (eventCount) {
+      checkTime();
+    }
+  }, [eventCount]);
 
   const AllMenuSections = TEXT_CONTANTS.SECTION_LIST.map(
     ({ menuName, list }) => (
@@ -111,7 +112,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   getUser: () => dispatch(getUser()),
-  checkTime: (data) => dispatch(checkTime(formatISO(data))),
+  checkTime: () => dispatch(checkTime()),
   clearUserStore: () => dispatch(clearUserStore()),
   clearChatData: () => dispatch(clearChatDataToInitial()),
 });

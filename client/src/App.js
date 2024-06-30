@@ -22,15 +22,13 @@ import EventPage from './pages/EventPage/EventPage';
 import EventsLink from './components/EventComponents/EventsLink/EventsLink';
 import ModeratorOnlyRoute from './components/Hocs/ModeratorOnlyRoute/ModeratorOnlyRoute';
 import OfferReview from './pages/OfferReview/OfferReview';
-import { checkTime, getEvents } from './store/slices/eventSlice';
+import { getEvents } from './store/slices/eventSlice';
 import { useDispatch } from 'react-redux';
-import { formatISO } from 'date-fns';
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getEvents());
-    dispatch(checkTime(formatISO(new Date())));
   }, []);
 
   return (

@@ -4,10 +4,14 @@ import {
   differenceInMilliseconds,
   format,
   formatDistanceToNowStrict,
+  formatISO,
   startOfDay,
 } from 'date-fns';
 
-export const getFromatedDate = (endDate, currentDate = new Date()) => {
+export const getFromatedDate = (
+  endDate,
+  currentDate = formatISO(new Date())
+) => {
   const timeDifference = differenceInMilliseconds(endDate, currentDate);
   const hoursDiff = differenceInHours(endDate, currentDate);
 
@@ -28,7 +32,7 @@ export const getFromatedDate = (endDate, currentDate = new Date()) => {
 export function getTimePercentage(
   startDate,
   endDate,
-  currentDate = new Date()
+  currentDate = formatISO(new Date())
 ) {
   const totalDuration = differenceInMilliseconds(endDate, startDate);
   const elapsedDuration = differenceInMilliseconds(currentDate, startDate);
@@ -36,7 +40,7 @@ export function getTimePercentage(
   return Math.min(Math.max(percentage, 0), 100);
 }
 
-export const sortClosestTime = (array, currentTime) => {
+export const sortClosestTime = (array, currentTime = formatISO(new Date())) => {
   return [...array].sort(
     (a, b) =>
       differenceInMilliseconds(a.endTime, currentTime) -

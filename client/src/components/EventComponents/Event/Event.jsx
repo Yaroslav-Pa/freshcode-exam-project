@@ -5,14 +5,12 @@ import { IoCloseSharp } from 'react-icons/io5';
 import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { removeEvent } from '../../../store/slices/eventSlice';
+import { getFromatedDate, getTimePercentage } from '../../../utils/eventsFunctions';
 
 function Event({
   name,
   endTime,
   creationTime,
-  currentTime,
-  getTimePercentage,
-  getFromatedDate,
   isOver,
   isRemind,
 }) {
@@ -32,11 +30,11 @@ function Event({
   });
 
   const timeDateText = endTime
-    ? getFromatedDate(toZonedTime(endTime, CONSTANTS.TIMEZONE), currentTime)
+    ? getFromatedDate(toZonedTime(endTime, CONSTANTS.TIMEZONE))
     : '';
   const percentage =
     creationTime && endTime
-      ? getTimePercentage(creationTime, endTime, currentTime)
+      ? getTimePercentage(creationTime, endTime)
       : 0;
 
   return (

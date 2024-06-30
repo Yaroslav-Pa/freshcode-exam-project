@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import CONSTANTS from '../../constants';
-import { isAfter } from 'date-fns';
+import { formatISO, isAfter } from 'date-fns';
 
 const SLICE_NAME = 'events';
 
@@ -14,14 +14,15 @@ const eventSlice = createSlice({
   name: SLICE_NAME,
   initialState,
   reducers: {
-    checkTime: (state, { payload }) => {
+    checkTime: (state, { payload = formatISO(new Date()) }) => {
+      const time = formatISO(payload);
       state.overCount = 0;
       state.remindCount = 0;
 
       state.events.forEach((event) => {
         if (event?.endTime && event?.remiderTime) {
-          event.isOver = isAfter(payload, event.endTime);
-          event.isRemind = isAfter(payload, event.remiderTime);
+          event.isOver = isAfter(time, event.endTime);
+          event.isRemind = isAfter(time, event.remiderTime);
         }
         if (event.isOver) state.overCount++;
         if (event.isRemind && !event.isOver) state.remindCount++;

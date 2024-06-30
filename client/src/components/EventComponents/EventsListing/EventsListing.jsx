@@ -1,32 +1,25 @@
-import { formatISO } from 'date-fns';
 import { useEffect, useState } from 'react';
 import Event from '../Event/Event';
 import styles from './EventsListing.module.sass';
 import { BsClockHistory } from 'react-icons/bs';
 import { useDispatch } from 'react-redux';
 import { checkTime } from '../../../store/slices/eventSlice';
-import {
-  getFromatedDate,
-  getTimePercentage,
-  sortClosestTime,
-} from '../../../utils/eventsFunctions';
+import { sortClosestTime } from '../../../utils/eventsFunctions';
+import { formatISO } from 'date-fns';
 
 function EventsListing({ events }) {
   const dispatch = useDispatch();
-  const [currentTime, setCurrentTime] = useState();
+  const [time, setTime] = useState(formatISO(new Date()));
 
   useEffect(() => {
-    setCurrentTime(formatISO(new Date()));
-    const intervalId = setInterval(
-      () => setCurrentTime(formatISO(new Date())),
-      1000
-    );
+    setTime(formatISO(new Date()));
+    dispatch(checkTime(time));
+    const intervalId = setInterval(() => {
+      setTime(formatISO(new Date()));
+      dispatch(checkTime(time));
+    }, 1000);
     return () => clearInterval(intervalId);
   }, []);
-
-  useEffect(() => {
-    dispatch(checkTime(currentTime));
-  }, [currentTime]);
 
   return (
     <section className={styles.mainContainer}>
@@ -38,14 +31,8 @@ function EventsListing({ events }) {
         </div>
       </div>
       <section className={styles.eventContainer}>
-        {sortClosestTime(events, currentTime).map((event) => (
-          <Event
-            key={event?.creationTime}
-            {...event}
-            currentTime={currentTime}
-            getTimePercentage={getTimePercentage}
-            getFromatedDate={getFromatedDate}
-          />
+        {sortClosestTime(events).map((event) => (
+          <Event key={event?.creationTime} {...event} />
         ))}
       </section>
     </section>

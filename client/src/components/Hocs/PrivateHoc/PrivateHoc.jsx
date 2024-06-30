@@ -1,37 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { getUser } from '../../../store/slices/userSlice';
 import Spinner from '../../Spinner/Spinner';
 import CONSTANTS from '../../../constants';
-//TODO test, dont allow to view even if technikly allowed 
 
 const PrivateHoc = (Component, props) => {
-  class Hoc extends React.Component {
-    componentDidMount() {
-      if (!this.props.data && localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
-        this.props.getUser();
+  const Redirector = ({ data, getUser, isFetching, history, match }) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      if (!data && localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
+        getUser();
       }
+      setIsLoading(false);
+    }, []);
+
+    if (isLoading || isFetching) {
+      return <Spinner />;
     }
 
-    render() {
-      if (this.props.isFetching) {
-        return <Spinner />;
-      }
-
-      if (!this.props.isFetching && !this.props.data) {
-        return <Redirect to="/login" />;
-      }
-
-      return (
-        <Component
-          history={this.props.history}
-          match={this.props.match}
-          {...props}
-        />
-      );
+    if (!isFetching && !data) {
+      return <Redirect to="/login" />;
     }
-  }
+
+    return <Component history={history} match={match} {...props} />;
+  };
 
   const mapStateToProps = (state) => state.userStore;
 
@@ -39,7 +33,7 @@ const PrivateHoc = (Component, props) => {
     getUser: () => dispatch(getUser()),
   });
 
-  return connect(mapStateToProps, mapDispatchToProps)(Hoc);
+  return connect(mapStateToProps, mapDispatchToProps)(Redirector);
 };
 
 export default PrivateHoc;

@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const eventCreateValidationSchem = yup.object({
+const eventCreateValidationSchem = yup.object({
   name: yup
     .string()
     .min(3, 'Event name must be at least 3 characters')
@@ -23,3 +23,5 @@ export const eventCreateValidationSchem = yup.object({
     )
     .required('Event reminder time required'),
 });
+
+export default eventCreateValidationSchem;

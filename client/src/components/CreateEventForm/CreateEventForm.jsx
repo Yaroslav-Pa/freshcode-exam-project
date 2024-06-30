@@ -2,7 +2,7 @@ import { Form, Formik } from 'formik';
 import styles from './CreateEventForm.module.sass';
 import FormInput from '../FormInput/FormInput';
 import FormTimeInput from '../FormTimeInput/FormTimeInput';
-import { eventCreateValidationSchem } from '../../utils/validators/eventCreateValidationSchema';
+import eventCreateValidationSchem from '../../utils/validators/eventCreateValidationSchema';
 import { useDispatch } from 'react-redux';
 import { addEvent } from '../../store/slices/eventSlice';
 import { formatISO } from 'date-fns';
@@ -20,7 +20,7 @@ function CreateEventForm() {
   const dispatch = useDispatch();
 
   const submitHandler = (values, { resetForm }) => {
-    dispatch(addEvent({...values, creationTime: formatISO(new Date())}));
+    dispatch(addEvent({ ...values, creationTime: formatISO(new Date()) }));
     resetForm();
   };
 

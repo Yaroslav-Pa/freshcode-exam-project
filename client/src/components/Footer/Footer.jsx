@@ -6,9 +6,9 @@ class Footer extends Component {
   topFooterItemsRender = (item) => (
     <div key={item.title}>
       <h4>{item.title}</h4>
-      {item.items.map((i) => (
-        <a key={i} href="https://google.com">
-          {i}
+      {item.items.map(({ text, href }) => (
+        <a key={text} href={href || 'https://google.com'}>
+          {text}
         </a>
       ))}
     </div>

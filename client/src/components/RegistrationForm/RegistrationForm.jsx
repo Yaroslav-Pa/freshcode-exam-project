@@ -68,7 +68,7 @@ function RegistrationForm({
         onSubmit={clicked}
         validationSchema={Schems.RegistrationSchem}
       >
-        <Form>
+        <Form className={styles.form}>
           <div className={styles.row}>
             <FormInput
               maxLength={CONSTANTS.MAX_LENGTH.USER_INPUTS}

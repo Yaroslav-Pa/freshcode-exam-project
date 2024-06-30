@@ -1,6 +1,5 @@
 import styles from './RegistrationFooter.module.sass';
-import CONSTANTS from '../../constants';
-const { REGISTRATION_FAQ, REGISTRATION_FAQ_SPLIT_INDEX } = CONSTANTS;
+import TEXT_CONTANTS from '../../textConstanst';
 
 const splitTexts = (texts, splitIndex) => {
   return [texts.slice(0, splitIndex), texts.slice(splitIndex)];
@@ -10,7 +9,10 @@ const textList = (arr) =>
   arr.map(({ theme, text }) => (
     <div key={theme}>
       <h1 className={styles.headerArticle}>{theme}</h1>
-      <p className={styles.article}>{text}</p>
+      <p
+        className={styles.article}
+        dangerouslySetInnerHTML={{ __html: text }}
+      ></p>
     </div>
   ));
 
@@ -18,8 +20,8 @@ const textList = (arr) =>
 
 function RegistrationFooter() {
   const [firstColumn, secondColumn] = splitTexts(
-    REGISTRATION_FAQ,
-    REGISTRATION_FAQ_SPLIT_INDEX
+    TEXT_CONTANTS.REGISTRATION_FAQ.items,
+    TEXT_CONTANTS.REGISTRATION_FAQ.splitIndex
   );
 
   return (

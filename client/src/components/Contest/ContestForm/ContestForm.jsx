@@ -50,7 +50,7 @@ const ContestForm = (props) => {
         break;
       }
       default:
-        throw new RangeError('There is no such case');
+        return;
     }
   };
 

@@ -43,7 +43,7 @@ function UserInfo({
             src={
               avatar === 'anon.png'
                 ? CONSTANTS.ANONYM_IMAGE_PATH
-                : `${CONSTANTS.publicImagesURL}${avatar}`
+                : `${CONSTANTS.PUBLIC_IMAGES_URL}${avatar}`
             }
             className={styles.avatar}
             alt="user"

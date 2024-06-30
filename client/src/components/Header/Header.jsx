@@ -11,8 +11,7 @@ import { Link } from 'react-router-dom/cjs/react-router-dom';
 import Logo from '../Logo';
 import { controller } from '../../api/ws/socketController';
 import { clearChatDataToInitial } from '../../store/slices/chatSlice';
-
-//TODO if have time: create some king of button to open nav on phones
+import TEXT_CONTANTS from '../../textConstanst';
 
 function Header({ data, getUser, isFetching, clearUserStore, clearChatData, history }) {
   useEffect(() => {
@@ -21,7 +20,7 @@ function Header({ data, getUser, isFetching, clearUserStore, clearChatData, hist
     }
   }, []);
 
-  const AllMenuSections = CONSTANTS.SECTION_LIST.map(({ menuName, list }) => (
+  const AllMenuSections = TEXT_CONTANTS.SECTION_LIST.map(({ menuName, list }) => (
     <MenuSection
       menuName={menuName}
       pagesList={list}

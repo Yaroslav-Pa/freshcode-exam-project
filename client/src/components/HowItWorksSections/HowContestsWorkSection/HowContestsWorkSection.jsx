@@ -1,17 +1,20 @@
 import CONSTANTS from '../../../constants';
 import HowNamingWorksBox from './HowNamingWorksBox/HowNamingWorksBox';
 import styles from './HowContestsWorkSection.module.sass';
+import TEXT_CONTANTS from '../../../textConstanst';
 
 function HowContestsWorkSection() {
-  const listOfHowWorksBoxes = CONSTANTS.HOW_NAMING_WORKS_BOXES.map((box, index) => (
-    <HowNamingWorksBox
-      key={box.text}
-      {...box}
-      stepIndex={index + 1}
-      isLast={CONSTANTS.HOW_NAMING_WORKS_BOXES.length === index + 1}
-    />
-  ));
-  
+  const listOfHowWorksBoxes = TEXT_CONTANTS.HOW_NAMING_WORKS_BOXES.map(
+    (text, index) => (
+      <HowNamingWorksBox
+        key={text}
+        text={text}
+        stepIndex={index + 1}
+        isLast={TEXT_CONTANTS.HOW_NAMING_WORKS_BOXES.length === index + 1}
+      />
+    )
+  );
+
   return (
     <section className={styles.workSection}>
       <div className={styles.workContainer}>

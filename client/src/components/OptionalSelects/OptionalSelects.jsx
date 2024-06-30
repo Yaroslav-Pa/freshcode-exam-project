@@ -5,7 +5,8 @@ import FormInput from '../FormInput/FormInput';
 import styles from '../Contest/ContestForm/ContestForm.module.sass';
 import Spinner from '../Spinner/Spinner';
 import ButtonGroup from '../InputComponents/ButtonGroup/ButtonGroup';
-//TODO default case
+import TEXT_CONTANTS from '../../textConstanst';
+
 const OptionalSelects = (props) => {
   if (props.isFetching) {
     return <Spinner />;
@@ -38,7 +39,7 @@ const OptionalSelects = (props) => {
           />
           <ButtonGroup
             name="matchingDomain"
-            buttons={CONSTANTS.BUTTON_GROUP}
+            buttons={TEXT_CONTANTS.BUTTON_GROUP}
             classes={{
               header: styles.buttonGroupHeader,
               container: styles.buttonGroupContainer,

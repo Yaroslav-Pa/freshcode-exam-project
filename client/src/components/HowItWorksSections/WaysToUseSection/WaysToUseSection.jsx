@@ -1,11 +1,9 @@
-import CONSTANTS from '../../../constants';
+import TEXT_CONTANTS from '../../../textConstanst';
 import WaysToUseBox from './WaysToUseBox/WaysToUseBox';
 import styles from './WaysToUseSection.module.sass';
 
-
 const WaysToUseSection = () => {
-
-  const listOfWaysToUseBoxes = CONSTANTS.WAYS_TO_USE_BOXES.map((box) => (
+  const listOfWaysToUseBoxes = TEXT_CONTANTS.WAYS_TO_USE_BOXES.map((box) => (
     <WaysToUseBox {...box} key={box.mainText} />
   ));
 

@@ -130,7 +130,7 @@ const OfferBox = (props) => {
               src={
                 avatar === 'anon.png'
                   ? CONSTANTS.ANONYM_IMAGE_PATH
-                  : `${CONSTANTS.publicImagesURL}${avatar}`
+                  : `${CONSTANTS.PUBLIC_IMAGES_URL}${avatar}`
               }
               alt="user"
             />
@@ -176,7 +176,7 @@ const OfferBox = (props) => {
                 })
               }
               className={styles.responseLogo}
-              src={`${CONSTANTS.publicContestsURL}${data.fileName}`}
+              src={`${CONSTANTS.PUBLIC_CONTESTS_URL}${data.fileName}`}
               alt="logo"
             />
           ) : (

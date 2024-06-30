@@ -1,11 +1,11 @@
 import { HiMagnifyingGlass } from 'react-icons/hi2';
-import CONSTANTS from '../../../constants';
 import styles from './SearchSection.module.sass';
 import { Link } from 'react-router-dom';
 import { BsArrowRight } from 'react-icons/bs';
+import TEXT_CONTANTS from '../../../textConstanst';
 
 function SearchSection() {
-  const popularSearchesList = CONSTANTS.POPULAR_SEARCHES.map((text) => (
+  const popularSearchesList = TEXT_CONTANTS.POPULAR_SEARCHES.map((text) => (
     <Link to="#" className={styles.searches} key={text}>
       {text}
     </Link>

@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import CONSTANTS from '../../constants';
 import styles from './LoginButtons.module.sass';
+import TEXT_CONTANTS from '../../textConstanst';
 
 function LoginButtons({ data, logOut }) {
-  const LinkList = CONSTANTS.USER_INFO_LINK_LIST.map(({ text, url }) =>
+  const LinkList = TEXT_CONTANTS.USER_INFO_LINK_LIST.map(({ text, url }) =>
     data?.role === CONSTANTS.MODERATOR &&
     CONSTANTS.UNAVAILABLE_PAGES_MODERATOR.includes(url) ? null : (
       <li key={text}>
@@ -22,7 +23,7 @@ function LoginButtons({ data, logOut }) {
             src={
               data.avatar === 'anon.png'
                 ? CONSTANTS.ANONYM_IMAGE_PATH
-                : `${CONSTANTS.publicImagesURL}${data.avatar}`
+                : `${CONSTANTS.PUBLIC_IMAGES_URL}${data.avatar}`
             }
             className={styles.avatar}
             alt="user"

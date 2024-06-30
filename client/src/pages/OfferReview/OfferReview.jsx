@@ -68,7 +68,7 @@ function OfferReview() {
     <>
       {isShowOnFull && (
         <Lightbox
-          mainSrc={`${CONSTANTS.publicContestsURL}${imagePath}`}
+          mainSrc={`${CONSTANTS.PUBLIC_CONTESTS_URL}${imagePath}`}
           onCloseRequest={() =>
             dispatch(changeShowImage({ isShowOnFull: false, imagePath: null }))
           }

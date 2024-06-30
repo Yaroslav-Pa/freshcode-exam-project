@@ -14,21 +14,6 @@ const eventSlice = createSlice({
   name: SLICE_NAME,
   initialState,
   reducers: {
-    updateCounters: (state) => {
-      const counters = state.events.reduce(
-        (acc, event) => {
-          if (event.isOver) {
-            acc.overCounter++;
-          } else if (event.isRemind && !event.isOver) {
-            acc.remindCounter++;
-          }
-          return acc;
-        },
-        { overCounter: 0, remindCounter: 0 }
-      );
-      state.overCount = counters.overCounter;
-      state.remindCount = counters.remindCounter;
-    },
     checkTime: (state, { payload }) => {
       state.overCount = 0;
       state.remindCount = 0;
@@ -47,9 +32,12 @@ const eventSlice = createSlice({
     },
     removeEvent: (state, { payload }) => {
       state.events = state.events.filter((event) => {
-        if (event.isOver) state.overCount--;
-        if (event.isRemind && !event.isOver) state.remindCounter--;
-        return event?.creationTime !== payload;
+        if (event?.creationTime === payload) {
+          if (event.isOver) state.overCount--;
+          if (event.isRemind && !event.isOver) state.remindCount--;
+          return false;
+        }
+        return true;
       });
     },
     getEvents: (state) => {

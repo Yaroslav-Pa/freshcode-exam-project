@@ -57,6 +57,7 @@ const CONSTANTS = {
     { label: 'Display Name', name: 'displayName' },
   ],
   MAX_LENGTH: {
+    EVENT_INPUT: 100,
     USER_INPUTS: 20,
     USER_EMAIL: 30,
     CONTEST_TITLE: 50,

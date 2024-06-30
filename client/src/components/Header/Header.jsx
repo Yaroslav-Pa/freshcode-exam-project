@@ -12,22 +12,38 @@ import Logo from '../Logo';
 import { controller } from '../../api/ws/socketController';
 import { clearChatDataToInitial } from '../../store/slices/chatSlice';
 import TEXT_CONTANTS from '../../textConstanst';
+import { formatISO } from 'date-fns';
+import { checkTime } from '../../store/slices/eventSlice';
 
-function Header({ data, getUser, isFetching, clearUserStore, clearChatData, history }) {
+function Header({
+  data,
+  getUser,
+  isFetching,
+  clearUserStore,
+  clearChatData,
+  history,
+  eventCount,
+  checkTime,
+}) {
   useEffect(() => {
     if (!data && localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
       getUser();
     }
+    if (eventCount) {
+      checkTime(new Date());
+    }
   }, []);
 
-  const AllMenuSections = TEXT_CONTANTS.SECTION_LIST.map(({ menuName, list }) => (
-    <MenuSection
-      menuName={menuName}
-      pagesList={list}
-      role={data?.role}
-      key={menuName}
-    />
-  ));
+  const AllMenuSections = TEXT_CONTANTS.SECTION_LIST.map(
+    ({ menuName, list }) => (
+      <MenuSection
+        menuName={menuName}
+        pagesList={list}
+        role={data?.role}
+        key={menuName}
+      />
+    )
+  );
 
   const logOut = () => {
     controller.unsubsctibe(data.id);
@@ -89,9 +105,13 @@ function Header({ data, getUser, isFetching, clearUserStore, clearChatData, hist
   );
 }
 
-const mapStateToProps = (state) => state.userStore;
+const mapStateToProps = (state) => ({
+  ...state.userStore,
+  eventCount: state.eventStore.events.length,
+});
 const mapDispatchToProps = (dispatch) => ({
   getUser: () => dispatch(getUser()),
+  checkTime: (data) => dispatch(checkTime(formatISO(data))),
   clearUserStore: () => dispatch(clearUserStore()),
   clearChatData: () => dispatch(clearChatDataToInitial()),
 });

@@ -6,6 +6,7 @@ import eventCreateValidationSchem from '../../utils/validators/eventCreateValida
 import { useDispatch } from 'react-redux';
 import { addEvent } from '../../store/slices/eventSlice';
 import { formatISO } from 'date-fns';
+import CONSTANTS from '../../constants';
 
 function CreateEventForm() {
   const formInputClasses = {
@@ -37,6 +38,7 @@ function CreateEventForm() {
       >
         <Form className={styles.form}>
           <FormInput
+            maxLength={CONSTANTS.MAX_LENGTH.EVENT_INPUT}
             withLable={true}
             classes={formInputClasses}
             name="name"

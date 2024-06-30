@@ -20,13 +20,17 @@ import ChatContainer from './components/Chat/ChatComponents/ChatContainer/ChatCo
 import HowItWorks from './pages/HowItWorks/HowItWorks';
 import EventPage from './pages/EventPage/EventPage';
 import EventsLink from './components/EventComponents/EventsLink/EventsLink';
-import { getGetAndUpdateEvents } from './utils/eventsFunctions';
 import ModeratorOnlyRoute from './components/Hocs/ModeratorOnlyRoute/ModeratorOnlyRoute';
 import OfferReview from './pages/OfferReview/OfferReview';
+import { checkTime, getEvents } from './store/slices/eventSlice';
+import { useDispatch } from 'react-redux';
+import { formatISO } from 'date-fns';
 
 function App() {
+  const dispatch = useDispatch();
   useEffect(() => {
-    getGetAndUpdateEvents();
+    dispatch(getEvents());
+    dispatch(checkTime(formatISO(new Date())));
   }, []);
 
   return (

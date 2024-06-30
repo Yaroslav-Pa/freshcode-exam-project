@@ -4,11 +4,8 @@ import {
   differenceInMilliseconds,
   format,
   formatDistanceToNowStrict,
-  formatISO,
   startOfDay,
 } from 'date-fns';
-import store from '../store';
-import { checkTime, getEvents, updateCounters } from '../store/slices/eventSlice';
 
 export const getFromatedDate = (endDate, currentDate = new Date()) => {
   const timeDifference = differenceInMilliseconds(endDate, currentDate);
@@ -45,11 +42,4 @@ export const sortClosestTime = (array, currentTime) => {
       differenceInMilliseconds(a.endTime, currentTime) -
       differenceInMilliseconds(b.endTime, currentTime)
   );
-};
-
-export const getGetAndUpdateEvents = () => {
-  const dispatch = store.dispatch;
-  dispatch(getEvents());
-  dispatch(checkTime(formatISO(new Date())));
-  dispatch(updateCounters());
 };

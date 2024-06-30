@@ -4,19 +4,16 @@ import CreateEventForm from '../../components/CreateEventForm/CreateEventForm';
 import Header from '../../components/Header/Header';
 import styles from './EventPage.module.sass';
 import { useEffect } from 'react';
-import { saveEvents } from '../../store/slices/eventSlice';
+import {
+  saveEvents,
+} from '../../store/slices/eventSlice';
 import EventsListing from '../../components/EventComponents/EventsListing/EventsListing';
-import { getGetAndUpdateEvents } from '../../utils/eventsFunctions';
 import { selectEvents } from '../../utils/reselect/eventsReselect';
 
 function EventPage() {
   const dispatch = useDispatch();
   const events = useSelector(selectEvents);
 
-  useEffect(() => {
-    getGetAndUpdateEvents();
-  }, []);
-  
   useEffect(() => {
     dispatch(saveEvents());
   }, [events]);

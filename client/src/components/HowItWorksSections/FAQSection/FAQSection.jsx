@@ -2,7 +2,10 @@ import styles from './FAQSection.module.sass';
 import { HashLink } from 'react-router-hash-link';
 import classNames from 'classnames';
 import QuestionAnswerCollapsible from './QuestionAnswerCollapsible/QuestionAnswerCollapsible';
-import { replaceSpace, scrollWithOffset } from '../../../utils/scrollAndFormatFunctions';
+import {
+  replaceSpace,
+  scrollWithOffset,
+} from '../../../utils/scrollAndFormatFunctions';
 import TEXT_CONTANTS from '../../../textConstanst';
 
 function FAQSection() {
@@ -11,18 +14,23 @@ function FAQSection() {
       [styles.faqNavButtonActive]: window.location.hash === buttonsHesh,
     });
 
-  const faqNavButtonList = TEXT_CONTANTS.FAQ_SECTIONS.map(({ sectionName }) => (
+  const faqNavButtonList = TEXT_CONTANTS.FAQ_SECTIONS.map(({ sectionName }) =>
     //TODO Link was not working correctly, so used founded replacement
-    <HashLink
-      to={`#${replaceSpace(sectionName)}`}
-      key={sectionName}
-      scroll={(el) => scrollWithOffset(el)}
-      smooth
-      className={faqNavButtonClasnames(`#${replaceSpace(sectionName)}`)}
-    >
-      {sectionName}
-    </HashLink>
-  ));
+    {
+      const buttonHesh = `#${replaceSpace(sectionName)}`;
+      return (
+        <HashLink
+          to={buttonHesh}
+          key={sectionName}
+          scroll={(el) => scrollWithOffset(el)}
+          smooth
+          className={faqNavButtonClasnames(buttonHesh)}
+        >
+          {sectionName}
+        </HashLink>
+      );
+    }
+  );
 
   const faqSectionsList = TEXT_CONTANTS.FAQ_SECTIONS.map(
     ({ sectionName, content }) => (

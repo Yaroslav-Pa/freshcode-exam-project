@@ -11,6 +11,8 @@
   &:last-child
     .menuList
       min-width: 200px
+      @media screen and (max-width: 600px)
+        min-width: 170px
 
   &:hover
     .listName
@@ -24,10 +26,10 @@
       left: 0px
       background-color: white
     .menuListToLeft
-      @media(max-width: 1350px)
+      @media screen and (max-width: 1350px)
         right: 0
         left: unset
-      @media(max-width: 800px)
+      @media screen and (max-width: 800px)
         top: 100%
         left: 0
 

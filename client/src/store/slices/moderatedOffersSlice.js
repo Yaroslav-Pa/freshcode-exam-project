@@ -38,10 +38,6 @@ const extraReducers = (builder) => {
     state.error = null;
     state.offers = [...state.offers, ...payload.offers];
     state.haveMore = payload.haveMore;
-
-    console.log(payload );
-    console.log('getOffers');
-    console.log(state.offers);
   });
   builder.addCase(getOffers.rejected, (state, { payload }) => {
     state.error = payload;
@@ -69,7 +65,6 @@ const extraReducers = (builder) => {
 
 const reducers = {
   removeOffer: (state, { payload }) => {
-    console.log('removedId ' + payload);
     state.offers = state.offers.filter((offer) => offer.id !== payload);
   },
   clearOffers: (state) => {

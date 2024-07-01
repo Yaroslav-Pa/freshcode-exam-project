@@ -15,7 +15,10 @@ import TryAgain from '../TryAgain/TryAgain';
 import CONSTANTS from '../../constants';
 import IndustryTypeSelect from '../IndustryTypeSelect/IndustryTypeSelect';
 import TypeSelector from '../TypeSelector/TypeSelector';
-import { contestList, getGoToExtended } from '../../utils/contestFunctions';
+import {
+  contestList,
+  getGoToExtended,
+} from '../../utils/contestFunctions';
 
 function CreatorDashboard(props) {
   const prevSearchRef = useRef(props.location.search);
@@ -155,12 +158,14 @@ function CreatorDashboard(props) {
             <span>By contest ID</span>
             <input
               type="text"
-              onChange={({ target }) =>
-                changePredicate({
-                  name: 'contestId',
-                  value: target.value,
-                })
-              }
+              onChange={({ target: { value } }) => {
+                if (/^\d*$/.test(value)) {
+                  return changePredicate({
+                    name: 'contestId',
+                    value: value,
+                  });
+                }
+              }}
               name="contestId"
               value={creatorFilter.contestId}
               className={styles.input}

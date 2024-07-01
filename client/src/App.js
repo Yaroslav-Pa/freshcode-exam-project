@@ -24,6 +24,7 @@ import ModeratorOnlyRoute from './components/Hocs/ModeratorOnlyRoute/ModeratorOn
 import OfferReview from './pages/OfferReview/OfferReview';
 import { getEvents } from './store/slices/eventSlice';
 import { useDispatch } from 'react-redux';
+import UsersOnlyRoute from './components/Hocs/UsersOnlyRoute/UsersOnlyRoute';
 
 function App() {
   const dispatch = useDispatch();
@@ -64,16 +65,16 @@ function App() {
           path="/offersReview"
           component={ModeratorOnlyRoute(OfferReview)}
         />
-        <Route exact path="/payment" component={PrivateHoc(Payment)} />
+        <Route exact path="/payment" component={UsersOnlyRoute(Payment)} />
         <Route
           exact
           path="/startContest"
-          component={PrivateHoc(StartContestPage)}
+          component={UsersOnlyRoute(StartContestPage)}
         />
         <Route
           exact
           path="/startContest/nameContest"
-          component={PrivateHoc(ContestCreationPage, {
+          component={UsersOnlyRoute(ContestCreationPage, {
             contestType: CONSTANTS.NAME_CONTEST,
             title: 'Company Name',
           })}
@@ -81,7 +82,7 @@ function App() {
         <Route
           exact
           path="/startContest/taglineContest"
-          component={PrivateHoc(ContestCreationPage, {
+          component={UsersOnlyRoute(ContestCreationPage, {
             contestType: CONSTANTS.TAGLINE_CONTEST,
             title: 'TAGLINE',
           })}
@@ -89,13 +90,17 @@ function App() {
         <Route
           exact
           path="/startContest/logoContest"
-          component={PrivateHoc(ContestCreationPage, {
+          component={UsersOnlyRoute(ContestCreationPage, {
             contestType: CONSTANTS.LOGO_CONTEST,
             title: 'LOGO',
           })}
         />
-        <Route exact path="/dashboard" component={PrivateHoc(Dashboard)} />
-        <Route exact path="/contest/:id" component={PrivateHoc(ContestPage)} />
+        <Route exact path="/dashboard" component={UsersOnlyRoute(Dashboard)} />
+        <Route
+          exact
+          path="/contest/:id"
+          component={UsersOnlyRoute(ContestPage)}
+        />
         <Route exact path="/account" component={PrivateHoc(UserProfile)} />
         <Route component={NotFound} />
       </Switch>

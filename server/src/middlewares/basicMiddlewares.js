@@ -41,7 +41,7 @@ module.exports.canGetContest = async (req, res, next) => {
         },
       });
     }
-    result ? next() : next(new RightsError());
+    result ? next() : next(new NotFound("Contest whith this id doesn't exist"));
   } catch (e) {
     next(new ServerError(e.message));
   }

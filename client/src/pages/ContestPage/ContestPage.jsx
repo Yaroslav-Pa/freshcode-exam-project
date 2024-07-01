@@ -124,7 +124,7 @@ class ContestPage extends React.Component {
         <Header />
         {error ? (
           <div className={styles.tryContainer}>
-            <TryAgain getData={this.getData} />
+            <TryAgain getData={this.getData} additionalText={error.data}/>
           </div>
         ) : isFetching ? (
           <div className={styles.containerSpinner}>

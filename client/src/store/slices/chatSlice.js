@@ -389,6 +389,9 @@ const reducers = {
   changeChatShow: (state) => {
     state.isShowCatalogCreation = false;
     state.isShow = !state.isShow;
+    if (!state.isShow) {
+      state.isExpanded = false;
+    }
   },
 
   setPreviewChatMode: (state, { payload }) => {

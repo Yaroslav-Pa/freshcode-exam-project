@@ -33,7 +33,7 @@ function OfferReview() {
   }, []);
 
   useEffect(() => {
-    if (haveMore && offers.length !== 0 && offers.length < 5) {
+    if (haveMore && offers.length !== 0 && offers.length < 6) {
       dispatch(getOffers(offers.length));
     }
   }, [offers]);

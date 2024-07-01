@@ -168,6 +168,7 @@ const TEXT_CONTANTS = {
       {
         theme: 'I have other questions! How can I get in touch with Squadhelp?',
         text: 'Check out our <span>FAQs</span> or send us a <span>message</span>. For assistance with launching a contest, you can also call us at (877) 355-3585 or schedule a <span>Branding Consultation</span>',
+        isInnerHtml: true,
       },
     ],
   },

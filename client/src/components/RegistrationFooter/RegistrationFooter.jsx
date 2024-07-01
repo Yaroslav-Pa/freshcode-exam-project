@@ -6,17 +6,17 @@ const splitTexts = (texts, splitIndex) => {
 };
 
 const textList = (arr) =>
-  arr.map(({ theme, text }) => (
+  arr.map(({ theme, text, isInnerHtml = false }) => (
     <div key={theme}>
       <h1 className={styles.headerArticle}>{theme}</h1>
       <p
         className={styles.article}
-        dangerouslySetInnerHTML={{ __html: text }}
+        {...(isInnerHtml
+          ? { dangerouslySetInnerHTML: { __html: text } }
+          : { children: text })}
       ></p>
     </div>
   ));
-
-//TODO some word where selected in last paragraf of secondColumn
 
 function RegistrationFooter() {
   const [firstColumn, secondColumn] = splitTexts(

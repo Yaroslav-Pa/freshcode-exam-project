@@ -1,4 +1,4 @@
-WITH rating_table AS (
+WITH top_creatives AS (
   SELECT id,
     rating
   FROM users u
@@ -8,5 +8,5 @@ WITH rating_table AS (
 )
 UPDATE users u
 SET balance = balance + 10
-FROM rating_table rt
-WHERE u.id = rt.id;
+FROM top_creatives tc
+WHERE u.id = tc.id;

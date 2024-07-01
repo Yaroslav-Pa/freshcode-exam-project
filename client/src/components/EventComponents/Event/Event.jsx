@@ -52,7 +52,6 @@ function Event({ name, remiderTime, endTime, creationTime, isOver, isRemind }) {
       <p className={timeTextClassnames}>{timeDateText}</p>
       <FaInfoCircle
         className={styles.info}
-        active={isInfoVisible}
         onClick={() => {
           setIsInfoVisible(!isInfoVisible);
         }}

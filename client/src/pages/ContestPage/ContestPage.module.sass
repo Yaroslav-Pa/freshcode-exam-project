@@ -39,11 +39,14 @@
   width: 1200px
   margin: 0 auto
   margin-bottom: 50px
-  @media(max-width: 1200px)
+  @media screen and (max-width: 1200px)
     width: auto
-  @media(max-width: 800px)
+    padding: 20px 20px 0
+  @media screen and (max-width: 800px)
     align-items: center
     flex-direction: column
+  @media screen and (max-width: 600px)
+    padding: 20px 0 0
 
   .infoContainer
     width: 80%

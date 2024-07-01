@@ -95,10 +95,9 @@
     border-right: 1px solid #eee
     border-bottom: 1px solid #eee
     box-shadow: 2px 2px rgba(0, 0, 0, 0.2)
-    @media(max-width: 400px)
+    @media screen and (max-width: 400px)
       margin-top: 10px
-      // align-self: flex-start
-
+      
     .timeContainer
       display: flex
       flex-direction: column
@@ -110,6 +109,8 @@
       .timeContest
         font-size: 18px
         color: #46568a
+        @media screen and (max-width: 400px)
+          text-align: center
 
       span
         font-size: 15px

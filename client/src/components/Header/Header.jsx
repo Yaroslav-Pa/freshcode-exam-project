@@ -13,6 +13,7 @@ import { controller } from '../../api/ws/socketController';
 import { clearChatDataToInitial } from '../../store/slices/chatSlice';
 import TEXT_CONTANTS from '../../textConstanst';
 import { checkTime } from '../../store/slices/eventSlice';
+import { clearContestStore } from '../../store/slices/contestCreationSlice';
 
 function Header({
   data,
@@ -23,6 +24,7 @@ function Header({
   history,
   eventCount,
   checkTime,
+  clearContestStore,
 }) {
   useEffect(() => {
     if (!data && localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
@@ -51,6 +53,7 @@ function Header({
     localStorage.clear();
     clearUserStore();
     clearChatData();
+    clearContestStore();
     history.replace('/login');
   };
 
@@ -115,6 +118,7 @@ const mapDispatchToProps = (dispatch) => ({
   checkTime: () => dispatch(checkTime()),
   clearUserStore: () => dispatch(clearUserStore()),
   clearChatData: () => dispatch(clearChatDataToInitial()),
+  clearContestStore: () => dispatch(clearContestStore()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

@@ -4,7 +4,11 @@ import CreateEventForm from '../../components/CreateEventForm/CreateEventForm';
 import Header from '../../components/Header/Header';
 import styles from './EventPage.module.sass';
 import { useEffect } from 'react';
-import { getEvents, saveEvents } from '../../store/slices/eventSlice';
+import {
+  checkTime,
+  getEvents,
+  saveEvents,
+} from '../../store/slices/eventSlice';
 import EventsListing from '../../components/EventComponents/EventsListing/EventsListing';
 import { selectEvents } from '../../utils/reselect/eventsReselect';
 
@@ -14,6 +18,7 @@ function EventPage() {
 
   useEffect(() => {
     dispatch(getEvents());
+    dispatch(checkTime());
   }, []);
   useEffect(() => {
     dispatch(saveEvents());

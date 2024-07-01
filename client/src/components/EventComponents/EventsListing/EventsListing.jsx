@@ -12,11 +12,9 @@ function EventsListing({ events }) {
   const [time, setTime] = useState(formatISO(new Date()));
 
   useEffect(() => {
-    setTime(formatISO(new Date()));
-    dispatch(checkTime(time));
     const intervalId = setInterval(() => {
       setTime(formatISO(new Date()));
-      dispatch(checkTime(time));
+      dispatch(checkTime());
     }, 1000);
     return () => clearInterval(intervalId);
   }, []);

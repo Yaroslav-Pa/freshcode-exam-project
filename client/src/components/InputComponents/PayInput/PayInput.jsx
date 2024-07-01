@@ -3,24 +3,26 @@ import classNames from 'classnames';
 import InputMask from 'react-input-mask';
 import { useField } from 'formik';
 
-const PayInput = props => {
-  const { label, changeFocus, classes, isInputMask, mask } = props;
-  const [field, meta] = useField(props.name);
+const PayInput = ({ label, changeFocus, classes, isInputMask, mask, name }) => {
+  const [field, meta] = useField(name);
   const { touched, error } = meta;
+
+  const fieldProps = {
+    ...field,
+    value: field.value || '',
+  };
 
   if (field.name === 'sum') {
     return (
       <div className={classes.container}>
         <input
-          {...field}
+          {...fieldProps}
           placeholder={label}
           className={classNames(classes.input, {
             [classes.notValid]: touched && error,
           })}
         />
-        {touched && error && (
-          <span className={classes.error}>{error.message}!</span>
-        )}
+        {touched && error && <span className={classes.error}>{error}!</span>}
       </div>
     );
   }
@@ -30,32 +32,28 @@ const PayInput = props => {
         <InputMask
           mask={mask}
           maskChar={null}
-          {...field}
+          {...fieldProps}
           placeholder={label}
           className={classNames(classes.input, {
             [classes.notValid]: touched && error,
           })}
           onFocus={() => changeFocus(field.name)}
         />
-        {touched && error && (
-          <span className={classes.error}>{error.message}!</span>
-        )}
+        {touched && error && <span className={classes.error}>{error}!</span>}
       </div>
     );
   }
   return (
     <div className={classes.container}>
       <input
-        {...field}
+        {...fieldProps}
         placeholder={label}
         className={classNames(classes.input, {
           [classes.notValid]: touched && error,
         })}
         onFocus={() => changeFocus(field.name)}
       />
-      {touched && error && (
-        <span className={classes.error}>{error.message}!</span>
-      )}
+      {touched && error && <span className={classes.error}>{error}!</span>}
     </div>
   );
 };

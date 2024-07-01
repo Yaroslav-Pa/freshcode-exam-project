@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, ErrorMessage } from 'formik';
 import classNames from 'classnames';
-import CONSTANTS from '../../constants';
+import CONSTANTS from '../../../constants';
 
 const FormInput = ({
   classes,

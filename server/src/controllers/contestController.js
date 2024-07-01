@@ -135,14 +135,15 @@ const resolveOffer = async (
   const offerStatusReject = `'${CONSTANTS.OFFER_STATUS.REJECTED}'::enum_offers_status `;
   const offerStatusReview = `'${CONSTANTS.OFFER_STATUS.REVIEW}'::enum_offers_status`;
   const offerStatusFailReview = `'${CONSTANTS.OFFER_STATUS.FAIL_REVIEW}'::enum_offers_status`;
-  
+  const offerStatusPending = `'${CONSTANTS.OFFER_STATUS.PENDING}'::enum_offers_status`;
+
   const updatedOffers = await contestService.updateOfferStatus(
     {
       status: db.sequelize.literal(
         `CASE 
         WHEN "id"=${offerId} THEN ${offerStatusResolve} 
         WHEN "status"=${offerStatusReview} OR "status"=${offerStatusFailReview} THEN ${offerStatusFailReview}
-        ELSE ${offerStatusReject}
+        WHEN "status"=${offerStatusPending} THEN ${offerStatusReject}
         END`
       ),
     },

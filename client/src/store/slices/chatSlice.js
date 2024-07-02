@@ -117,7 +117,7 @@ const sendMessageExtraReducers = createExtraReducers({
     };
     state.chatData = { ...state.chatData, ...chatData };
     state.messagesPreview = messagesPreview;
-    state.messages = [...state.messages, payload.message]; ////
+    state.messages = [...state.messages, payload.message];
   },
   rejectedReducer: (state, { payload }) => {
     state.error = payload;

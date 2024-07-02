@@ -8,7 +8,8 @@ const Notification = ({ message, history, contestId }) => {
 
   const clickHendler = () => {
     const conntestPath = `/contest/${contestId}`;
-    if (window.location.pathname === conntestPath) {
+    const contestPathPattern = /^\/contest\/\d+$/;
+    if (contestPathPattern.test(window.location.pathname)) {
       dispatch(getContestById({ contestId }));
     }
     history.push(conntestPath);

@@ -4,6 +4,7 @@ import {
   addMessage,
   changeBlockStatusInStore,
 } from '../../../store/slices/chatSlice';
+import store from '../../../store';
 class ChatSocket extends WebSocket {
   anotherSubscribes = () => {
     this.onNewMessage();
@@ -18,7 +19,8 @@ class ChatSocket extends WebSocket {
 
   onNewMessage = () => {
     this.socket.on('newMessage', (data) => {
-      this.dispatch(addMessage(data.message));
+      const userId = store.getState().userStore.data.id;
+      this.dispatch(addMessage({ ...data.message, userId }));
     });
   };
 

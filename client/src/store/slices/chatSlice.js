@@ -117,7 +117,7 @@ const sendMessageExtraReducers = createExtraReducers({
     };
     state.chatData = { ...state.chatData, ...chatData };
     state.messagesPreview = messagesPreview;
-    state.messages = [...state.messages, payload.message];
+    state.messages = [...state.messages, payload.message]; ////
   },
   rejectedReducer: (state, { payload }) => {
     state.error = payload;
@@ -339,7 +339,7 @@ const reducers = {
   },
 
   addMessage: (state, { payload }) => {
-    const { message, preview } = payload;
+    const { message, preview, userId } = payload;
     const { messagesPreview } = state;
     const isInCurrentChat = isEqual(
       state.chatData?.participants,
@@ -360,8 +360,8 @@ const reducers = {
     }
     if (!state.isExpanded || !isInCurrentChat) state.isNewMessages = true;
     state.messagesPreview = messagesPreview;
-
-    if (isInCurrentChat) state.messages = [...state.messages, payload.message];
+    if (isInCurrentChat && payload.message.sender !== userId)
+      state.messages = [...state.messages, payload.message];
   },
 
   backToDialogList: (state) => {

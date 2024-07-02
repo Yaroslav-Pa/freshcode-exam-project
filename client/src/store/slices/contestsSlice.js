@@ -33,6 +33,9 @@ export const getContests = decorateAsyncThunk({
 });
 
 const reducers = {
+  clearContestsFilters: () => {
+    return initialState;
+  },
   clearContestsList: (state) => {
     state.error = null;
     state.contests = [];
@@ -72,7 +75,11 @@ const contestsSlice = createSlice({
 
 const { actions, reducer } = contestsSlice;
 
-export const { clearContestsList, setNewCustomerFilter, setNewCreatorFilter } =
-  actions;
+export const {
+  clearContestsFilters,
+  clearContestsList,
+  setNewCustomerFilter,
+  setNewCreatorFilter,
+} = actions;
 
 export default reducer;

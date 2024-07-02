@@ -14,6 +14,7 @@ import { clearChatDataToInitial } from '../../store/slices/chatSlice';
 import TEXT_CONTANTS from '../../textConstanst';
 import { checkTime } from '../../store/slices/eventSlice';
 import { clearContestStore } from '../../store/slices/contestCreationSlice';
+import { clearContestsFilters } from '../../store/slices/contestsSlice';
 
 function Header({
   data,
@@ -25,6 +26,7 @@ function Header({
   eventCount,
   checkTime,
   clearContestStore,
+  clearContestsFilters,
 }) {
   useEffect(() => {
     if (!data && localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
@@ -54,6 +56,7 @@ function Header({
     clearUserStore();
     clearChatData();
     clearContestStore();
+    clearContestsFilters();
     history.replace('/login');
   };
 
@@ -119,6 +122,7 @@ const mapDispatchToProps = (dispatch) => ({
   clearUserStore: () => dispatch(clearUserStore()),
   clearChatData: () => dispatch(clearChatDataToInitial()),
   clearContestStore: () => dispatch(clearContestStore()),
+  clearContestsFilters: () => dispatch(clearContestsFilters()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

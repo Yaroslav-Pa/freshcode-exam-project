@@ -129,14 +129,14 @@ const resolveOffer = async (
     finishedContest.prize
   );
 
-  //TODO! maybe redo this to normal style, not sequelize.literal
-  //Раніше проблема: якщо визначити хто вийграв - усі інші офери навіть що були заблоковані адміном будуть показані
-  const offerStatusResolve = `'${CONSTANTS.OFFER_STATUS.RESOLVE}'::enum_offers_status`;
-  const offerStatusReject = `'${CONSTANTS.OFFER_STATUS.REJECTED}'::enum_offers_status `;
-  const offerStatusReview = `'${CONSTANTS.OFFER_STATUS.REVIEW}'::enum_offers_status`;
-  const offerStatusFailReview = `'${CONSTANTS.OFFER_STATUS.FAIL_REVIEW}'::enum_offers_status`;
-  const offerStatusPending = `'${CONSTANTS.OFFER_STATUS.PENDING}'::enum_offers_status`;
-  
+  const [
+    offerStatusReview,
+    offerStatusFailReview,
+    offerStatusPending,
+    offerStatusResolve,
+    offerStatusReject,
+  ] = UtilFunctions.getAllOfferStatusesInLitteral();
+
   const updatedOffers = await contestService.updateOfferStatus(
     {
       status: db.sequelize.literal(
@@ -212,10 +212,6 @@ module.exports.setFinalStatus = async (req, res, next) => {
   }
 };
 
-//* вище нічого не робив
-
-//! Contests
-
 module.exports.getCustomerContests = async (req, res, next) => {
   try {
     const {
@@ -225,7 +221,7 @@ module.exports.getCustomerContests = async (req, res, next) => {
 
     const contests = await db.Contest.findAll({
       where: { status, userId },
-      limit,
+      limit: limit || null,
       offset: offset || 0,
       order: [['id', 'DESC']],
       include: [
@@ -289,7 +285,7 @@ module.exports.getContests = async (req, res, next) => {
     const contests = await db.Contest.findAll({
       where,
       order,
-      limit,
+      limit: limit || null,
       offset: offset || 0,
       include: [
         {
@@ -355,7 +351,6 @@ module.exports.getContestById = async (req, res, next) => {
         },
       ],
     });
-    //TODO переробити
     contestInfo = contestInfo.get({ plain: true });
     let reviewCount = 0;
     let failReviewCount = 0;

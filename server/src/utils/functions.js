@@ -57,3 +57,11 @@ const types = [
   'logo,tagline',
   'name,logo',
 ];
+
+module.exports.getAllOfferStatusesInLitteral = () => {
+  return Object.values(CONSTANTS.OFFER_STATUS).map((status) => {
+    return toSequilizeLitteral(status);
+  });
+};
+
+const toSequilizeLitteral = (text) => `'${text}'::enum_offers_status`;

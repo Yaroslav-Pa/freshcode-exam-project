@@ -51,7 +51,6 @@ function Header({
   );
 
   const logOut = () => {
-    controller.unsubsctibe(data.id);
     localStorage.clear();
     clearUserStore();
     clearChatData();

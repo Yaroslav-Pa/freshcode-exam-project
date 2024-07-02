@@ -31,12 +31,10 @@ class NotificationSocket extends WebSocket {
   };
 
   subscribe = (id) => {
-    console.log(`subscribe ${id}`);
     this.socket.emit('subscribe', id);
   };
 
-  unsubsctibe = (id) => {
-    console.log(`'unsubscribe ${id}`);
+  unsubscribe = (id) => {
     this.socket.emit('unsubscribe', id);
   };
 }

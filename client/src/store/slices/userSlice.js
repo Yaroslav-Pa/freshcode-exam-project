@@ -48,17 +48,18 @@ export const updateUser = createAsyncThunk(
 );
 
 const reducers = {
-  clearUserStore: state => {
+  clearUserStore: (state) => {
+    controller.unsubscribe(state.data?.id);
     state.error = null;
     state.data = null;
   },
-  clearUserError: state => {
+  clearUserError: (state) => {
     state.error = null;
   },
 };
 
-const extraReducers = builder => {
-  builder.addCase(getUser.pending, state => {
+const extraReducers = (builder) => {
+  builder.addCase(getUser.pending, (state) => {
     state.isFetching = true;
     state.error = null;
     state.data = null;

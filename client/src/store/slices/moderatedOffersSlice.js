@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import * as restController from '../../api/rest/restController';
 import { decorateAsyncThunk, pendingReducer } from '../../utils/store';
+import { removeDuplicates } from '../../utils/contestFunctions';
 
 const MODERATED_OFFERS_SLICE_NAME = 'moderatedOffers';
 
@@ -36,7 +37,7 @@ const extraReducers = (builder) => {
   builder.addCase(getOffers.fulfilled, (state, { payload }) => {
     state.isFetching = false;
     state.error = null;
-    state.offers = [...state.offers, ...payload.offers];
+    state.offers = removeDuplicates(state.offers, payload.offers);
     state.haveMore = payload.haveMore;
   });
   builder.addCase(getOffers.rejected, (state, { payload }) => {

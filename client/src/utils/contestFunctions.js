@@ -1,12 +1,11 @@
-import CONSTANTS from "../constants";
+import CONSTANTS from '../constants';
 import ContestBox from '../components/Contest/ContestBox/ContestBox';
-import { formatDistanceToNow } from "date-fns";
-import { toZonedTime } from "date-fns-tz";
+import { formatDistanceToNow } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
+import _ from 'lodash';
 
 export const getFormatedGoingTimeStr = (data) => {
-  const diff = formatDistanceToNow(
-    toZonedTime(data, CONSTANTS.TIMEZONE)
-  );
+  const diff = formatDistanceToNow(toZonedTime(data, CONSTANTS.TIMEZONE));
   if (diff.includes('minute')) {
     return 'less than one hour';
   }
@@ -52,4 +51,8 @@ export const contestList = (contests, goToExtended) => {
     );
   });
   return array;
+};
+
+export const removeDuplicates = (array1, array2) => {
+  return _.uniqWith([...array1, ...array2], _.isEqual);
 };

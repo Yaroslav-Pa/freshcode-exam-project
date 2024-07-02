@@ -55,8 +55,7 @@ module.exports.updateOfferReviewStatus = async (req, res, next) => {
         returning: true,
       }
     );
-    res.send(updatedOffer);
-
+    
     const offer = await db.Offer.findOne({
       where: { id: offerId },
       include: [
@@ -69,6 +68,8 @@ module.exports.updateOfferReviewStatus = async (req, res, next) => {
         },
       ],
     });
+
+    res.send(updatedOffer);
 
     transporter.sendMail(
       mailOptions(

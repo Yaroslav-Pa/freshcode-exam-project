@@ -16,7 +16,7 @@ function OfferOnReview({ offer }) {
     if (offer.updatedStatus) {
       setTimeout(() => {
         dispatch(removeOffer(offer.id));
-      }, 500);
+      }, 300);
     }
   }, [offer, dispatch]);
 

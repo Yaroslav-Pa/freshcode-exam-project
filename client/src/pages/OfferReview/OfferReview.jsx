@@ -20,7 +20,6 @@ import {
 
 function OfferReview() {
   const dispatch = useDispatch();
-
   const { isFetching, error, offers, haveMore } = useSelector(
     selectModeratedOffers
   );
@@ -30,10 +29,10 @@ function OfferReview() {
   useEffect(() => {
     dispatch(clearOffers());
     dispatch(getOffers());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (haveMore && offers.length !== 0 && offers.length < 6) {
+    if (haveMore && offers.length !== 0 && offers.length === 5) {
       dispatch(getOffers(offers.length));
     }
   }, [offers]);

@@ -60,7 +60,6 @@ const UserProfile = ({
 };
 
 const mapStateToProps = (state) => {
-  //TODO? there was a error in this area but it vaporised
   const { balance, role } = state.userStore.data;
   const { profileViewMode } = state.userProfile;
   const { error } = state.payment;

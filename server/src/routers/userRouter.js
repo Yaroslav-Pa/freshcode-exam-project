@@ -46,7 +46,6 @@ userRouter.post(
 // /user/transactionHistory
 userRouter.use('/transactionHistory', transactionHistoryRouter);
 
-//TODO? maybe change it
 // /user/:creatorId/offers/:offerId/changeMark
 userRouter.post(
   '/:creatorId/offers/:offerId/changeMark',

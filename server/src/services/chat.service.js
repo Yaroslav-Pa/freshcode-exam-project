@@ -94,7 +94,6 @@ module.exports.getConversationAndInterlocutor = async (
   return [conversation, interlocutor];
 };
 
-//TODO maybe redo later, but I think its ok
 module.exports.formatConversationForPreview = (
   conversations,
   senders,

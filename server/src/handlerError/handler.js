@@ -1,7 +1,6 @@
 const errorLogger = require("../utils/errorLogger");
 
 module.exports = (err, req, res, next) => {
-  //TODO! CONSTANTS
   console.log(err);
   errorLogger.error(err);
   if (err.message ===

@@ -88,8 +88,6 @@ module.exports.canSendOffer = async (req, res, next) => {
       attributes: ['status'],
     });
 
-    //TODO навіщо робити тут 2 запити, напевно status можна й просто дістати?
-    //* глянути через console.log(result)
     if (
       result.get({ plain: true }).status === CONSTANTS.CONTEST_STATUS_ACTIVE
     ) {
@@ -125,7 +123,6 @@ module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
   }
 };
 
-//TODO? не використовується
 module.exports.canUpdateContest = async (req, res, next) => {
   try {
     const {

@@ -15,7 +15,6 @@ function FAQSection() {
     });
 
   const faqNavButtonList = TEXT_CONTANTS.FAQ_SECTIONS.map(({ sectionName }) =>
-    //TODO Link was not working correctly, so used founded replacement
     {
       const buttonHesh = `#${replaceSpace(sectionName)}`;
       return (

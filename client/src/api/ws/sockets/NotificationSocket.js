@@ -4,8 +4,6 @@ import WebSocket from './WebSocket';
 import Notification from '../../../components/Notification/Notification';
 
 class NotificationSocket extends WebSocket {
-  //TODO! delete console.log
-  
   anotherSubscribes = () => {
     this.onEntryCreated();
     this.onChangeMark();

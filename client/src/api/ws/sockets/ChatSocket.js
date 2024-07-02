@@ -4,7 +4,6 @@ import {
   addMessage,
   changeBlockStatusInStore,
 } from '../../../store/slices/chatSlice';
-//TODO! delete console.log
 class ChatSocket extends WebSocket {
   anotherSubscribes = () => {
     this.onNewMessage();

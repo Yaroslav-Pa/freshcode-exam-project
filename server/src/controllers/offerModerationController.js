@@ -16,7 +16,6 @@ module.exports.getAllOffersOnReview = async (req, res, next) => {
 
     const offers = await db.Offer.findAll({
       where: { status: OFFER_STATUS.REVIEW },
-      //TODO! if limit = undefiend then request will return empty data so need to fix it later
       limit: limit || null,
       offset: offset || 0,
       order: [['id', 'ASC']],

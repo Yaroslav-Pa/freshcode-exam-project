@@ -108,18 +108,15 @@ const OfferBox = (props) => {
 
   const { data, role, id, contestType } = props;
   const { avatar, firstName, lastName, email, rating } = props.data.User;
-  const offerContainerClassnames = classNames(
-    styles.offerContainer,
-    {
-      [styles.offerContainerReview]:
-        props.data.status === CONSTANTS.OFFER_STATUS_REVIEW &&
-        !props.isForModerator,
-      [styles.offerContainerFailReview]:
-        props.data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW &&
-        !props.isForModerator,
-      [styles.transparentBackground]: props.isForModerator,
-    }
-  );
+  const offerContainerClassnames = classNames(styles.offerContainer, {
+    [styles.offerContainerReview]:
+      props.data.status === CONSTANTS.OFFER_STATUS_REVIEW &&
+      !props.isForModerator,
+    [styles.offerContainerFailReview]:
+      props.data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW &&
+      !props.isForModerator,
+    [styles.transparentBackground]: props.isForModerator,
+  });
   return (
     <div className={offerContainerClassnames}>
       {offerStatus()}
@@ -209,7 +206,7 @@ const OfferBox = (props) => {
           )}
         </div>
         {role !== CONSTANTS.CREATOR && (
-          <i onClick={goChat} className="fas fa-comments" />
+          <i onClick={goChat} className={'fas fa-comments ' + styles.chatIcon} />
         )}
       </div>
       {props.needButtons && props.needButtons(data.status) && (

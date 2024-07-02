@@ -6,6 +6,7 @@ const controller = require('../socketInit');
 const UtilFunctions = require('../utils/functions');
 const CONSTANTS = require('../constants');
 const { createTransact } = require('../services/transact.service');
+const { Op } = require('sequelize');
 
 module.exports.dataForContest = async (req, res, next) => {
   const response = {};
@@ -111,7 +112,7 @@ const resolveOffer = async (
             WHEN "order_id"='${orderId}' AND "priority"=${
         priority + 1
       }  THEN '${CONSTANTS.CONTEST_STATUS_ACTIVE}'
-            ELSE '${CONSTANTS.CONTEST_STATUS_PENDING}'
+            ELSE "status"
             END
     `),
     },
@@ -142,7 +143,7 @@ const resolveOffer = async (
       status: db.sequelize.literal(
         `CASE 
         WHEN "id"=${offerId} THEN ${offerStatusResolve} 
-        WHEN "status"=${offerStatusReview} OR "status"=${offerStatusFailReview} THEN ${offerStatusFailReview}
+        WHEN "status"=${offerStatusReview} THEN ${offerStatusFailReview}
         WHEN "status"=${offerStatusPending} THEN ${offerStatusReject}
         ELSE "status"
         END`
@@ -150,10 +151,17 @@ const resolveOffer = async (
     },
     {
       contestId,
+      status: {
+        [Op.or]: [
+          CONSTANTS.OFFER_STATUS.PENDING,
+          CONSTANTS.OFFER_STATUS.REVIEW,
+        ],
+      },
     },
     transaction
   );
   transaction.commit();
+
   const arrayRoomsId = [];
   updatedOffers.forEach((offer) => {
     if (
@@ -163,6 +171,7 @@ const resolveOffer = async (
       arrayRoomsId.push(offer.userId);
     }
   });
+
   if (arrayRoomsId.length > 0) {
     controller
       .getNotificationController()

@@ -23,7 +23,7 @@ const FieldFileInput = ({ classes, name }) => {
       <label htmlFor="fileInput" className={labelClass}>
         Choose file
       </label>
-      {value.name && (
+      {value?.name && (
         <span id="fileNameContainer" className={fileNameClass}>
           {getFileName()}
         </span>

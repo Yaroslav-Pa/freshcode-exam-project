@@ -31,7 +31,7 @@ function CreatorDashboard(props) {
 
   useEffect(() => {
     props.getDataForContest();
-    if (!props.contests.length) getContests(props.creatorFilter);
+    parseUrlForParams(props.location.search);
     return () => {
       props.clearContestsList();
     };

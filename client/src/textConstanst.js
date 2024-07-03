@@ -228,7 +228,7 @@ const TEXT_CONTANTS = {
           answer: `While it is unusually rare that you will not like any names provided, we have a few options in case this problem occurs:<br/>
           •	If the contest ends and you have not yet found a name that you’d like to move forward with, we can provide complimentary extension of your contest as well as a complimentary consultation with one of our branding consultants (a $99 value).<br/>
           •	By exploring our premium domain marketplace you can apply the contest award towards the purchase of any name listed for sale.<br/>
-          •	If you choose the Gold package or Platinum package and keep the contest as 'Not Guaranteed', you can request a partial refund if you choose not to move forward with any name from you project. (Please note that the refund is for the contest award). Here is a link to our <a hre:https://helpdesk.atom.com/en/articles/115621-refund-policy">Refund Policy</a>`,
+          •	If you choose the Gold package or Platinum package and keep the contest as 'Not Guaranteed', you can request a partial refund if you choose not to move forward with any name from you project. (Please note that the refund is for the contest award). Here is a link to our <a href="https://helpdesk.atom.com/en/articles/115621-refund-policy">Refund Policy</a>`,
         },
         {
           question: 'How much does it cost?',
@@ -299,15 +299,15 @@ const TEXT_CONTANTS = {
         {
           question: 'How much do Managed Contests cost?',
           answer: `We offer two levels of Managed Contests: Standard ($1499) and Enterprise ($2999). The Enterprise option includes:<br/>
-            •	(1) a $500 award amount (instead of $300), which will attract our top Creatives and provide more options to choose from;<br/>
-            •	(2) we will ensure a senior member of our branding team is assigned to your project and the branding team will invest about 3X more time in the day-to-day management of your project;<br/>
-            •	(3) you will receive more high-end trademark report and 5X more responses for your audience test.<br/>
+            •	① a $500 award amount (instead of $300), which will attract our top Creatives and provide more options to choose from;<br/>
+            •	② we will ensure a senior member of our branding team is assigned to your project and the branding team will invest about 3X more time in the day-to-day management of your project;<br/>
+            •	③ you will receive more high-end trademark report and 5X more responses for your audience test.<br/>
             •	Here is a link to our <a href="https://www.atom.com/pricing">Pricing Page</a> with a detailed comparison of the two packages.`,
         },
         {
           question: 'Where are the Branding Consultants located?',
           answer:
-            'All our branding consultants are based in our Headquarters (Hoffman Estates, IL). They have years of experience managing branding projects for companies ranging from startups to Fortune 500 corporations.',
+            'All our branding consultants are based in in our Headquarters (Hoffman Estates, IL). Our branding consultants have many years of experience in managing hundreds of branding projects for companies ranging from early stage startups to Fortune 500 corporations.',
         },
       ],
     },

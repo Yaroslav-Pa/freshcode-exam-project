@@ -106,6 +106,10 @@ const OfferBox = (props) => {
     });
   };
 
+  const chatIconClassnames = classNames(styles.chatIcon, {
+    [styles.chatIconForModerator]: props.isForModerator,
+  });
+
   const { data, role, id, contestType } = props;
   const { avatar, firstName, lastName, email, rating } = props.data.User;
   const offerContainerClassnames = classNames(styles.offerContainer, {
@@ -206,7 +210,10 @@ const OfferBox = (props) => {
           )}
         </div>
         {role !== CONSTANTS.CREATOR && (
-          <i onClick={goChat} className={'fas fa-comments ' + styles.chatIcon} />
+          <i
+            onClick={goChat}
+            className={'fas fa-comments ' + chatIconClassnames}
+          />
         )}
       </div>
       {props.needButtons && props.needButtons(data.status) && (

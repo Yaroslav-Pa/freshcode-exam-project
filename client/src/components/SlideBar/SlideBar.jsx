@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Flickity from 'react-flickity-component';
 import style from './SlideBar.module.sass';
 import carouselConstants from '../../carouselConstants';
 import './flickity.css';
 
 const SliderBar = (props) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   const options = {
     draggable: true,
     wrapAround: true,
@@ -63,6 +69,11 @@ const SliderBar = (props) => {
         return;
     }
   };
+
+  if (!isLoaded) {
+    return null;
+  }
+
   return (
     <Flickity className={getStyleName()} elementType="div" options={options}>
       {renderSlides()}

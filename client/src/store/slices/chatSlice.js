@@ -345,20 +345,21 @@ const reducers = {
       state.chatData?.participants,
       payload.message?.participants
     );
+    const isNotInCurrentChat = !state.isExpanded || !isInCurrentChat;
     let isNew = true;
     messagesPreview.forEach((preview) => {
       if (isEqual(preview.participants, message.participants)) {
         preview.text = message.body;
         preview.sender = message.sender;
         preview.createAt = message.createdAt;
-        if (!state.isExpanded || !isInCurrentChat) preview.isNewMessage = true;
+        if (isNotInCurrentChat) preview.isNewMessage = true;
         isNew = false;
       }
     });
     if (isNew) {
       messagesPreview.push({ ...preview, isNewMessage: true });
     }
-    if (!state.isExpanded || !isInCurrentChat) state.isNewMessages = true;
+    if (isNotInCurrentChat) state.isNewMessages = true;
     state.messagesPreview = messagesPreview;
     if (isInCurrentChat && payload.message.sender !== userId)
       state.messages = [...state.messages, payload.message];

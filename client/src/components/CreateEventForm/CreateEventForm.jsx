@@ -1,7 +1,7 @@
 import { Form, Formik } from 'formik';
 import styles from './CreateEventForm.module.sass';
 import FormInput from '../InputComponents/FormInput/FormInput';
-import FormTimeInput from '../FormTimeInput/FormTimeInput';
+import FormTimeInput from '../InputComponents/FormTimeInput/FormTimeInput';
 import eventCreateValidationSchem from '../../utils/validators/eventCreateValidationSchema';
 import { useDispatch } from 'react-redux';
 import { addEvent } from '../../store/slices/eventSlice';

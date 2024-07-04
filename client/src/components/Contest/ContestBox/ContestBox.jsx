@@ -13,8 +13,7 @@ const ContestBox = (props) => {
   const ucFirstLetter = (string) =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
-  const { id, title, contestType, prize, count, status } =
-    props.data;
+  const { id, title, contestType, prize, count, status } = props.data;
   return (
     <div
       className={styles.contestBoxContainer}
@@ -73,7 +72,7 @@ const ContestBox = (props) => {
           <span>
             {status === CONSTANTS.CONTEST_STATUS_ACTIVE
               ? 'Going'
-              : status.charAt(0).toUpperCase() + status.slice(1)}
+              : ucFirstLetter(status)}
           </span>
         </div>
       </div>

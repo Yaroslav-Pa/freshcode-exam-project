@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import CreateEventCollapsible from '../../components/CreateEventCollapsible/CreateEventCollapsible';
-import CreateEventForm from '../../components/CreateEventForm/CreateEventForm';
+import CreateEventForm from '../../components/EventComponents/CreateEventForm/CreateEventForm';
 import Header from '../../components/Header/Header';
 import styles from './EventPage.module.sass';
 import { useEffect } from 'react';

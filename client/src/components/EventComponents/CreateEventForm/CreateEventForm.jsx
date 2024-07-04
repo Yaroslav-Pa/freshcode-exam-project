@@ -1,12 +1,12 @@
 import { Form, Formik } from 'formik';
 import styles from './CreateEventForm.module.sass';
-import FormInput from '../InputComponents/FormInput/FormInput';
-import FormTimeInput from '../InputComponents/FormTimeInput/FormTimeInput';
-import eventCreateValidationSchem from '../../utils/validators/eventCreateValidationSchema';
+import FormInput from '../../InputComponents/FormInput/FormInput';
+import FormTimeInput from '../../InputComponents/FormTimeInput/FormTimeInput';
+import eventCreateValidationSchem from '../../../utils/validators/eventCreateValidationSchema';
 import { useDispatch } from 'react-redux';
-import { addEvent } from '../../store/slices/eventSlice';
+import { addEvent } from '../../../store/slices/eventSlice';
 import { formatISO } from 'date-fns';
-import CONSTANTS from '../../constants';
+import CONSTANTS from '../../../constants';
 
 function CreateEventForm() {
   const formInputClasses = {

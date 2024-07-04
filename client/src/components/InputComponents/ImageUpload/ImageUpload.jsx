@@ -10,7 +10,7 @@ function ImageUpload({ name, classes }) {
     const file = e.target?.files[0];
     const imageType = /image.*/;
 
-    if (!file.type?.match(imageType)) {
+    if (!file?.type?.match(imageType)) {
       e.target.value = '';
     } else {
       helpers.setValue(file);

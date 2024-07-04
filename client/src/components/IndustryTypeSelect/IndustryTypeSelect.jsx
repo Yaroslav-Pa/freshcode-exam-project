@@ -11,7 +11,7 @@ const IndustryTypeSelect = ({
   const { industry } = dataForContest.data;
   const array = [];
   array.push(
-    <option key={0} value={""}>
+    <option key={0} value={''}>
       Choose industry
     </option>
   );
@@ -30,6 +30,7 @@ const IndustryTypeSelect = ({
           value: target.value,
         })
       }
+      name={'industry'}
       value={creatorFilter.industry}
       className={styles.input}
     >

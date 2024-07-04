@@ -80,7 +80,8 @@ function OfferReview() {
             <button
               className={styles.refresh}
               onClick={() => {
-                dispatch(getOffers(offers.length));
+                dispatch(clearOffers());
+                dispatch(getOffers());
               }}
             >
               Refresh

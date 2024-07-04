@@ -187,6 +187,7 @@ function CreatorDashboard(props) {
                   value: target.value,
                 })
               }
+              name={'awardSort'}
               value={creatorFilter.awardSort}
               className={styles.input}
             >

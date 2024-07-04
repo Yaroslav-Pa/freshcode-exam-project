@@ -29,6 +29,7 @@ const TypeSelector = ({ changePredicate, creatorFilter }) => {
           value: types.indexOf(target.value),
         })
       }
+      name={'typeIndex'}
       value={types[creatorFilter.typeIndex]}
       className={styles.input}
     >

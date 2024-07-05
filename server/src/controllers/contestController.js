@@ -119,15 +119,18 @@ const resolveOffer = async (
     { orderId },
     transaction
   );
+
+  const contestPrizeMoney = finishedContest.prize;
+
   await userService.updateUser(
-    { balance: db.sequelize.literal('balance + ' + finishedContest.prize) },
+    { balance: db.sequelize.literal('balance + ' + contestPrizeMoney) },
     creatorId,
     transaction
   );
   await createTransact(
     creatorId,
     CONSTANTS.TRANSACTION_INCOME,
-    finishedContest.prize
+    contestPrizeMoney
   );
 
   const [
@@ -183,7 +186,12 @@ const resolveOffer = async (
   }
   controller
     .getNotificationController()
-    .emitChangeOfferStatus(creatorId, 'Someone of your offers WIN', contestId);
+    .emitChangeOfferStatus(
+      creatorId,
+      'Someone of your offers WIN',
+      contestId,
+      contestPrizeMoney
+    );
   return updatedOffers.find(
     (offer) => offer.dataValues.status === CONSTANTS.OFFER_STATUS.RESOLVE
   );

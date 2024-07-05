@@ -56,6 +56,11 @@ const reducers = {
   clearUserError: (state) => {
     state.error = null;
   },
+  addUserBalance: (state, { payload }) => {
+    if (payload && state.data) {
+      state.data.balance = +state.data.balance + +payload;
+    }
+  },
 };
 
 const extraReducers = (builder) => {
@@ -88,6 +93,6 @@ const userSlice = createSlice({
 
 const { actions, reducer } = userSlice;
 
-export const { clearUserStore, clearUserError } = actions;
+export const { clearUserStore, clearUserError, addUserBalance } = actions;
 
 export default reducer;

@@ -18,9 +18,7 @@ class NotificationSocket extends WebSocket {
 
   onChangeOfferStatus = () => {
     this.socket.on('changeOfferStatus', (message) => {
-      toast(
-        <Notification message={message.message} contestId={message.contestId} />
-      );
+      toast(<Notification {...message} />);
     });
   };
 

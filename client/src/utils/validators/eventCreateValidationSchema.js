@@ -12,15 +12,15 @@ const eventCreateValidationSchem = yup.object({
     .required('Event time required'),
   remiderTime: yup
     .date()
+    .min(new Date(), 'Event reminder time must be in future')
     .test(
       'is-before',
-      'Event reminder  time must be before event time',
+      'Event reminder time must be before event time & must be in future',
       function (value) {
         const { endTime } = this.parent;
-        return value < endTime;
+        return value < endTime && new Date() <= value;
       }
     )
-    .min(new Date(), 'Event reminder time must be in future')
     .required('Event reminder time required'),
 });
 

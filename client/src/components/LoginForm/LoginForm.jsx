@@ -9,7 +9,7 @@ import Error from '../Error/Error';
 import CONSTANTS from '../../constants';
 
 function LoginForm({ authClear, loginRequest, history, auth, submitting }) {
-  useEffect(() => () => authClear(), []);
+  useEffect(() => () => authClear(), [authClear]);
 
   const clicked = (values) => {
     loginRequest({ data: values, history: history });

@@ -10,7 +10,7 @@ const OnlyNotAuthorizedUserHoc = (Component) => {
       if (localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
         checkAuth(history.replace);
       }
-    }, []);
+    }, [checkAuth, history.replace]);
 
     if (isFetching) {
       return <Spinner />;

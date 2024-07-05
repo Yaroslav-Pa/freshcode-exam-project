@@ -9,7 +9,7 @@ import RegistrationFooter from '../../components/RegistrationFooter/Registration
 const RegistrationPage = ({ history, clearError }) => {
   useEffect(() => {
     clearError();
-  }, []);
+  }, [clearError]);
 
   return (
     <section className={styles.signUpPage}>

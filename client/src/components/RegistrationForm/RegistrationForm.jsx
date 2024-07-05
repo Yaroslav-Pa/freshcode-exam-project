@@ -18,7 +18,7 @@ function RegistrationForm({
   register,
   history,
 }) {
-  useEffect(() => () => authClear(), []);
+  useEffect(() => () => authClear(), [authClear]);
 
   useEffect(() => {
     if (error) scrollToTop();

@@ -12,11 +12,18 @@ import FormInput from '../InputComponents/FormInput/FormInput';
 import Schems from '../../utils/validators/offersValidationSchema';
 import Error from '../Error/Error';
 
-const OfferForm = (props) => {
-  useEffect(() => () => clearOfferError(), []);
+const OfferForm = ({
+  clearOfferError,
+  addOfferError,
+  contestId,
+  contestType,
+  customerId,
+  createNewOffer,
+}) => {
+  useEffect(() => () => clearOfferError(), [clearOfferError]);
 
   const renderOfferInput = () => {
-    if (props.contestType === CONTANTS.LOGO_CONTEST) {
+    if (contestType === CONTANTS.LOGO_CONTEST) {
       return (
         <ImageUpload
           name="offerData"
@@ -44,20 +51,18 @@ const OfferForm = (props) => {
   };
 
   const setOffer = (values, { resetForm }) => {
-    props.clearOfferError();
+    clearOfferError();
     const data = new FormData();
-    const { contestId, contestType, customerId } = props;
     data.append('contestId', contestId);
     data.append('contestType', contestType);
     data.append('offerData', values.offerData);
     data.append('customerId', customerId);
-    props.createNewOffer(data);
+    createNewOffer(data);
     resetForm();
   };
 
-  const { addOfferError, clearOfferError } = props;
   const validationSchema =
-    props.contestType === CONTANTS.LOGO_CONTEST
+    contestType === CONTANTS.LOGO_CONTEST
       ? Schems.LogoOfferSchema
       : Schems.TextOfferSchema;
   return (

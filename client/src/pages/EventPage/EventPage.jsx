@@ -19,10 +19,10 @@ function EventPage() {
   useEffect(() => {
     dispatch(getEvents());
     dispatch(checkTime());
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     dispatch(saveEvents());
-  }, [events]);
+  }, [events, dispatch]);
 
   return (
     <>

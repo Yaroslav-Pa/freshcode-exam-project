@@ -14,7 +14,7 @@ const PrivateHoc = (Component, props) => {
         getUser();
       }
       setIsLoading(false);
-    }, []);
+    }, [data, getUser]);
 
     if (isLoading || isFetching) {
       return <Spinner />;

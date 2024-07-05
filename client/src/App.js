@@ -30,7 +30,7 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getEvents());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Router>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Form, Formik } from 'formik';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -30,35 +30,42 @@ const variableOptions = {
   },
 };
 
-const ContestForm = (props) => {
-  const getPreference = () => {
-    const { contestType } = props;
+const ContestForm = ({
+  contestType,
+  getData,
+  dataForContest,
+  initialValues,
+  handleSubmit,
+  formRef,
+  isEditContest,
+}) => {
+  const getPreference = useCallback(() => {
     switch (contestType) {
       case CONSTANTS.NAME_CONTEST: {
-        props.getData({
+        getData({
           characteristic1: 'nameStyle',
           characteristic2: 'typeOfName',
         });
         break;
       }
       case CONSTANTS.TAGLINE_CONTEST: {
-        props.getData({ characteristic1: 'typeOfTagline' });
+        getData({ characteristic1: 'typeOfTagline' });
         break;
       }
       case CONSTANTS.LOGO_CONTEST: {
-        props.getData({ characteristic1: 'brandStyle' });
+        getData({ characteristic1: 'brandStyle' });
         break;
       }
       default:
         return;
     }
-  };
+  }, [contestType, getData]);
 
   useEffect(() => {
     getPreference();
-  }, []);
+  }, [getPreference]);
 
-  const { isFetching, error } = props.dataForContest;
+  const { isFetching, error } = dataForContest;
   if (error) {
     return <TryAgain getData={getPreference} />;
   }
@@ -75,12 +82,12 @@ const ContestForm = (props) => {
             focusOfWork: '',
             targetCustomer: '',
             file: '',
-            ...variableOptions[props.contestType],
-            ...props.initialValues,
+            ...variableOptions[contestType],
+            ...initialValues,
           }}
-          onSubmit={props.handleSubmit}
+          onSubmit={handleSubmit}
           validationSchema={ContestSchem}
-          innerRef={props.formRef}
+          innerRef={formRef}
           enableReinitialize
         >
           <Form>
@@ -110,7 +117,7 @@ const ContestForm = (props) => {
                   warning: styles.warning,
                 }}
                 header="Describe industry associated with your venture"
-                optionsArray={props.dataForContest.data.industry}
+                optionsArray={dataForContest.data.industry}
               />
             </div>
             <div className={styles.inputContainer}>
@@ -147,7 +154,11 @@ const ContestForm = (props) => {
                 }}
               />
             </div>
-            <OptionalSelects {...props} />
+            <OptionalSelects
+              contestType={contestType}
+              isFetching={isFetching}
+              dataForContest={dataForContest}
+            />
             <FieldFileInput
               name="file"
               classes={{
@@ -159,7 +170,7 @@ const ContestForm = (props) => {
               }}
               type="file"
             />
-            {props.isEditContest ? (
+            {isEditContest ? (
               <button type="submit" className={styles.changeData}>
                 Set Data
               </button>

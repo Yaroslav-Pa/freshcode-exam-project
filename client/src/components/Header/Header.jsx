@@ -9,7 +9,6 @@ import MenuSection from '../MenuSection/MenuSection';
 import LoginButtons from '../LoginButtons/LoginButtons';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import Logo from '../Logo';
-import { controller } from '../../api/ws/socketController';
 import { clearChatDataToInitial } from '../../store/slices/chatSlice';
 import TEXT_CONTANTS from '../../textConstanst';
 import { checkTime } from '../../store/slices/eventSlice';
@@ -32,12 +31,12 @@ function Header({
     if (!data && localStorage.hasOwnProperty(CONSTANTS.ACCESS_TOKEN)) {
       getUser();
     }
-  }, []);
+  }, [data, getUser]);
   useEffect(() => {
     if (eventCount) {
       checkTime();
     }
-  }, [eventCount]);
+  }, [eventCount, checkTime]);
 
   const AllMenuSections = TEXT_CONTANTS.SECTION_LIST.map(
     ({ menuName, list }) => (

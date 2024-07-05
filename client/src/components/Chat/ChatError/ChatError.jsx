@@ -16,7 +16,7 @@ const ChatError = ({ getData, error }) => {
       dispatch(clearChatError());
       redirectToLogin(history);
     }
-  }, [error]);
+  }, [error, dispatch]);
 
   return (
     <div className={styles.errorContainer} onClick={() => getData()}>

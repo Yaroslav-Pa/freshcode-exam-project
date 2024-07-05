@@ -15,7 +15,7 @@ const LoginPage = ({ history, clearError }) => {
     if (isTokenExpired) {
       toast('Apologies, session token timed out. Please re-enter to continue.');
     }
-  }, []);
+  }, [clearError]);
   return (
     <div className={styles.mainContainer}>
       <div className={styles.loginContainer}>

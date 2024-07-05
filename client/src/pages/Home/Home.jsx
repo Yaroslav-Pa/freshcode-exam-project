@@ -23,7 +23,7 @@ const Home = (props) => {
       setStyle(styles.headline__static);
       clearInterval(timeout);
     };
-  });
+  }, [index]);
 
   const { isFetching } = props;
   const text =

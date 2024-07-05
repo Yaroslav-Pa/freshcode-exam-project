@@ -9,7 +9,7 @@ import { formatISO } from 'date-fns';
 
 function EventsListing({ events }) {
   const dispatch = useDispatch();
-  const [time, setTime] = useState(formatISO(new Date()));
+  const [, setTime] = useState(formatISO(new Date()));
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -17,7 +17,7 @@ function EventsListing({ events }) {
       dispatch(checkTime());
     }, 1000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [dispatch]);
 
   return (
     <section className={styles.mainContainer}>

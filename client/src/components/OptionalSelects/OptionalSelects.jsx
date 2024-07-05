@@ -7,11 +7,11 @@ import Spinner from '../Spinner/Spinner';
 import ButtonGroup from '../InputComponents/ButtonGroup/ButtonGroup';
 import TEXT_CONTANTS from '../../textConstanst';
 
-const OptionalSelects = (props) => {
-  if (props.isFetching) {
+const OptionalSelects = ({ contestType, isFetching, dataForContest }) => {
+  if (isFetching) {
     return <Spinner />;
   }
-  switch (props.contestType) {
+  switch (contestType) {
     case CONSTANTS.NAME_CONTEST: {
       return (
         <>
@@ -33,7 +33,7 @@ const OptionalSelects = (props) => {
               selectInput: styles.select,
               warning: styles.warning,
             }}
-            optionsArray={props.dataForContest.data.typeOfName}
+            optionsArray={dataForContest.data.typeOfName}
           />
           <SelectInput
             name="styleName"
@@ -44,7 +44,7 @@ const OptionalSelects = (props) => {
               selectInput: styles.select,
               warning: styles.warning,
             }}
-            optionsArray={props.dataForContest.data.nameStyle}
+            optionsArray={dataForContest.data.nameStyle}
           />
         </>
       );
@@ -78,7 +78,7 @@ const OptionalSelects = (props) => {
               warning: styles.warning,
             }}
             header="Brand Style"
-            optionsArray={props.dataForContest.data.brandStyle}
+            optionsArray={dataForContest.data.brandStyle}
           />
         </>
       );
@@ -112,7 +112,7 @@ const OptionalSelects = (props) => {
               warning: styles.warning,
             }}
             header="Type tagline"
-            optionsArray={props.dataForContest.data.typeOfTagline}
+            optionsArray={dataForContest.data.typeOfTagline}
           />
         </>
       );

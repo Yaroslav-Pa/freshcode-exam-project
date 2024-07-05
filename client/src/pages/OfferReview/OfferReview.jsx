@@ -35,7 +35,7 @@ function OfferReview() {
     if (haveMore && offers.length !== 0 && offers.length === 5) {
       dispatch(getOffers(offers.length));
     }
-  }, [offers]);
+  }, [offers, dispatch, haveMore]);
 
   const reviewingOffersList = offers.map((offer) => (
     <OfferOnReview key={offer.id} offer={offer} />

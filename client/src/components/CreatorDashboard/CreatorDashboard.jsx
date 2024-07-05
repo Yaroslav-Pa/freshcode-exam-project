@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
@@ -17,39 +17,65 @@ import IndustryTypeSelect from '../IndustryTypeSelect/IndustryTypeSelect';
 import TypeSelector from '../TypeSelector/TypeSelector';
 import { contestList, getGoToExtended } from '../../utils/contestFunctions';
 
-function CreatorDashboard(props) {
-  const prevSearchRef = useRef(props.location.search);
+function CreatorDashboard({
+  location: { search },
+  history,
+  error,
+  haveMore,
+  creatorFilter,
+  dataForContest,
+  isFetching,
+  contests,
+  getDataForContest,
+  clearContestsList,
+  getCreatorContests,
+  newFilter,
+}) {
+  const getContests = useCallback(
+    (filter) => {
+      getCreatorContests({
+        limit: 8,
+        offset: 0,
+        ...filter,
+      });
+    },
+    [getCreatorContests]
+  );
+
+  const parseUrlForParams = useCallback(
+    (search) => {
+      const obj = queryString.parse(search);
+      const filter = {
+        typeIndex: obj.typeIndex || 1,
+        contestId: obj.contestId ? obj.contestId : '',
+        industry: obj.industry ? obj.industry : '',
+        awardSort: obj.awardSort || 'asc',
+        onlyActiveStatus: obj.onlyActiveStatus === 'true',
+        ownEntries:
+          typeof obj.ownEntries === 'undefined' ? false : obj.ownEntries,
+      };
+      newFilter(filter);
+      clearContestsList();
+      getContests(filter);
+    },
+    [clearContestsList, getContests, newFilter]
+  );
 
   useEffect(() => {
-    if (prevSearchRef.current !== props.location.search) {
-      prevSearchRef.current = props.location.search;
-      if (props.location.search) {
-        parseUrlForParams(props.location.search);
-      }
-    }
-  }, [props.location.search]);
+    parseUrlForParams(search);
+  }, [search, parseUrlForParams]);
 
   useEffect(() => {
-    props.getDataForContest();
-    parseUrlForParams(props.location.search);
+    getDataForContest();
     return () => {
-      props.clearContestsList();
+      clearContestsList();
     };
-  }, []);
+  }, [clearContestsList, getDataForContest]);
 
-  const goToExtended = getGoToExtended(props.history);
-
-  const getContests = (filter) => {
-    props.getContests({
-      limit: 8,
-      offset: 0,
-      ...filter,
-    });
-  };
+  const goToExtended = getGoToExtended(history);
 
   const changePredicate = ({ name, value }) => {
-    const { creatorFilter } = props;
-    props.newFilter({
+    newFilter({
       [name]: value === 'Choose industry' ? null : value,
     });
     parseParamsToUrl({
@@ -63,28 +89,11 @@ function CreatorDashboard(props) {
     Object.keys(creatorFilter).forEach((el) => {
       if (creatorFilter[el]) obj[el] = creatorFilter[el];
     });
-    props.history.push(`/Dashboard?${queryString.stringify(obj)}`);
-  };
-
-  const parseUrlForParams = (search) => {
-    const obj = queryString.parse(search);
-    const filter = {
-      typeIndex: obj.typeIndex || 1,
-      contestId: obj.contestId ? obj.contestId : '',
-      industry: obj.industry ? obj.industry : '',
-      awardSort: obj.awardSort || 'asc',
-      onlyActiveStatus: obj.onlyActiveStatus === 'true',
-      ownEntries:
-        typeof obj.ownEntries === 'undefined' ? false : obj.ownEntries,
-    };
-    props.newFilter(filter);
-    props.clearContestsList();
-    getContests(filter);
+    history.push(`/Dashboard?${queryString.stringify(obj)}`);
   };
 
   const getPredicateOfRequest = () => {
     const obj = {};
-    const { creatorFilter } = props;
     Object.keys(creatorFilter).forEach((el) => {
       if (creatorFilter[el]) {
         obj[el] = creatorFilter[el];
@@ -95,7 +104,7 @@ function CreatorDashboard(props) {
   };
 
   const loadMore = (startFrom) => {
-    props.getContests({
+    getCreatorContests({
       limit: 8,
       offset: startFrom,
       ...getPredicateOfRequest(),
@@ -103,16 +112,15 @@ function CreatorDashboard(props) {
   };
 
   const tryLoadAgain = () => {
-    props.clearContestsList();
-    props.getContests({
+    clearContestsList();
+    getCreatorContests({
       limit: 8,
       offset: 0,
       ...getPredicateOfRequest(),
     });
   };
 
-  const { error, haveMore, creatorFilter } = props;
-  const { isFetching } = props.dataForContest;
+  const { isFetching: isDataForContestFetching } = dataForContest;
   return (
     <div className={styles.mainContainer}>
       <div className={styles.filterContainer}>
@@ -148,7 +156,7 @@ function CreatorDashboard(props) {
             <span>By contest type</span>
             <TypeSelector
               changePredicate={changePredicate}
-              creatorFilter={props.creatorFilter}
+              creatorFilter={creatorFilter}
             />
           </div>
           <div className={styles.inputContainer}>
@@ -168,13 +176,13 @@ function CreatorDashboard(props) {
               className={styles.input}
             />
           </div>
-          {!isFetching && (
+          {!isDataForContestFetching && (
             <div className={styles.inputContainer}>
               <span>By industry</span>
               <IndustryTypeSelect
                 changePredicate={changePredicate}
-                creatorFilter={props.creatorFilter}
-                dataForContest={props.dataForContest}
+                creatorFilter={creatorFilter}
+                dataForContest={dataForContest}
               />
             </div>
           )}
@@ -203,12 +211,12 @@ function CreatorDashboard(props) {
         </div>
       ) : (
         <ContestsContainer
-          isFetching={props.isFetching}
+          isFetching={isFetching}
           loadMore={loadMore}
-          history={props.history}
+          history={history}
           haveMore={haveMore}
         >
-          {contestList(props.contests, goToExtended)}
+          {contestList(contests, goToExtended)}
         </ContestsContainer>
       )}
     </div>
@@ -221,7 +229,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getContests: (data) =>
+  getCreatorContests: (data) =>
     dispatch(getContests({ requestData: data, role: CONSTANTS.CREATOR })),
   clearContestsList: () => dispatch(clearContestsList()),
   newFilter: (filter) => dispatch(setNewCreatorFilter(filter)),

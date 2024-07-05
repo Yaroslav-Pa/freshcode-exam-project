@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import * as restController from '../../api/rest/restController';
 import { decorateAsyncThunk, pendingReducer } from '../../utils/store';
 import { removeDuplicates } from '../../utils/contestFunctions';
+import { toast } from 'react-toastify';
 
 const MODERATED_OFFERS_SLICE_NAME = 'moderatedOffers';
 
@@ -51,6 +52,9 @@ const extraReducers = (builder) => {
   builder.addCase(setStatus.fulfilled, (state, { payload }) => {
     state.isFetching = false;
     state.error = null;
+    if (payload?.message) {
+      toast(payload?.message);
+    }
     state.offers = state.offers.filter((offer) => {
       if (offer.id === payload.id) {
         offer.updatedStatus = payload.status;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import CONTANTS from '../../constants';
@@ -8,16 +8,25 @@ import {
 } from '../../store/slices/contestByIdSlice';
 import styles from './OfferForm.module.sass';
 import ImageUpload from '../InputComponents/ImageUpload/ImageUpload';
-import FormInput from '../FormInput/FormInput';
-import Schems from '../../utils/validators/validationSchems';
+import FormInput from '../InputComponents/FormInput/FormInput';
+import Schems from '../../utils/validators/offersValidationSchema';
 import Error from '../Error/Error';
 
-const OfferForm = props => {
+const OfferForm = ({
+  clearOfferError,
+  addOfferError,
+  contestId,
+  contestType,
+  customerId,
+  createNewOffer,
+}) => {
+  useEffect(() => () => clearOfferError(), [clearOfferError]);
+
   const renderOfferInput = () => {
-    if (props.contestType === CONTANTS.LOGO_CONTEST) {
+    if (contestType === CONTANTS.LOGO_CONTEST) {
       return (
         <ImageUpload
-          name='offerData'
+          name="offerData"
           classes={{
             uploadContainer: styles.imageUploadContainer,
             inputContainer: styles.uploadInputContainer,
@@ -28,34 +37,32 @@ const OfferForm = props => {
     }
     return (
       <FormInput
-        name='offerData'
+        name="offerData"
         classes={{
           container: styles.inputContainer,
           input: styles.input,
           warning: styles.fieldWarning,
           notValid: styles.notValid,
         }}
-        type='text'
-        label='your suggestion'
+        type="text"
+        label="your suggestion"
       />
     );
   };
 
   const setOffer = (values, { resetForm }) => {
-    props.clearOfferError();
+    clearOfferError();
     const data = new FormData();
-    const { contestId, contestType, customerId } = props;
     data.append('contestId', contestId);
     data.append('contestType', contestType);
     data.append('offerData', values.offerData);
     data.append('customerId', customerId);
-    props.setNewOffer(data);
+    createNewOffer(data);
     resetForm();
   };
 
-  const { valid, addOfferError, clearOfferError } = props;
   const validationSchema =
-    props.contestType === CONTANTS.LOGO_CONTEST
+    contestType === CONTANTS.LOGO_CONTEST
       ? Schems.LogoOfferSchema
       : Schems.TextOfferSchema;
   return (
@@ -76,23 +83,23 @@ const OfferForm = props => {
       >
         <Form className={styles.form}>
           {renderOfferInput()}
-          {valid && (
-            <button type='submit' className={styles.btnOffer}>
+          {
+            <button type="submit" className={styles.btnOffer}>
               Send Offer
             </button>
-          )}
+          }
         </Form>
       </Formik>
     </div>
   );
 };
 
-const mapDispatchToProps = dispatch => ({
-  setNewOffer: data => dispatch(addOffer(data)),
+const mapDispatchToProps = (dispatch) => ({
+  createNewOffer: (data) => dispatch(addOffer(data)),
   clearOfferError: () => dispatch(clearAddOfferError()),
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { addOfferError } = state.contestByIdStore;
   return { addOfferError };
 };

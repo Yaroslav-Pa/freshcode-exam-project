@@ -1,52 +1,52 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import className from 'classnames';
 import {
   getDialogMessages,
   clearMessageList,
+  setNewMessageOff,
 } from '../../../../store/slices/chatSlice';
 import ChatHeader from '../../ChatComponents/ChatHeader/ChatHeader';
 import styles from './Dialog.module.sass';
 import ChatInput from '../../ChatComponents/ChatInut/ChatInput';
+import { format, isSameDay, parseISO } from 'date-fns';
 
 class Dialog extends React.Component {
-  componentDidMount() {
-    this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
-    this.scrollToBottom();
-  }
-
   messagesEnd = React.createRef();
 
   scrollToBottom = () => {
     this.messagesEnd.current.scrollIntoView({ behavior: 'smooth' });
   };
-
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.interlocutor.id !== this.props.interlocutor.id)
-      this.props.getDialog({ interlocutorId: nextProps.interlocutor.id });
+  
+  componentDidMount() {
+    this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
+    this.props.setNewMessageOff(this.props.chatData?._id);
+    this.scrollToBottom();
   }
 
   componentWillUnmount() {
     this.props.clearMessageList();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     if (this.messagesEnd.current) this.scrollToBottom();
+    if (this.props.interlocutor?.id !== prevProps.interlocutor?.id) {
+      this.props.getDialog({ interlocutorId: this.props.interlocutor?.id });
+    }
   }
 
   renderMainDialog = () => {
     const messagesArray = [];
     const { messages, userId } = this.props;
-    let currentTime = moment();
+    let currentTime = new Date();
     messages.forEach((message, i) => {
-      if (!currentTime.isSame(message.createdAt, 'date')) {
+      if (!isSameDay(currentTime, message.createdAt)) {
         messagesArray.push(
           <div key={message.createdAt} className={styles.date}>
-            {moment(message.createdAt).format('MMMM DD, YYYY')}
+            {format(message.createdAt, 'MMMM dd, yyyy')}
           </div>
         );
-        currentTime = moment(message.createdAt);
+        currentTime = parseISO(message.createdAt);
       }
       messagesArray.push(
         <div
@@ -57,7 +57,7 @@ class Dialog extends React.Component {
         >
           <span>{message.body}</span>
           <span className={styles.messageTime}>
-            {moment(message.createdAt).format('HH:mm')}
+            {format(message.createdAt, 'HH:mm')}
           </span>
           <div ref={this.messagesEnd} />
         </div>
@@ -101,6 +101,7 @@ const mapStateToProps = (state) => state.chatStore;
 const mapDispatchToProps = (dispatch) => ({
   getDialog: (data) => dispatch(getDialogMessages(data)),
   clearMessageList: () => dispatch(clearMessageList()),
+  setNewMessageOff: (id) => dispatch(setNewMessageOff(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dialog);

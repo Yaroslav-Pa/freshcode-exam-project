@@ -1,0 +1,35 @@
+@import '../../utils/styles/_templates'
+
+.tableContainer
+  flex-grow: 1
+  padding: 20px
+  border: 1px #c0c0c0 solid
+  border-radius: 5px
+  @media(max-width: 400px)
+    padding: 5px
+    margin: 0 5px
+  @media(max-width: 600px)
+    padding: 10px
+
+.mainText
+  @extend %errorText
+  font-size: 24px
+  margin-bottom: 10px
+  @media(max-width: 400px)
+    padding: 18px
+
+.table
+  width: 100%
+  border: 1px #c0c0c0 solid
+  border-collapse: collapse
+  padding: 10px
+
+  tr
+    border: 1px #c0c0c0 solid
+
+    th, td
+      border: inherit
+      padding: 10px
+      text-align: center
+      @media(max-width: 400px)
+        padding: 5px

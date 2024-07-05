@@ -13,7 +13,7 @@ const AgreeTermOfServiceInput = ({ id, type, classes, label, ...rest }) => (
         <div>
           <div className={classes.container}>
             <input {...field} placeholder={label} id={id} type={type} />
-            <label htmlFor={id}>
+            <label htmlFor={id} className={classes?.text}>
               By clicking this checkbox, you agree to our{' '}
               <a href='https://www.google.com' target='_blank' rel='noreferrer'>
                 Terms of Service.

@@ -1,8 +1,13 @@
-const bd = require('../models');
+const db = require('../db/models');
 const CONSTANTS = require('../constants');
 
 module.exports.createWhereForAllContests = (
-  typeIndex, contestId, industry, awardSort) => {
+  typeIndex,
+  contestId,
+  industry,
+  awardSort,
+  isActiveStatus
+) => {
   const object = {
     where: {},
     order: [],
@@ -19,20 +24,27 @@ module.exports.createWhereForAllContests = (
   if (awardSort) {
     object.order.push(['prize', awardSort]);
   }
-  Object.assign(object.where, {
-    status: {
-      [ bd.Sequelize.Op.or ]: [
-        CONSTANTS.CONTEST_STATUS_FINISHED,
-        CONSTANTS.CONTEST_STATUS_ACTIVE,
-      ],
-    },
-  });
+  if (isActiveStatus) {
+    Object.assign(object.where, {
+      status: CONSTANTS.CONTEST_STATUS_ACTIVE,
+    });
+  } else {
+    Object.assign(object.where, {
+      status: {
+        [db.Sequelize.Op.or]: [
+          CONSTANTS.CONTEST_STATUS_FINISHED,
+          CONSTANTS.CONTEST_STATUS_ACTIVE,
+        ],
+      },
+    });
+  }
+
   object.order.push(['id', 'desc']);
   return object;
 };
 
-function getPredicateTypes (index) {
-  return { [ bd.Sequelize.Op.or ]: [types[ index ].split(',')] };
+function getPredicateTypes(index) {
+  return { [db.Sequelize.Op.or]: [types[index].split(',')] };
 }
 
 const types = [
@@ -45,3 +57,11 @@ const types = [
   'logo,tagline',
   'name,logo',
 ];
+
+module.exports.getAllOfferStatusesInLitteral = () => {
+  return Object.values(CONSTANTS.OFFER_STATUS).map((status) => {
+    return toSequilizeLitteral(status);
+  });
+};
+
+const toSequilizeLitteral = (text) => `'${text}'::enum_offers_status`;

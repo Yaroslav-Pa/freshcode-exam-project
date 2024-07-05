@@ -1,3 +1,65 @@
+# Положення завдань
+
+4. How It Works page. Знаходиться у папці `client\src\pages\HowItWorks`. Сторінка розділена на секції, що знаходяться у `client\src\components\HowItWorksSections`. Була зроблена у гілці "how-it-works-page-layout".
+
+5. Events (Динамічний брендінг). Сторінка зноходиться у папці `client\src\pages\EventPage`. Копмоненти сторінки знаходяться у `client\src\components\EventComponents`. У App.js було додано компонент "EventsLink" який забезпечує перенаплавлення користувача на сторінку та має функцію відображення нагадування про події та їх завершення у вигляді кружечків (жовтого та червоного відповідно). Було зроблено у гілці "react-dynamic-branding".
+
+6. Group Buttons. Знаходяться у папці `client\src\components\InputComponents\ButtonGroup`. Були зроблені у гілці "react-button-group".
+
+7. Агрегація db no-sql. Знаходиться у файлі `server\src\db\tasks\task-7.mongodb.js`. Була зроблена у гілці "db-no-sql".
+
+8-11. Завдання db sql. Знаходяться у папці `server\src\db\tasks`, кожне завдання знаходиться у файлу з назвою "task-#" (де # відповідний номер завдання). Схема ERD для завдання 8 (структура чатів з SQL) була надана у файлу "task-8.png". Для завдання 10 (зарахування кешбеку) було створено відповідний функціонал таблиці витрат та зарахувань, що була розташована на сторінці профилю користувача. Були зроблені у гілці "db-sql".
+
+12. Logger помилок. Розташован у файлі `server\src\utils\errorLogger.js`. Та був 'приєданний' у файлі обробника помилок (`server\src\handlerError\handler.js`.) Був зроблен у гілці "nodejs-logger".
+
+13. Архивування помилок. Розташован у файлі `server\src\utils\archivingLogs.js`. Та був 'приєданний' у файлі index.js (`server\src\index.js`). Був зроблен у гілці "nodejs-logger".
+
+14. Модерація пропозицій. На стороні сервера була стовренна нова роль, відповідний роут(`server\src\routers\offerModerationRouter.js`) та контроллер (`server\src\controllers\offerModerationController.js`). На стороні клієнта була зроблена сторінка (`client\src\pages\OfferReview\OfferReview.jsx`) та відповідні slice для redux (`client\src\store\slices\moderatedOffersSlice.js`). Був зроблен у гілці "fullstack-moderator".
+
+15. Перороблення роботи чатів. Були додані відповідні моделі у папці `server\src\db\models` та міграції у папці `server\src\db\migrations`. Та було перероблено котроллер чатів (`server\src\controllers\chatController.js`). Було зроблено у гілці "fullstack-chats-to-sql-db".
+
+***
+
+# Коментарі
+
+Проєкт був розроблений локально, без застосування docker.
+
+### Доданий функціонал та дороботки поза завданням
+
+- У чатах було додано відображення надходження нових повідомлень у вигляді червоного кружечка
+- У CreatorDashboard було додано кнопку "Only Active", що відображає лише поточні контести зі статусом "going"
+- Для сторінки "OfferReview" (функціонал перевірки offers модератора), було додано кнопку "Refresh"
+- При отриманні помилки про вичерпаний токен та переведені користувача на сторінку "login" було додано повідомлення з проханням перезайти у аккаунт для продовження роботи.
+- У більшості полях вводу було встановлено масимальну кількість символів
+
+### Перенесення та реструктуризація компонентів
+
+Клієнт:
+
+- Деякі компоненти на клієнту були перенесені у загальні папки ("Contest", "EventComponents", "InputComponents", "Hocs" та інші)
+- Деякі стилі що були схожі або зовсім однакові були переведені у папку `client\src\utils\styles`
+
+Сервер:
+
+- Папка "queries" була переіменована у "service" та перенесена у src `server\src\services`
+- Папки "migrations", "seeders", "config" та "models" були перенесені у загальну папку "db" `server\src\db`
+
+### Стандартні данні користувачів
+
+- creative:
+email: create@gmail.com
+password: create@gmail.com
+
+- customer:
+email: buy@gmail.com
+password: buy@gmail.com
+
+-moderator:
+email: moderator@gmail.com
+password: moderator@gmail.com
+
+***
+
 # Інструкції для роботи з проектом
 
 ## Робота з контейнеризованою версією додатка при встановленому Docker
@@ -17,16 +79,19 @@
 2. За необхідності в терміналах у папках `/client` та `/server` виконати команду `npm install` для встановлення залежностей для клієтської та серверної частини додатку.
 
 3. Зайти у папку сервера через термінал та виконати команди, необхідні для створення БД PostgreSQL:
-  - `npx sequelize db:create`
-  - `npx sequelize db:migrate`
-  - `npx sequelize db:seed:all`
+
+- `npx sequelize db:create`
+- `npx sequelize db:migrate`
+- `npx sequelize db:seed:all`
 
 4. Запустити у окремих терміналах клієнстську та серверну частни, виконуючи команду `npm start` в терміналах у папках `/client` та `/server`
 
 # Додаткові дані по проекту
 
 Під час роботи з додатком буде необхідно використовувати наступні дані:
+
 1. Дані про банківські картки для оплати контестів / виводу винагороди за контести:
-  - **Номер картки:** 4111 1111 1111 1111
-  - **Дата кінця дії картки:** 09/26
-  - **CVC код:** 505
+
+- **Номер картки:** 4111 1111 1111 1111
+- **Дата кінця дії картки:** 09/26
+- **CVC код:** 505

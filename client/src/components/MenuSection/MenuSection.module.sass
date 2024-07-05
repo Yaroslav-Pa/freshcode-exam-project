@@ -1,0 +1,73 @@
+.navItem
+  display: flex
+  align-items: center
+  justify-content: flex-start
+  position: relative
+  @media(max-width: 800px)
+    width: fit-content
+    align-items: flex-start
+    flex-direction: column
+
+  &:last-child
+    .menuList
+      min-width: 200px
+      @media screen and (max-width: 600px)
+        min-width: 170px
+
+  &:hover
+    .listName
+      color: #f27e51
+    .menuList
+      display: block
+      position: absolute
+      border: 1px solid #eee
+      z-index: 10
+      top: 100%
+      left: 0px
+      background-color: white
+    .menuListToLeft
+      @media screen and (max-width: 1350px)
+        right: 0
+        left: unset
+      @media screen and (max-width: 800px)
+        top: 100%
+        left: 0
+
+.menuList
+  padding: 0
+  margin: 0
+  min-width: 160px
+  display: none
+
+.last
+  min-width: 100%
+  padding-top: 8px
+  box-sizing: border-box
+  border-top: 1px solid aquamarine
+
+.menuLinkText
+  box-sizing: border-box
+  min-width: 100%
+  padding: 10px 15px
+  display: flex
+  justify-content: flex-start
+  font-size: 12px
+  text-decoration: none
+  color: #333
+
+  &:hover
+    color: #f27e51
+    background: #f9fafb
+
+.listName
+  color: #495d8b
+  font-size: 15px
+  font-weight: 300
+  padding: 15px 0
+  @media(max-width: 800px)
+    padding: 10px 0
+
+.listNameContainer
+  display: flex
+  flex-direction: row
+  align-items: center

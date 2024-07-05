@@ -1,34 +1,39 @@
-const bd = require('../models');
+const db = require('../db/models');
 const NotFound = require('../errors/UserNotFoundError');
 const RightsError = require('../errors/RightsError');
 const ServerError = require('../errors/ServerError');
 const CONSTANTS = require('../constants');
 
 module.exports.parseBody = (req, res, next) => {
-  req.body.contests = JSON.parse(req.body.contests);
-  for (let i = 0; i < req.body.contests.length; i++) {
-    if (req.body.contests[ i ].haveFile) {
+  const newContests = JSON.parse(req.body.contests);
+  newContests.forEach((contest) => {
+    if (contest.haveFile) {
       const file = req.files.splice(0, 1);
-      req.body.contests[ i ].fileName = file[ 0 ].filename;
-      req.body.contests[ i ].originalFileName = file[ 0 ].originalname;
+      contest.fileName = file[0].filename;
+      contest.originalFileName = file[0].originalname;
     }
-  }
+  });
+  req.body.contests = newContests;
   next();
 };
-
 module.exports.canGetContest = async (req, res, next) => {
   let result = null;
   try {
-    if (req.tokenData.role === CONSTANTS.CUSTOMER) {
-      result = await bd.Contests.findOne({
-        where: { id: req.headers.contestid, userId: req.tokenData.userId },
+    const {
+      params: { contestId },
+      tokenData: { role, userId },
+    } = req;
+    const contestIdInt = +contestId;
+    if (role === CONSTANTS.CUSTOMER) {
+      result = await db.Contest.findOne({
+        where: { id: contestIdInt, userId },
       });
-    } else if (req.tokenData.role === CONSTANTS.CREATOR) {
-      result = await bd.Contests.findOne({
+    } else if (role === CONSTANTS.CREATOR) {
+      result = await db.Contest.findOne({
         where: {
-          id: req.headers.contestid,
+          id: contestIdInt,
           status: {
-            [ bd.Sequelize.Op.or ]: [
+            [db.Sequelize.Op.or]: [
               CONSTANTS.CONTEST_STATUS_ACTIVE,
               CONSTANTS.CONTEST_STATUS_FINISHED,
             ],
@@ -36,42 +41,56 @@ module.exports.canGetContest = async (req, res, next) => {
         },
       });
     }
-    result ? next() : next(new RightsError());
+    result ? next() : next(new NotFound("Contest whith this id doesn't exist"));
   } catch (e) {
-    next(new ServerError(e));
+    next(new ServerError(e.message));
   }
 };
 
 module.exports.onlyForCreative = (req, res, next) => {
-  if (req.tokenData.role === CONSTANTS.CUSTOMER) {
-    next(new RightsError());
+  if (req.tokenData.role !== CONSTANTS.CREATOR) {
+    next(new RightsError('this page request for creatives'));
   } else {
     next();
   }
-
 };
 
 module.exports.onlyForCustomer = (req, res, next) => {
-  if (req.tokenData.role === CONSTANTS.CREATOR) {
-    return next(new RightsError('this page only for customers'));
+  if (req.tokenData.role !== CONSTANTS.CUSTOMER) {
+    return next(new RightsError('this request only for customers'));
+  } else {
+    next();
+  }
+};
+
+module.exports.onlyForModerator = (req, res, next) => {
+  if (req.tokenData.role !== CONSTANTS.MODERATOR) {
+    return next(new RightsError('this request only for moderators'));
   } else {
     next();
   }
 };
 
 module.exports.canSendOffer = async (req, res, next) => {
-  if (req.tokenData.role === CONSTANTS.CUSTOMER) {
+  const {
+    params: { contestId },
+    tokenData: { role },
+  } = req;
+  const contestIdInt = +contestId;
+  if (role === CONSTANTS.CUSTOMER) {
     return next(new RightsError());
   }
   try {
-    const result = await bd.Contests.findOne({
+    const result = await db.Contest.findOne({
       where: {
-        id: req.body.contestId,
+        id: contestIdInt,
       },
       attributes: ['status'],
     });
-    if (result.get({ plain: true }).status ===
-      CONSTANTS.CONTEST_STATUS_ACTIVE) {
+
+    if (
+      result.get({ plain: true }).status === CONSTANTS.CONTEST_STATUS_ACTIVE
+    ) {
       next();
     } else {
       return next(new RightsError());
@@ -79,15 +98,19 @@ module.exports.canSendOffer = async (req, res, next) => {
   } catch (e) {
     next(new ServerError());
   }
-
 };
 
 module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
   try {
-    const result = await bd.Contests.findOne({
+    const {
+      params: { contestId },
+      tokenData: { userId },
+    } = req;
+    const contestIdInt = +contestId;
+    const result = await db.Contest.findOne({
       where: {
-        userId: req.tokenData.userId,
-        id: req.body.contestId,
+        userId,
+        id: contestIdInt,
         status: CONSTANTS.CONTEST_STATUS_ACTIVE,
       },
     });
@@ -102,11 +125,16 @@ module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
 
 module.exports.canUpdateContest = async (req, res, next) => {
   try {
-    const result = bd.Contests.findOne({
+    const {
+      params: { contestId },
+      tokenData: { userId },
+    } = req;
+    const contestIdInt = +contestId;
+    const result = db.Contest.findOne({
       where: {
-        userId: req.tokenData.userId,
-        id: req.body.contestId,
-        status: { [ bd.Sequelize.Op.not ]: CONSTANTS.CONTEST_STATUS_FINISHED },
+        userId,
+        id: contestIdInt,
+        status: { [db.Sequelize.Op.not]: CONSTANTS.CONTEST_STATUS_FINISHED },
       },
     });
     if (!result) {
@@ -117,4 +145,3 @@ module.exports.canUpdateContest = async (req, res, next) => {
     next(new ServerError());
   }
 };
-

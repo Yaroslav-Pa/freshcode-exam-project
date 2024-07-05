@@ -106,10 +106,23 @@ const OfferBox = (props) => {
     });
   };
 
+  const chatIconClassnames = classNames(styles.chatIcon, {
+    [styles.chatIconForModerator]: props.isForModerator,
+  });
+
   const { data, role, id, contestType } = props;
   const { avatar, firstName, lastName, email, rating } = props.data.User;
+  const offerContainerClassnames = classNames(styles.offerContainer, {
+    [styles.offerContainerReview]:
+      props.data.status === CONSTANTS.OFFER_STATUS_REVIEW &&
+      !props.isForModerator,
+    [styles.offerContainerFailReview]:
+      props.data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW &&
+      !props.isForModerator,
+    [styles.transparentBackground]: props.isForModerator,
+  });
   return (
-    <div className={styles.offerContainer}>
+    <div className={offerContainerClassnames}>
       {offerStatus()}
       <div className={styles.mainInfoContainer}>
         <div className={styles.userInfo}>
@@ -118,7 +131,7 @@ const OfferBox = (props) => {
               src={
                 avatar === 'anon.png'
                   ? CONSTANTS.ANONYM_IMAGE_PATH
-                  : `${CONSTANTS.publicURL}${avatar}`
+                  : `${CONSTANTS.PUBLIC_IMAGES_URL}${avatar}`
               }
               alt="user"
             />
@@ -164,13 +177,13 @@ const OfferBox = (props) => {
                 })
               }
               className={styles.responseLogo}
-              src={`${CONSTANTS.publicURL}${data.fileName}`}
+              src={`${CONSTANTS.PUBLIC_CONTESTS_URL}${data.fileName}`}
               alt="logo"
             />
           ) : (
             <span className={styles.response}>{data.text}</span>
           )}
-          {data.User.id !== id && (
+          {!props.isForModerator && data.User.id !== id && (
             <Rating
               fractions={2}
               fullSymbol={
@@ -197,10 +210,13 @@ const OfferBox = (props) => {
           )}
         </div>
         {role !== CONSTANTS.CREATOR && (
-          <i onClick={goChat} className="fas fa-comments" />
+          <i
+            onClick={goChat}
+            className={'fas fa-comments ' + chatIconClassnames}
+          />
         )}
       </div>
-      {props.needButtons(data.status) && (
+      {props.needButtons && props.needButtons(data.status) && (
         <div className={styles.btnsContainer}>
           <div onClick={resolveOffer} className={styles.resolveBtn}>
             Resolve

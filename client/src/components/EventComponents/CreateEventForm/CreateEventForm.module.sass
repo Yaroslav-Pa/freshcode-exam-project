@@ -1,0 +1,71 @@
+@import '../../../utils/styles/_templates'
+
+.formContainer
+  display: flex
+  flex-direction: column
+  gap: 20px 0
+
+.form
+  flex-wrap: wrap
+  display: flex
+  flex-direction: column
+  gap: 20px 20px
+  justify-content: space-between
+  align-items: center
+
+.inputContainer
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-self: stretch
+  gap: 5px 0
+  width: 100%
+  max-width: 550px
+  margin: 0 auto
+  @media screen and (max-width: 600px)
+    width: 100%
+
+  .notValid
+    @extend %formFieldNotValid
+
+  .valid
+    @extend %formFieldValid
+
+.fieldWarning
+  @extend %formFieldError
+
+.lableOfInput
+  color: rgba(153, 153, 153, 0.8)
+  font-weight: 600
+  display: flex
+  flex-direction: column
+  gap: 5px 0
+  font-size: 0.8rem
+
+.input
+  border: 2px solid rgba(153, 153, 153, 0.64)
+  border-radius: 4px
+  color: #707070
+  font-size: 18px
+  padding: 10px 20px
+  outline: none
+
+.submitButton
+  box-sizing: border-box
+  border-radius: 4px
+  display: flex
+  justify-content: center
+  align-items: center
+  border: 2px solid #28d2d0
+  background-color: #28d2d0
+  transition: all .2s
+  font-size: 1.1rem
+  color: white
+  padding: 5px 15px
+
+  @media screen and (max-width: 500px)
+    width: 100%
+
+  &:hover
+    color: #28d2d0
+    background-color: transparent

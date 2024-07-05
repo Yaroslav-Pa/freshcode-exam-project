@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { pay, clearPaymentStore } from '../../store/slices/paymentSlice';
 import PayForm from '../../components/PayForm/PayForm';
 import styles from './Payment.module.sass';
-import CONSTANTS from '../../constants';
 import Error from '../../components/Error/Error';
+import Logo from '../../components/Logo';
 
 const Payment = (props) => {
-  const pay = (values) => {
+  const pay = async (values) => {
     const { contests } = props.contestCreationStore;
     const contestArray = [];
     Object.keys(contests).forEach((key) =>
@@ -16,10 +16,21 @@ const Payment = (props) => {
     );
     const { number, expiry, cvc } = values;
     const data = new FormData();
-    for (let i = 0; i < contestArray.length; i++) {
-      data.append('files', contestArray[i].file);
-      contestArray[i].haveFile = !!contestArray[i].file;
+    const arrayFiles = [];
+    for (let contest of contestArray) {
+      if (contest.file) {
+        try {
+          const file = await (await fetch(contest.file.url)).blob();
+          arrayFiles.push({ name: contest.file.name, file });
+        } catch (error) {
+          console.error('Error fetching the file blob:', error);
+        }
+      }
+      contest.haveFile = !!contest.file;
     }
+    arrayFiles.forEach(({ file, name }) => {
+      data.append(`files`, file, name);
+    });
     data.append('number', number);
     data.append('expiry', expiry);
     data.append('cvc', cvc);
@@ -40,26 +51,28 @@ const Payment = (props) => {
   const { contests } = props.contestCreationStore;
   const { error } = props.payment;
   const { clearPaymentStore } = props;
-  if (isEmpty(contests)) {
-    props.history.replace('startContest');
-  }
+
+  useEffect(() => {
+    if (isEmpty(contests)) {
+      props.history.replace('startContest');
+    }
+  }, [contests, props.history]);
   return (
     <div>
       <div className={styles.header}>
-        <img
-          src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
-          alt="blue-logo"
-        />
+        <Logo />
       </div>
       <div className={styles.mainContainer}>
         <div className={styles.paymentContainer}>
           <span className={styles.headerLabel}>Checkout</span>
           {error && (
-            <Error
-              data={error.data}
-              status={error.status}
-              clearError={clearPaymentStore}
-            />
+            <div className={styles.errorContainer}>
+              <Error
+                data={error.data}
+                status={error.status}
+                clearError={clearPaymentStore}
+              />
+            </div>
           )}
           <PayForm sendRequest={pay} back={goBack} isPayForOrder />
         </div>

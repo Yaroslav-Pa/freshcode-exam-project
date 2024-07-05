@@ -1,11 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit';
 import CONSTANTS from '../../constants';
+import * as restController from '../../api/rest/restController';
+import { decorateAsyncThunk, rejectedReducer } from '../../utils/store';
 
 const USER_PROFILE_SLICE_NAME = 'userProfile';
 
 const initialState = {
   profileViewMode: CONSTANTS.USER_INFO_MODE,
   isEdit: false,
+  isFetching: false,
+  transactionHistory: null,
+  error: null,
+};
+
+export const getTransactionHistory = decorateAsyncThunk({
+  key: `${USER_PROFILE_SLICE_NAME}/getTransactionHistory`,
+  thunk: async () => {
+    const response = await restController.getTransactionHistory();
+    return response.data;
+  },
+});
+
+const extraReducers = (builder) => {
+  builder.addCase(getTransactionHistory.pending, (state) => {
+    state.isFetching = true;
+    state.transactionHistory = null;
+    state.error = null;
+  });
+  builder.addCase(getTransactionHistory.fulfilled, (state, { payload }) => {
+    state.isFetching = false;
+    state.transactionHistory = payload;
+  });
+  builder.addCase(getTransactionHistory.rejected, rejectedReducer);
 };
 
 const reducers = {
@@ -21,6 +47,7 @@ const userProfileSlice = createSlice({
   name: USER_PROFILE_SLICE_NAME,
   initialState,
   reducers,
+  extraReducers,
 });
 
 const { actions, reducer } = userProfileSlice;

@@ -1,0 +1,88 @@
+.emailIcon
+  display: flex
+  align-items: center
+  padding: 0 15px
+  height: 100%
+  border-right: 1px solid #ebebeb
+
+.userInfo
+  display: flex
+  justify-content: center
+  align-items: center
+  padding: 0 15px
+  height: 100%
+  border-right: 1px solid #ebebeb
+  position: relative
+
+  &:hover
+    .dropdownMenu
+      display: block
+      position: absolute
+      top: 100%
+      left: -1px
+      @media screen and (max-width: 600px)
+        max-width: 174px
+
+.dropdownMenu
+  box-sizing: border-box
+  border: 1px solid #eee
+  z-index: 500
+  padding: 5px 0
+  list-style: none
+  background: white
+  width: 180px
+  display: none
+
+  li
+    text-align: left
+    width: 100%
+    box-sizing: border-box
+    margin: 0
+
+.helloText
+  margin-left: 5px
+  line-height: 24px
+  overflow: hidden
+  text-overflow: ellipsis
+  text-wrap: nowrap
+  max-width: 170px
+  color: #718888
+  @media screen and (max-width: 600px)
+    max-width: 100px
+    line-height: 18px
+  @media screen and (max-width: 400px)
+    max-width: 50px
+
+.menuText
+  box-sizing: border-box
+  display: inline-block
+  padding: 5px 15px
+  color: #333
+  font-size: 16px
+  min-width: 100%
+  text-decoration: none
+  border: 0
+  background: white
+  text-align: left
+
+  &:hover
+    background: #f9fafb
+
+.avatar
+  width: 20px
+  height: 20px
+  border-radius: 10px
+
+.loginAndRegistration
+  height: 100%
+  display: flex
+  align-items: center
+  text-decoration: none
+  padding: 0 15px
+  color: #718888
+  font-weight: 400
+  font-size: 14px
+  border-right: 1px solid #ebebeb
+
+  &:hover
+    background: #f9fafb

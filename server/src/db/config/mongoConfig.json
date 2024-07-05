@@ -1,0 +1,13 @@
+{
+  "_comment": "back to docker ? change host to 'mongo-dev' : local - '127.0.0.1'",
+  "development": {
+    "database": "shm-chat",
+    "host": "127.0.0.1", 
+    "port": 27017
+  },
+  "production": {
+    "database": "shm-chat",
+    "host": "localhost",
+    "port": 27017
+  }
+}

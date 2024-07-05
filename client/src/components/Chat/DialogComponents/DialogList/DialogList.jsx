@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import CONSTANTS from '../../../../constants';
 import {
   goToExpandedDialog,
@@ -10,6 +9,7 @@ import {
 } from '../../../../store/slices/chatSlice';
 import DialogBox from '../DialogBox/DialogBox';
 import styles from './DialogList.module.sass';
+import classNames from 'classnames';
 
 const DialogList = (props) => {
   const changeFavorite = (data, event) => {
@@ -33,32 +33,26 @@ const DialogList = (props) => {
   const onlyBlockDialogs = (chatPreview, userId) =>
     chatPreview.blackList[chatPreview.participants.indexOf(userId)];
 
-  const getTimeStr = (time) => {
-    const currentTime = moment();
-    if (currentTime.isSame(time, 'day')) return moment(time).format('HH:mm');
-    if (currentTime.isSame(time, 'week')) return moment(time).format('dddd');
-    if (currentTime.isSame(time, 'year')) return moment(time).format('MM DD');
-    return moment(time).format('MMMM DD, YYYY');
-  };
-
   const renderPreview = (filterFunc) => {
     const arrayList = [];
     const {
+      isLonger,
       userId,
       preview,
       goToExpandedDialog,
       chatMode,
       removeChat,
-      interlocutor,
     } = props;
-    preview.forEach((chatPreview, index) => {
+    const sortedPreview = [...preview].sort((a, b) => {
+      return new Date(b.createAt) - new Date(a.createAt);
+    });
+    sortedPreview.forEach((chatPreview, index) => {
       const dialogNode = (
         <DialogBox
           interlocutor={chatPreview.interlocutor}
           chatPreview={chatPreview}
           userId={userId}
           key={index}
-          getTimeStr={getTimeStr}
           changeFavorite={changeFavorite}
           changeBlackList={changeBlackList}
           chatMode={chatMode}
@@ -76,10 +70,17 @@ const DialogList = (props) => {
         arrayList.push(dialogNode);
       }
     });
+    const previewClassnames = classNames(styles.previewContainer, {
+      [styles.longerPreviewContainer]: isLonger,
+    });
+    const notFoundClassnames = classNames(styles.notFound, {
+      [styles.loverNotFound]: isLonger,
+    });
+
     return arrayList.length ? (
-      arrayList
+      <div className={previewClassnames}>{arrayList}</div>
     ) : (
-      <span className={styles.notFound}>Not found</span>
+      <p className={notFoundClassnames}>Not found</p>
     );
   };
 
@@ -92,7 +93,7 @@ const DialogList = (props) => {
     return renderPreview();
   };
 
-  return <div className={styles.previewContainer}>{renderChatPreview()}</div>;
+  return renderChatPreview();
 };
 
 const mapStateToProps = (state) => state.chatStore;

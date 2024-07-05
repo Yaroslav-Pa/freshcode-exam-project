@@ -1,87 +1,61 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
 import Header from '../../components/Header/Header';
 import styles from './UserProfile.module.sass';
 import CONSTANTS from '../../constants';
 import UserInfo from '../../components/UserInfo/UserInfo';
-import PayForm from '../../components/PayForm/PayForm';
 import { cashOut, clearPaymentStore } from '../../store/slices/paymentSlice';
 import { changeProfileViewMode } from '../../store/slices/userProfileSlice';
-import Error from '../../components/Error/Error';
+import UserProfileSectionButton from '../../components/UserProfileSectionButton/UserProfileSectionButton';
+import CashoutFormShower from '../../components/CashoutFormShower/CashoutFormShower';
+import TransactionTableSection from '../../components/TransactionTableSection/TransactionTableSection';
 
-const UserProfile = (props) => {
-  const pay = (values) => {
-    const { number, expiry, cvc, sum } = values;
-    props.cashOut({
-      number,
-      expiry,
-      cvc,
-      sum,
-    });
-  };
-
-  const {
-    balance,
-    role,
-    profileViewMode,
-    changeProfileViewMode,
-    error,
-    clearPaymentStore,
-  } = props;
+const UserProfile = ({
+  role,
+  profileViewMode,
+  changeProfileViewMode,
+  ...restProps
+}) => {
   return (
-    <div>
+    <>
       <Header />
-      <div className={styles.mainContainer}>
-        <div className={styles.aside}>
-          <span className={styles.headerAside}>Select Option</span>
+      <main className={styles.mainContainer}>
+        <aside className={styles.aside}>
+          <h1 className={styles.headerAside}>Select Option</h1>
           <div className={styles.optionsContainer}>
-            <div
-              className={classNames(styles.optionContainer, {
-                [styles.currentOption]:
-                  profileViewMode === CONSTANTS.USER_INFO_MODE,
-              })}
-              onClick={() => changeProfileViewMode(CONSTANTS.USER_INFO_MODE)}
-            >
-              UserInfo
-            </div>
+            <UserProfileSectionButton
+              profileViewMode={profileViewMode}
+              changeProfileViewMode={changeProfileViewMode}
+              text={'User info'}
+              mode={CONSTANTS.USER_INFO_MODE}
+            />
             {role === CONSTANTS.CREATOR && (
-              <div
-                className={classNames(styles.optionContainer, {
-                  [styles.currentOption]:
-                    profileViewMode === CONSTANTS.CASHOUT_MODE,
-                })}
-                onClick={() => changeProfileViewMode(CONSTANTS.CASHOUT_MODE)}
-              >
-                Cashout
-              </div>
+              <UserProfileSectionButton
+                profileViewMode={profileViewMode}
+                changeProfileViewMode={changeProfileViewMode}
+                text={'Cashout'}
+                mode={CONSTANTS.CASHOUT_MODE}
+              />
+            )}
+            {role !== CONSTANTS.MODERATOR && (
+              <UserProfileSectionButton
+                profileViewMode={profileViewMode}
+                changeProfileViewMode={changeProfileViewMode}
+                text={'View transaction history'}
+                mode={CONSTANTS.TRANSACTION_HISTORY_MODE}
+              />
             )}
           </div>
-        </div>
-        {profileViewMode === CONSTANTS.USER_INFO_MODE ? (
-          <UserInfo />
-        ) : (
-          <div className={styles.container}>
-            {parseInt(balance) === 0 ? (
-              <span className={styles.notMoney}>
-                There is no money on your balance
-              </span>
-            ) : (
-              <div>
-                {error && (
-                  <Error
-                    data={error.data}
-                    status={error.status}
-                    clearError={clearPaymentStore}
-                  />
-                )}
-                <PayForm sendRequest={pay} />
-              </div>
-            )}
-          </div>
+        </aside>
+        {profileViewMode === CONSTANTS.USER_INFO_MODE && <UserInfo />}
+        {profileViewMode === CONSTANTS.CASHOUT_MODE && (
+          <CashoutFormShower {...restProps} />
         )}
-      </div>
-    </div>
+        {profileViewMode === CONSTANTS.TRANSACTION_HISTORY_MODE && (
+          <TransactionTableSection />
+        )}
+      </main>
+    </>
   );
 };
 

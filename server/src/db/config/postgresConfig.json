@@ -1,0 +1,30 @@
+{
+  "_comment": "back to docker ? change host to 'db-dev' and password to 'password' : local - 'localhost' 'postgres'",
+  "development": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "squad-help",
+    "host": "localhost",
+    "dialect": "postgres",
+    "operatorsAliases": "Op",
+    "seederStorage": "sequelize"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "admin",
+    "database": "squad-help-test",
+    "host": "localhost",
+    "dialect": "postgres",
+    "operatorsAliases": "Op",
+    "seederStorage": "sequelize"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "admin",
+    "database": "squad-help-prod",
+    "host": "localhost",
+    "dialect": "postgres",
+    "operatorsAliases": "Op",
+    "seederStorage": "sequelize"
+  }
+}

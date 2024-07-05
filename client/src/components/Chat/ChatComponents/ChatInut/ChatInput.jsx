@@ -4,8 +4,8 @@ import { Form, Formik } from 'formik';
 import { sendMessage } from '../../../../store/slices/chatSlice';
 import styles from './ChatInput.module.sass';
 import CONSTANTS from '../../../../constants';
-import FormInput from '../../../FormInput/FormInput';
-import Schems from '../../../../utils/validators/validationSchems';
+import FormInput from '../../../InputComponents/FormInput/FormInput';
+import Schems from '../../../../utils/validators/chatValidationSchema';
 
 const ChatInput = (props) => {
   const submitHandler = (values, { resetForm }) => {
@@ -26,6 +26,7 @@ const ChatInput = (props) => {
       >
         <Form className={styles.form}>
           <FormInput
+            withError={false}
             name="message"
             type="text"
             label="message"

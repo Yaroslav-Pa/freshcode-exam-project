@@ -47,14 +47,6 @@ module.exports.updateOfferReviewStatus = async (req, res, next) => {
       body: { status },
     } = req;
 
-    const [count, [updatedOffer]] = await db.Offer.update(
-      { status },
-      {
-        where: { id: offerId },
-        returning: true,
-      }
-    );
-    
     const offer = await db.Offer.findOne({
       where: { id: offerId },
       include: [
@@ -68,7 +60,21 @@ module.exports.updateOfferReviewStatus = async (req, res, next) => {
       ],
     });
 
-    res.send(updatedOffer);
+    if (offer.dataValues.status !== OFFER_STATUS.REVIEW) {
+      res.send({
+        ...offer.dataValues,
+        message: 'This offer was already reviewed',
+      });
+    } else {
+      const [count, [updatedOffer]] = await db.Offer.update(
+        { status },
+        {
+          where: { id: offerId },
+          returning: true,
+        }
+      );
+      res.send(updatedOffer);
+    }
 
     transporter.sendMail(
       mailOptions(

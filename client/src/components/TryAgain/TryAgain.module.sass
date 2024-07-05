@@ -1,15 +1,24 @@
+%text
+  font-weight: 600
+  color: #4e618d
+
 .container
   display: flex
+  flex-direction: column
   justify-content: center
   align-items: center
   position: relative
+  gap: 10px 0
 
-  span
+  .tryAgainText
+    @extend %text
     cursor: pointer
     margin-right: 8px
     font-size: 20px
-    font-weight: 600
-    color: #4e618d
+
+  .additionalText
+    @extend %text
+    font-size: 16px
 
   i
     right: -24px
@@ -29,4 +38,3 @@
     transform: rotate(0deg)
   100%
     transform: rotate(360deg)
-

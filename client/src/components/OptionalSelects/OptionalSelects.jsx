@@ -1,39 +1,50 @@
 import React from 'react';
 import CONSTANTS from '../../constants';
-import SelectInput from '../SelectInput/SelectInput';
-import FormInput from '../FormInput/FormInput';
-import styles from '../ContestForm/ContestForm.module.sass';
+import SelectInput from '../InputComponents/SelectInput/SelectInput';
+import FormInput from '../InputComponents/FormInput/FormInput';
+import styles from '../Contest/ContestForm/ContestForm.module.sass';
 import Spinner from '../Spinner/Spinner';
-//TODO
-const OptionalSelects = props => {
-  if (props.isFetching) {
+import ButtonGroup from '../InputComponents/ButtonGroup/ButtonGroup';
+import TEXT_CONTANTS from '../../textConstanst';
+
+const OptionalSelects = ({ contestType, isFetching, dataForContest }) => {
+  if (isFetching) {
     return <Spinner />;
   }
-  switch (props.contestType) {
+  switch (contestType) {
     case CONSTANTS.NAME_CONTEST: {
       return (
         <>
-          <SelectInput
-            name='typeOfName'
-            header='type of company'
+          <ButtonGroup
+            name="matchingDomain"
+            buttons={TEXT_CONTANTS.BUTTON_GROUP}
             classes={{
-              inputContainer: styles.selectInputContainer,
-              inputHeader: styles.selectHeader,
-              selectInput: styles.select,
+              header: styles.buttonGroupHeader,
+              container: styles.buttonGroupContainer,
               warning: styles.warning,
             }}
-            optionsArray={props.dataForContest.data.typeOfName}
           />
           <SelectInput
-            name='styleName'
-            header='Style name'
+            name="typeOfName"
+            header="Type of company"
             classes={{
               inputContainer: styles.selectInputContainer,
               inputHeader: styles.selectHeader,
               selectInput: styles.select,
               warning: styles.warning,
             }}
-            optionsArray={props.dataForContest.data.nameStyle}
+            optionsArray={dataForContest.data.typeOfName}
+          />
+          <SelectInput
+            name="styleName"
+            header="Style name"
+            classes={{
+              inputContainer: styles.selectInputContainer,
+              inputHeader: styles.selectHeader,
+              selectInput: styles.select,
+              warning: styles.warning,
+            }}
+            optionsArray={dataForContest.data.nameStyle}
           />
         </>
       );
@@ -46,26 +57,28 @@ const OptionalSelects = props => {
               What name of your venture?
             </span>
             <FormInput
-              name='nameVenture'
-              type='text'
-              label='name of venture'
+              name="nameVenture"
+              type="text"
+              label="name of venture"
               classes={{
                 container: styles.componentInputContainer,
                 input: styles.input,
                 warning: styles.warning,
+                notValid: styles.notValid,
+                valid: styles.valid,
               }}
             />
           </div>
           <SelectInput
-            name='brandStyle'
+            name="brandStyle"
             classes={{
               inputContainer: styles.selectInputContainer,
               inputHeader: styles.selectHeader,
               selectInput: styles.select,
               warning: styles.warning,
             }}
-            header='Brand Style'
-            optionsArray={props.dataForContest.data.brandStyle}
+            header="Brand Style"
+            optionsArray={dataForContest.data.brandStyle}
           />
         </>
       );
@@ -78,30 +91,34 @@ const OptionalSelects = props => {
               What name of your venture?
             </span>
             <FormInput
-              name='nameVenture'
-              type='text'
-              label='name of venture'
+              name="nameVenture"
+              type="text"
+              label="name of venture"
               classes={{
                 container: styles.componentInputContainer,
                 input: styles.input,
                 warning: styles.warning,
+                notValid: styles.notValid,
+                valid: styles.valid,
               }}
             />
           </div>
           <SelectInput
-            name='typeOfTagline'
+            name="typeOfTagline"
             classes={{
               inputContainer: styles.selectInputContainer,
               inputHeader: styles.selectHeader,
               selectInput: styles.select,
               warning: styles.warning,
             }}
-            header='Type tagline'
-            optionsArray={props.dataForContest.data.typeOfTagline}
+            header="Type tagline"
+            optionsArray={dataForContest.data.typeOfTagline}
           />
         </>
       );
     }
+    default:
+      return;
   }
 };
 

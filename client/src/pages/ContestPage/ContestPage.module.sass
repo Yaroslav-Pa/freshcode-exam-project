@@ -1,10 +1,3 @@
-.notFound
-  color: #455a89
-  font-size: 20px
-  margin-top: 40px
-  width: 100%
-  text-align: center
-
 .errorContainer
   display: flex
   justify-content: center
@@ -43,14 +36,17 @@
   align-items: flex-start
   justify-content: stretch
   padding-top: 20px
-  width: 1200px
+  max-width: 1200px
   margin: 0 auto
   margin-bottom: 50px
-  @media(max-width: 1200px)
+  @media screen and (max-width: 1200px)
     width: auto
-  @media(max-width: 680px)
+    padding: 20px 20px 0
+  @media screen and (max-width: 800px)
     align-items: center
     flex-direction: column
+  @media screen and (max-width: 600px)
+    padding: 20px 0 0
 
   .infoContainer
     width: 80%
@@ -61,7 +57,7 @@
     flex-direction: column
     align-items: flex-start
     justify-content: flex-start
-    @media(max-width: 680px)
+    @media(max-width: 800px)
       width: auto
       margin: 10px
       align-self: stretch
@@ -70,15 +66,18 @@
       display: flex
       flex-direction: column
       justify-content: flex-start
-      align-items: center
+      // align-items: center
       align-self: stretch
       border-top: 1px solid #f3f3f3
       padding: 15px
 
       .offers
+        display: flex
+        flex-direction: column
         width: 100%
         margin-top: 20px
         padding-top: 10px
+        gap: 15px 0
         align-self: stretch
 
     .buttonsContainer
@@ -107,3 +106,26 @@
 
         &:hover
           background-color: white
+
+.offersPendingText
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+
+.offersPendingBox
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+  gap: 5px 0
+  padding: 5px 10px
+  background-color: #f9f9fa
+  border-radius: 10px
+
+.offersPendingBox:empty
+  padding: 0
+
+.pendingText
+  color: #ca6c01
+
+.failedText
+  color: #a60008

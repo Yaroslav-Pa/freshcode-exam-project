@@ -43,10 +43,10 @@
         font-size: 36px
         color: #4e618d
         transition: font-size 0.2s
+        cursor: pointer
 
         &:hover
           font-size: 44px
-          transition: font-size 0.2s
 
       .editBtn
         margin-right: 15px
@@ -55,8 +55,10 @@
         padding: 12px 28px
         border-radius: 8px
         background-color: #8aca6b
+        transition: .1s background-color
 
         &:hover
+          cursor: pointer
           background-color: #6b8ab1
 
     .dataContainer
@@ -87,6 +89,10 @@
       .file
         align-self: stretch
         text-decoration: underline
+        max-width: 100%
+        text-overflow: ellipsis
+        overflow: hidden
+        line-height: 24px
 
         &:hover
           color: #6b89b0

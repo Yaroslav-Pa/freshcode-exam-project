@@ -21,7 +21,7 @@ const initialState = {
 export const pay = decorateAsyncThunk({
   key: `${PAYMENT_SLICE_NAME}/pay`,
   thunk: async ({ data, history }, { dispatch }) => {
-    await restController.payMent(data);
+    await restController.payment(data);
     history.replace('dashboard');
     dispatch(clearContestStore());
   },

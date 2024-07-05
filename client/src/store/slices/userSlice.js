@@ -7,7 +7,7 @@ import { changeEditModeOnUserProfile } from './userProfileSlice';
 const USER_SLICE_NAME = 'user';
 
 const initialState = {
-  isFetching: true,
+  isFetching: false,
   error: null,
   data: null,
 };
@@ -48,17 +48,23 @@ export const updateUser = createAsyncThunk(
 );
 
 const reducers = {
-  clearUserStore: state => {
+  clearUserStore: (state) => {
+    controller.unsubscribe(state.data?.id);
     state.error = null;
     state.data = null;
   },
-  clearUserError: state => {
+  clearUserError: (state) => {
     state.error = null;
+  },
+  addUserBalance: (state, { payload }) => {
+    if (payload && state.data) {
+      state.data.balance = +state.data.balance + +payload;
+    }
   },
 };
 
-const extraReducers = builder => {
-  builder.addCase(getUser.pending, state => {
+const extraReducers = (builder) => {
+  builder.addCase(getUser.pending, (state) => {
     state.isFetching = true;
     state.error = null;
     state.data = null;
@@ -87,6 +93,6 @@ const userSlice = createSlice({
 
 const { actions, reducer } = userSlice;
 
-export const { clearUserStore, clearUserError } = actions;
+export const { clearUserStore, clearUserError, addUserBalance } = actions;
 
 export default reducer;

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Field, useField } from 'formik';
+import { useField } from 'formik';
 
 const FieldFileInput = ({ classes, name }) => {
   const { fileUploadContainer, labelClass, fileNameClass, fileInput } = classes;
 
-  const [{ value, ...field }, meta, helpers] = useField(name);
+  const [{ value, ...field }, , helpers] = useField(name);
 
   const getFileName = () => {
     if (value) {
@@ -14,9 +14,7 @@ const FieldFileInput = ({ classes, name }) => {
   };
 
   const onChange = (e) => {
-
     const file = e.target.files[0];
-
     helpers.setValue(file);
   };
 
@@ -25,9 +23,11 @@ const FieldFileInput = ({ classes, name }) => {
       <label htmlFor="fileInput" className={labelClass}>
         Choose file
       </label>
-      <span id="fileNameContainer" className={fileNameClass}>
-        {getFileName()}
-      </span>
+      {value?.name && (
+        <span id="fileNameContainer" className={fileNameClass}>
+          {getFileName()}
+        </span>
+      )}
       <input
         {...field}
         className={fileInput}

@@ -5,20 +5,34 @@ import { updateUser } from '../../store/slices/userSlice';
 import { changeEditModeOnUserProfile } from '../../store/slices/userProfileSlice';
 import CONSTANTS from '../../constants';
 import styles from './UserInfo.module.sass';
+import UserInfoBlock from '../UserInfoBlock/UserInfoBlock';
 
-const UserInfo = (props) => {
+function UserInfo({
+  isEdit,
+  changeEditMode,
+  data: { avatar, firstName, lastName, displayName, email, role, balance },
+  updateUser,
+}) {
   const updateUserData = (values) => {
     const formData = new FormData();
     formData.append('file', values.file);
     formData.append('firstName', values.firstName);
     formData.append('lastName', values.lastName);
     formData.append('displayName', values.displayName);
-    props.updateUser(formData);
+    updateUser(formData);
   };
+  const userInfoArr = [
+    { label: 'First Name', info: firstName },
+    { label: 'Last Name', info: lastName },
+    { label: 'Display Name', info: displayName },
+    { label: 'Email', info: email },
+    { label: 'Role', info: role },
+  ];
 
-  const { isEdit, changeEditMode, data } = props;
-  const { avatar, firstName, lastName, displayName, email, role, balance } =
-    data;
+  const userInfoList = userInfoArr.map((item) => (
+    <UserInfoBlock {...item} key={item.label} />
+  ));
+
   return (
     <div className={styles.mainContainer}>
       {isEdit ? (
@@ -29,50 +43,28 @@ const UserInfo = (props) => {
             src={
               avatar === 'anon.png'
                 ? CONSTANTS.ANONYM_IMAGE_PATH
-                : `${CONSTANTS.publicImagesURL}${avatar}`
+                : `${CONSTANTS.PUBLIC_IMAGES_URL}${avatar}`
             }
             className={styles.avatar}
             alt="user"
           />
           <div className={styles.infoContainer}>
-            <div className={styles.infoBlock}>
-              <span className={styles.label}>First Name</span>
-              <span className={styles.info}>{firstName}</span>
-            </div>
-            <div className={styles.infoBlock}>
-              <span className={styles.label}>Last Name</span>
-              <span className={styles.info}>{lastName}</span>
-            </div>
-            <div className={styles.infoBlock}>
-              <span className={styles.label}>Display Name</span>
-              <span className={styles.info}>{displayName}</span>
-            </div>
-            <div className={styles.infoBlock}>
-              <span className={styles.label}>Email</span>
-              <span className={styles.info}>{email}</span>
-            </div>
-            <div className={styles.infoBlock}>
-              <span className={styles.label}>Role</span>
-              <span className={styles.info}>{role}</span>
-            </div>
+            {userInfoList}
             {role === CONSTANTS.CREATOR && (
-              <div className={styles.infoBlock}>
-                <span className={styles.label}>Balance</span>
-                <span className={styles.info}>{`${balance}$`}</span>
-              </div>
+              <UserInfoBlock label={'Balance'} info={`${balance}$`} />
             )}
           </div>
         </section>
       )}
-      <div
+      <button
         onClick={() => changeEditMode(!isEdit)}
         className={styles.buttonEdit}
       >
         {isEdit ? 'Cancel' : 'Edit'}
-      </div>
+      </button>
     </div>
   );
-};
+}
 
 const mapStateToProps = (state) => {
   const { data } = state.userStore;

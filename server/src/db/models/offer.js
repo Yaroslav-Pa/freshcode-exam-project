@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const { OFFER_STATUS } = require('../../constants');
 module.exports = (sequelize, DataTypes) => {
   class Offer extends Model {
     /**
@@ -40,14 +41,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       userId: {
-        field:"user_id",
+        field: 'user_id',
         type: DataTypes.INTEGER,
         allowNull: false,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       },
       contestId: {
-        field:"contest_id",
+        field: 'contest_id',
         type: DataTypes.INTEGER,
         allowNull: false,
         onDelete: 'CASCADE',
@@ -58,19 +59,25 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       fileName: {
-        field:"file_name",
+        field: 'file_name',
         type: DataTypes.STRING,
         allowNull: true,
       },
       originalFileName: {
-        field:"original_file_name",
+        field: 'original_file_name',
         type: DataTypes.STRING,
         allowNull: true,
       },
       status: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM(
+          OFFER_STATUS.FAIL_REVIEW,
+          OFFER_STATUS.REVIEW,
+          OFFER_STATUS.PENDING,
+          OFFER_STATUS.REJECTED,
+          OFFER_STATUS.RESOLVE
+        ),
         allowNull: true,
-        defaultValue: 'pending',
+        defaultValue: OFFER_STATUS.REVIEW,
       },
     },
     {
@@ -78,7 +85,7 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
       tableName: 'offers',
       modelName: 'Offer',
-      timestamps: false,
+      timestamps: true,
     }
   );
   return Offer;

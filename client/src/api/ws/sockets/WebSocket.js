@@ -16,7 +16,6 @@ class WebSocket {
       this.anotherSubscribes();
     });
   };
-
   anotherSubscribes = () => {};
 }
 

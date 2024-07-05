@@ -1,34 +1,23 @@
 import http from '../interceptor';
 
-export const registerRequest = (data) => http.post('registration', data);
-export const loginRequest = (data) => http.post('login', data);
-export const getUser = () => http.post('getUser');
-export const setNewOffer = (data) => http.post('setNewOffer', data);
-export const setOfferStatus = (data) => http.post('setOfferStatus', data);
-export const downloadContestFile = (data) =>
-  http.get(`downloadFile/${data.fileName}`);
-export const payMent = (data) => http.post('pay', data.formData);
-export const changeMark = (data) => http.post('changeMark', data);
-export const getPreviewChat = () => http.post('getPreview');
-export const getDialog = (data) => http.post('getChat', data);
-export const dataForContest = (data) => http.post('dataForContest', data);
-export const cashOut = (data) => http.post('cashout', data);
-export const updateUser = (data) => http.post('updateUser', data);
-export const newMessage = (data) => http.post('newMessage', data);
-export const changeChatFavorite = (data) => http.post('favorite', data);
-export const changeChatBlock = (data) => http.post('blackList', data);
-export const getCatalogList = (data) => http.post('getCatalogs', data);
-export const addChatToCatalog = (data) =>
-  http.post('addNewChatToCatalog', data);
-export const createCatalog = (data) => http.post('createCatalog', data);
-export const deleteCatalog = (data) => http.post('deleteCatalog', data);
-export const removeChatFromCatalog = (data) =>
-  http.post('removeChatFromCatalog', data);
-export const changeCatalogName = (data) => http.post('updateNameCatalog', data);
+//? User
 
-//* вище нічого не змінював
+export const getUser = () => http.get('user/');
+export const registerRequest = (data) => http.post('user/registration', data);
+export const loginRequest = (data) => http.post('user/login', data);
+export const updateUser = (data) => http.put('user/update', data);
+export const payment = ({ formData }) => http.post('user/pay', formData);
+export const cashOut = (data) => http.post('user/cashout', data);
 
-// only user contests
+export const changeMark = ({ creatorId, offerId, ...restData }) =>
+  http.post(`user/${creatorId}/offers/${offerId}/changeMark`, restData);
+
+//? Transaction History
+
+export const getTransactionHistory = () => http.get(`user/transactionHistory/`);
+
+//? Contests
+
 export const getCustomerContests = ({ limit, offset, contestStatus }) =>
   http.get('contests/customers', {
     params: {
@@ -38,8 +27,7 @@ export const getCustomerContests = ({ limit, offset, contestStatus }) =>
     },
   });
 
-// all contests (creative)
-export const getActiveContests = (data) =>
+export const getCreativeContests = (data) =>
   http.get('contests/', { params: { ...data } });
 
 export const getContestById = ({ contestId }) =>
@@ -48,4 +36,63 @@ export const getContestById = ({ contestId }) =>
 export const updateContest = (data) =>
   http.put(`contests/${data.get('contestId')}`, data);
 
-export const getTransactionHistory = () => http.get(`/transactionHistory/`);
+export const downloadContestFile = ({ fileName }) =>
+  http.get(`contests/file/${fileName}`);
+
+export const dataForContest = (data) =>
+  http.get('contests/data', {
+    params: {
+      ...data,
+    },
+  });
+
+//? Moderator offers
+
+export const getOffersOnReview = (data) =>
+  http.get(`moderation/offers/`, {
+    params: {
+      ...data,
+    },
+  });
+
+export const setReviewStatus = ({ offerId, ...data }) =>
+  http.put(`moderation/offers/${offerId}`, {
+    ...data,
+  });
+
+//? Offers
+
+export const createNewOffer = (data) =>
+  http.post(`contests/${data.get('contestId')}/offers/`, data);
+
+export const setFinalStatus = ({ contestId, offerId, ...restData }) =>
+  http.put(`contests/${contestId}/offers/${offerId}`, restData);
+
+//? Chats
+
+export const getPreviewChat = () => http.get('/chats/');
+export const getDialog = ({ interlocutorId, ...restData }) =>
+  http.get(`/chats/interlocutor/${interlocutorId}`, restData);
+export const newMessage = ({ recipient, ...restData }) =>
+  http.post(`/chats/interlocutor/${recipient}`, restData);
+
+export const changeChatFavorite = (data) => http.put('/chats/favorite', data);
+export const changeChatBlock = (data) => http.put('/chats/blackList', data);
+
+export const addChatToCatalog = ({ chatId, ...restData }) =>
+  http.put(`/chats/${chatId}`, restData);
+export const removeChatFromCatalog = ({ chatId, ...restData }) =>
+  http.delete(`/chats/${chatId}`, {
+    params: {
+      ...restData,
+    },
+  });
+
+//? Catalogs
+
+export const getCatalogList = (data) => http.get('/chats/catalogs/', data);
+export const createCatalog = (data) => http.post('/chats/catalogs/', data);
+export const changeCatalogName = ({ catalogId, ...restData }) =>
+  http.put(`/chats/catalogs/${catalogId}`, restData);
+export const deleteCatalog = ({ catalogId }) =>
+  http.delete(`/chats/catalogs/${catalogId}`);

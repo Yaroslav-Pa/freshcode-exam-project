@@ -1,31 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import LoginForm from '../../components/LoginForm/LoginForm';
-import Logo from '../../components/Logo';
 import styles from './LoginPage.module.sass';
 import { clearAuthError } from '../../store/slices/authSlice';
-import CONSTANTS from '../../constants';
+import LoginRegisterHeader from '../../components/LoginRegisterHeader/LoginRegisterHeader';
+import { toast } from 'react-toastify';
 
-const LoginPage = props => (
-  <div className={styles.mainContainer}>
-    <div className={styles.loginContainer}>
-      <div className={styles.headerSignUpPage}>
-        <Logo src={`${CONSTANTS.STATIC_IMAGES_PATH}logo.png`} alt='logo' />
-        <div className={styles.linkLoginContainer}>
-          <Link to='/registration' style={{ textDecoration: 'none' }}>
-            <span>Signup</span>
-          </Link>
-        </div>
-      </div>
-      <div className={styles.loginFormContainer}>
-        <LoginForm history={props.history} />
+const LoginPage = ({ history, clearError }) => {
+  useEffect(() => {
+    clearError();
+    const isTokenExpired = new URLSearchParams(window.location.search).get(
+      'isTokenExpired'
+    );
+    if (isTokenExpired) {
+      toast('Apologies, session token timed out. Please re-enter to continue.');
+    }
+  }, [clearError]);
+  return (
+    <div className={styles.mainContainer}>
+      <div className={styles.loginContainer}>
+        <LoginRegisterHeader buttonText={'Signup'} url={'/registration'} />
+        <LoginForm history={history} />
       </div>
     </div>
-  </div>
-);
+  );
+};
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   clearError: () => dispatch(clearAuthError()),
 });
 

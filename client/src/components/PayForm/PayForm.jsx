@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import styles from './PayForm.module.sass';
 import { changeFocusOnCard } from '../../store/slices/paymentSlice';
 import PayInput from '../InputComponents/PayInput/PayInput';
-import Schems from '../../utils/validators/validationSchems';
+import Schems from '../../utils/validators/payValidationSchema';
 
 const PayForm = (props) => {
   const changeFocusOnCard = (name) => {

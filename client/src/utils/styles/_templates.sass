@@ -1,10 +1,75 @@
+%offersBtn
+  text-align: center
+  cursor: pointer
+  width: 100px
+  padding: 10px
+  border-radius: 8px
+  color: white
+  transition: background-color .2s
+  @media(max-width: 500px)
+    width: fit-content
+
+%offerResolveBtn
+  @extend %offersBtn
+  background-color: #8aca6b
+  &:hover
+    background-color: rgba(138, 202, 107, 0.7)
+
+%offerRejectBtn
+  @extend %offersBtn
+  background-color: #CD5C5C
+  &:hover
+    background-color: rgba(205, 92, 92, 0.7)
 
 %errorText
   box-sizing: border-box
   font-size: 18px
   text-align: center
   padding: 10px
+  padding-top: 30px
   font-weight: 600
   width: 100%
   margin: 0 auto
   color: #4e618d
+
+%formFieldError
+  text-align: center
+  box-sizing: border-box
+  font-size: 16px
+  display: flex
+  flex-direction: row
+  justify-content: center
+  align-items: center
+  padding: 5px 10px
+  font-weight: 600
+  color: white
+  border-radius: 4px
+  background-color: #b72522
+
+%formFieldNotValid
+  border: 2px solid red
+
+%formFieldValid
+  border: 2px solid green
+
+%formSubmitButton
+  box-sizing: border-box
+  align-self: stretch
+  min-width: 260px
+  border-radius: 4px
+  display: flex
+  justify-content: center
+  align-items: center
+  background-color: #28d2d0
+  min-height: 64px
+  border: 0
+  font-size: 16px
+  color: white
+  border: 2px solid #28d2d0
+  transition: all .2s
+
+  @media(max-width: 850px)
+    align-self: auto
+
+  &:hover
+    border: 2px solid #7cf3f1

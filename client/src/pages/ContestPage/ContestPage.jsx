@@ -13,9 +13,8 @@ import {
   changeShowImage,
 } from '../../store/slices/contestByIdSlice';
 import Header from '../../components/Header/Header';
-import ContestSideBar from '../../components/ContestSideBar/ContestSideBar';
+import ContestSideBar from '../../components/Contest/ContestSideBar/ContestSideBar';
 import styles from './ContestPage.module.sass';
-import OfferBox from '../../components/OfferBox/OfferBox';
 import OfferForm from '../../components/OfferForm/OfferForm';
 import CONSTANTS from '../../constants';
 import Brief from '../../components/Brief/Brief';
@@ -23,9 +22,12 @@ import Spinner from '../../components/Spinner/Spinner';
 import TryAgain from '../../components/TryAgain/TryAgain';
 import 'react-18-image-lightbox/style.css';
 import Error from '../../components/Error/Error';
+import OfferList from '../../components/OfferList/OfferList';
+import ContestOffersStatusText from '../../components/Contest/ContestOffersStatusText/ContestOffersStatusText';
 
 class ContestPage extends React.Component {
   componentWillUnmount() {
+    this.props.clearSetOfferStatusError();
     this.props.changeEditContest(false);
   }
 
@@ -36,29 +38,6 @@ class ContestPage extends React.Component {
   getData = () => {
     const { params } = this.props.match;
     this.props.getData({ contestId: params.id });
-  };
-
-  setOffersList = () => {
-    const array = [];
-    for (let i = 0; i < this.props.contestByIdStore.offers.length; i++) {
-      array.push(
-        <OfferBox
-          data={this.props.contestByIdStore.offers[i]}
-          key={this.props.contestByIdStore.offers[i].id}
-          needButtons={this.needButtons}
-          setOfferStatus={this.setOfferStatus}
-          contestType={this.props.contestByIdStore.contestData.contestType}
-          date={new Date()}
-        />
-      );
-    }
-    return array.length !== 0 ? (
-      array
-    ) : (
-      <div className={styles.notFound}>
-        There is no suggestion at this moment
-      </div>
-    );
   };
 
   needButtons = (offerStatus) => {
@@ -120,7 +99,6 @@ class ContestPage extends React.Component {
       contestByIdStore,
       changeShowImage,
       changeContestViewMode,
-      getData,
       clearSetOfferStatusError,
     } = this.props;
     const {
@@ -135,10 +113,9 @@ class ContestPage extends React.Component {
     } = contestByIdStore;
     return (
       <div>
-        {/* <Chat/> */}
         {isShowOnFull && (
           <LightBox
-            mainSrc={`${CONSTANTS.publicContestsURL}${imagePath}`}
+            mainSrc={`${CONSTANTS.PUBLIC_CONTESTS_URL}${imagePath}`}
             onCloseRequest={() =>
               changeShowImage({ isShowOnFull: false, imagePath: null })
             }
@@ -147,7 +124,7 @@ class ContestPage extends React.Component {
         <Header />
         {error ? (
           <div className={styles.tryContainer}>
-            <TryAgain getData={getData} />
+            <TryAgain getData={this.getData} additionalText={error.data}/>
           </div>
         ) : isFetching ? (
           <div className={styles.containerSpinner}>
@@ -182,6 +159,10 @@ class ContestPage extends React.Component {
                 />
               ) : (
                 <div className={styles.offersContainer}>
+                  <ContestOffersStatusText
+                    contestData={contestData}
+                    role={role}
+                  />
                   {role === CONSTANTS.CREATOR &&
                     contestData.status === CONSTANTS.CONTEST_STATUS_ACTIVE && (
                       <OfferForm
@@ -197,7 +178,14 @@ class ContestPage extends React.Component {
                       clearError={clearSetOfferStatusError}
                     />
                   )}
-                  <div className={styles.offers}>{this.setOffersList()}</div>
+                  <div className={styles.offers}>
+                    <OfferList
+                      contestData={this.props.contestByIdStore.contestData}
+                      offers={this.props.contestByIdStore.offers}
+                      needButtons={this.needButtons}
+                      setOfferStatus={this.setOfferStatus}
+                    />
+                  </div>
                 </div>
               )}
             </div>

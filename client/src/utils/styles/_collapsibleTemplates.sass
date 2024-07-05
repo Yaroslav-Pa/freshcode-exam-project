@@ -1,0 +1,30 @@
+%container
+  border: 1px solid #F3F5FE
+  border-radius: 16px
+  background-color: white
+  box-sizing: border-box
+  cursor: pointer
+  width: 100%
+  transition: all ease 0.3s
+
+  &:hover:not(.active)
+    border: 1px solid #307DF6
+    background-color: rgba(48, 125, 246, .1)
+
+%collapsible
+  position: relative
+  font-family: "Product Sans", sans-serif
+  font-size: 19px
+  font-weight: 700
+  color: #19184A
+  padding: 24px
+  padding-right: 38px
+  transition: all ease 0.5s
+  text-align: left
+  border-radius: 16px
+  background: transparent
+  width: 100%
+  line-height: 27px
+  border: none
+  @media screen and (max-width: 770px)
+    font-size: 17px

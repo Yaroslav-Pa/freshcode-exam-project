@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
-import FormInput from '../../../FormInput/FormInput';
+import FormInput from '../../../InputComponents/FormInput/FormInput';
 import styles from './CreateCatalog.module.sass';
 import { createCatalog } from '../../../../store/slices/chatSlice';
-import Schems from '../../../../utils/validators/validationSchems';
+import Schems from '../../../../utils/validators/chatValidationSchema';
 
 const CreateCatalog = (props) => {
   const click = (values) => {
@@ -18,8 +18,9 @@ const CreateCatalog = (props) => {
       initialValues={{ catalogName: '' }}
       validationSchema={Schems.CatalogSchema}
     >
-      <Form className={styles.form}>
+      <Form>
         <FormInput
+          withError={false}
           name="catalogName"
           type="text"
           label="name of catalog"
@@ -30,7 +31,9 @@ const CreateCatalog = (props) => {
             notValid: styles.notValid,
           }}
         />
-        <button type="submit">Create Catalog</button>
+        <button className={styles.button} type="submit">
+          Create Catalog
+        </button>
       </Form>
     </Formik>
   );

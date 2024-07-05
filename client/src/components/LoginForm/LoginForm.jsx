@@ -1,79 +1,73 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { checkAuth, clearAuth } from '../../store/slices/authSlice';
 import styles from './LoginForm.module.sass';
-import FormInput from '../FormInput/FormInput';
-import Schems from '../../utils/validators/validationSchems';
+import FormInput from '../InputComponents/FormInput/FormInput';
+import Schems from '../../utils/validators/registrationAndLoginSchems';
 import Error from '../Error/Error';
 import CONSTANTS from '../../constants';
 
-class LoginForm extends React.Component {
-  componentWillUnmount() {
-    this.props.authClear();
-  }
+function LoginForm({ authClear, loginRequest, history, auth, submitting }) {
+  useEffect(() => () => authClear(), [authClear]);
 
-  clicked = (values) => {
-    this.props.loginRequest({ data: values, history: this.props.history });
+  const clicked = (values) => {
+    loginRequest({ data: values, history: history });
   };
 
-  render() {
-    const { error, isFetching } = this.props.auth;
-    const { submitting, authClear } = this.props;
+  const { error, isFetching } = auth;
 
-    const formInputClasses = {
-      container: styles.inputContainer,
-      input: styles.input,
-      warning: styles.fieldWarning,
-      notValid: styles.notValid,
-      valid: styles.valid,
-    };
+  const formInputClasses = {
+    container: styles.inputContainer,
+    input: styles.input,
+    warning: styles.fieldWarning,
+    notValid: styles.notValid,
+    valid: styles.valid,
+  };
 
-    return (
-      <div className={styles.loginForm}>
-        {error && (
-          <Error
-            data={error.data}
-            status={error.status}
-            clearError={authClear}
+  return (
+    <div className={styles.loginFormContainer}>
+      {error && (
+        <Error
+          data={error.data}
+          status={error.status}
+          clearError={authClear}
+        />
+      )}
+      <h2 className={styles.mainText}>LOGIN TO YOUR ACCOUNT</h2>
+      <Formik
+        initialValues={{
+          email: '',
+          password: '',
+        }}
+        onSubmit={clicked}
+        validationSchema={Schems.LoginSchem}
+      >
+        <Form className={styles.form}>
+          <FormInput
+            classes={formInputClasses}
+            maxLength={CONSTANTS.MAX_LENGTH.USER_EMAIL}
+            name="email"
+            type="text"
+            label="Email Address"
           />
-        )}
-        <h2>LOGIN TO YOUR ACCOUNT</h2>
-        <Formik
-          initialValues={{
-            email: '',
-            password: '',
-          }}
-          onSubmit={this.clicked}
-          validationSchema={Schems.LoginSchem}
-        >
-          <Form>
-            <FormInput
-              classes={formInputClasses}
-              name="email"
-              type="text"
-              label="Email Address"
-            />
-            <FormInput
-              classes={formInputClasses}
-              name="password"
-              type="password"
-              label="Password"
-            />
-            <button
-              type="submit"
-              disabled={submitting}
-              className={styles.submitContainer}
-            >
-              <span className={styles.inscription}>
-                {isFetching ? 'Submitting...' : 'LOGIN'}
-              </span>
-            </button>
-          </Form>
-        </Formik>
-      </div>
-    );
-  }
+          <FormInput
+            classes={formInputClasses}
+            name="password"
+            type="password"
+            label="Password"
+          />
+          <button
+            type="submit"
+            disabled={submitting}
+            className={styles.submitButton}
+          >
+            {isFetching ? 'Submitting...' : 'LOGIN'}
+          </button>
+        </Form>
+      </Formik>
+    </div>
+  );
 }
 
 const mapStateToProps = (state) => {

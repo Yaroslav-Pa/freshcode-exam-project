@@ -1,0 +1,43 @@
+@import '../../../../utils/styles/_collapsibleTemplates.sass'
+.container
+  @extend %container
+
+.active
+  border: 1px solid #307DF6
+  background-color: #307DF6
+
+.collapsible
+  @extend %collapsible
+
+.activeCollapsible
+  color: #fff
+
+.collapsible:after
+  position: absolute
+  color: #307DF6
+  right: 5%
+  content: '\002B'
+  @media screen and (max-width: 770px)
+    top: 40%
+
+.activeCollapsible:after
+  content: "\2212"
+  color: white
+
+.content
+  box-sizing: border-box
+  padding: 0
+  max-height: 0px
+  overflow: hidden
+  transition: max-height 0.2s ease-out
+  background-color: transparent
+  margin: 0
+  font-size: 16px
+  color: #fff
+  line-height: 24px
+
+.activeContent
+  padding: 20px 24px 30px 24px
+
+  a
+    color: white

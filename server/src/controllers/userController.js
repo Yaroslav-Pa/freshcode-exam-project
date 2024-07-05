@@ -3,36 +3,39 @@ const CONSTANTS = require('../constants');
 const db = require('../db/models');
 const NotUniqueEmail = require('../errors/NotUniqueEmail');
 const NotFound = require('../errors/UserNotFoundError');
-const moment = require('moment');
 const { v4: uuid } = require('uuid');
 const controller = require('../socketInit');
-const userQueries = require('./queries/userQueries');
-const bankQueries = require('./queries/bankQueries');
-const ratingQueries = require('./queries/ratingQueries');
-const { createTransact } = require('./queries/transactQueries');
+const userService = require('../services/user.service');
+const bankService = require('../services/bank.service');
+const ratingService = require('../services/rating.service');
+const { createTransact } = require('../services/transact.service');
 
 module.exports.login = async (req, res, next) => {
   try {
-    const foundUser = await userQueries.findUser({ email: req.body.email });
+    const foundUser = await userService.findUser({ email: req.body.email });
 
     const isValidPassword = await foundUser.passwordCompare(req.body.password);
 
-    if(!isValidPassword) {
+    if (!isValidPassword) {
       throw new NotFound('user with this data dont exist');
     }
 
-    const accessToken = jwt.sign({
-      firstName: foundUser.firstName,
-      userId: foundUser.id,
-      role: foundUser.role,
-      lastName: foundUser.lastName,
-      avatar: foundUser.avatar,
-      displayName: foundUser.displayName,
-      balance: foundUser.balance,
-      email: foundUser.email,
-      rating: foundUser.rating,
-    }, CONSTANTS.JWT_SECRET, { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME });
-    await userQueries.updateUser({ accessToken }, foundUser.id);
+    const accessToken = jwt.sign(
+      {
+        firstName: foundUser.firstName,
+        userId: foundUser.id,
+        role: foundUser.role,
+        lastName: foundUser.lastName,
+        avatar: foundUser.avatar,
+        displayName: foundUser.displayName,
+        balance: foundUser.balance,
+        email: foundUser.email,
+        rating: foundUser.rating,
+      },
+      CONSTANTS.JWT_SECRET,
+      { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME }
+    );
+    await userService.updateUser({ accessToken }, foundUser.id);
     res.send({ token: accessToken });
   } catch (err) {
     next(err);
@@ -40,19 +43,23 @@ module.exports.login = async (req, res, next) => {
 };
 module.exports.registration = async (req, res, next) => {
   try {
-    const newUser = await userQueries.userCreation(req.body);
-    const accessToken = jwt.sign({
-      firstName: newUser.firstName,
-      userId: newUser.id,
-      role: newUser.role,
-      lastName: newUser.lastName,
-      avatar: newUser.avatar,
-      displayName: newUser.displayName,
-      balance: newUser.balance,
-      email: newUser.email,
-      rating: newUser.rating,
-    }, CONSTANTS.JWT_SECRET, { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME });
-    await userQueries.updateUser({ accessToken }, newUser.id);
+    const newUser = await userService.userCreation(req.body);
+    const accessToken = jwt.sign(
+      {
+        firstName: newUser.firstName,
+        userId: newUser.id,
+        role: newUser.role,
+        lastName: newUser.lastName,
+        avatar: newUser.avatar,
+        displayName: newUser.displayName,
+        balance: newUser.balance,
+        email: newUser.email,
+        rating: newUser.rating,
+      },
+      CONSTANTS.JWT_SECRET,
+      { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME }
+    );
+    await userService.updateUser({ accessToken }, newUser.id);
     res.send({ token: accessToken });
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
@@ -65,7 +72,7 @@ module.exports.registration = async (req, res, next) => {
 
 function getQuery(offerId, userId, mark, isFirst, transaction) {
   const getCreateQuery = () =>
-    ratingQueries.createRating(
+    ratingService.createRating(
       {
         offerId,
         mark,
@@ -74,7 +81,7 @@ function getQuery(offerId, userId, mark, isFirst, transaction) {
       transaction
     );
   const getUpdateQuery = () =>
-    ratingQueries.updateRating({ mark }, { offerId, userId }, transaction);
+    ratingService.updateRating({ mark }, { offerId, userId }, transaction);
   return isFirst ? getCreateQuery : getUpdateQuery;
 }
 
@@ -82,7 +89,10 @@ module.exports.changeMark = async (req, res, next) => {
   let sum = 0;
   let avg = 0;
   let transaction;
-  const { isFirst, offerId, mark, creatorId } = req.body;
+  const {
+    params: { creatorId, offerId },
+    body: { isFirst, mark },
+  } = req;
   const userId = req.tokenData.userId;
   try {
     transaction = await db.sequelize.transaction({
@@ -106,9 +116,9 @@ module.exports.changeMark = async (req, res, next) => {
     }
     avg = sum / offersArray.length;
 
-    await userQueries.updateUser({ rating: avg }, creatorId, transaction);
+    await userService.updateUser({ rating: avg }, creatorId, transaction);
     transaction.commit();
-    controller.getNotificationController().emitChangeMark(creatorId);
+    controller.getNotificationController().emitChangeMark(+creatorId);
     res.send({ userId: creatorId, rating: avg });
   } catch (err) {
     transaction.rollback();
@@ -120,7 +130,7 @@ module.exports.payment = async (req, res, next) => {
   let transaction;
   try {
     transaction = await db.sequelize.transaction();
-    await bankQueries.updateBankBalance(
+    await bankService.updateBankBalance(
       {
         balance: db.sequelize.literal(`
                 CASE
@@ -179,14 +189,36 @@ module.exports.payment = async (req, res, next) => {
 
 module.exports.updateUser = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.avatar = req.file.filename;
+    const { file, body, tokenData } = req;
+    
+    if (file) {
+      body.avatar = file.filename;
     }
-    const updatedUser = await userQueries.updateUser(
-      req.body,
+
+    const accessToken = jwt.sign(
+      {
+        firstName: body.firstName,
+        lastName: body.lastName,
+        displayName: body.displayName,
+        avatar: file ? body.avatar : tokenData.avatar,
+
+        userId: tokenData.userId,
+        role: tokenData.role,
+        balance: tokenData.balance,
+        email: tokenData.email,
+        rating: tokenData.rating,
+      },
+      CONSTANTS.JWT_SECRET,
+      { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME }
+    );
+
+    const updatedUser = await userService.updateUser(
+      { accessToken, ...body },
       req.tokenData.userId
     );
+
     res.send({
+      token: accessToken,
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       displayName: updatedUser.displayName,
@@ -205,12 +237,12 @@ module.exports.cashout = async (req, res, next) => {
   let transaction;
   try {
     transaction = await db.sequelize.transaction();
-    const updatedUser = await userQueries.updateUser(
+    const updatedUser = await userService.updateUser(
       { balance: db.sequelize.literal('balance - ' + req.body.sum) },
       req.tokenData.userId,
       transaction
     );
-    await bankQueries.updateBankBalance(
+    await bankService.updateBankBalance(
       {
         balance: db.sequelize.literal(`CASE 
                 WHEN "card_number"='${req.body.number.replace(

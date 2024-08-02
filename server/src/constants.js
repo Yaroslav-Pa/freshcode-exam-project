@@ -3,7 +3,10 @@ const path = require('path');
 module.exports = {
   DEV_IMAGES_PATH: path.resolve(__dirname, '..', 'public', 'images'),
   DEV_CONTESTS_PATH: path.resolve(__dirname, '..', 'public', 'contests'),
-  EMAIL: { user: 'mailsquadhelp@gmail.com', pass: 'ovtv iapm fagi exnc' },
+  EMAIL: {
+    user: 'testingemailsend12312312@gmail.com',
+    pass: 'oiuc qjud dhgm tihu',
+  },
   LOGGER_FILENAME: 'errors.log',
   ARCHIVE_DIR: 'logs/archive',
   LOGGER_DIR: 'logs',

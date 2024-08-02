@@ -7,7 +7,6 @@ import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import Payment from './pages/Payment/Payment';
 import StartContestPage from './pages/StartContestPage/StartContestPage';
 import Dashboard from './pages/Dashboard/Dashboard';
-import PrivateHoc from './components/Hocs/PrivateHoc/PrivateHoc';
 import NotFound from './components/NotFound/NotFound';
 import Home from './pages/Home/Home';
 import OnlyNotAuthorizedUserHoc from './components/Hocs/OnlyNotAuthorizedUserHoc/OnlyNotAuthorizedUserHoc';
@@ -20,11 +19,10 @@ import ChatContainer from './components/Chat/ChatComponents/ChatContainer/ChatCo
 import HowItWorks from './pages/HowItWorks/HowItWorks';
 import EventPage from './pages/EventPage/EventPage';
 import EventsLink from './components/EventComponents/EventsLink/EventsLink';
-import ModeratorOnlyRoute from './components/Hocs/ModeratorOnlyRoute/ModeratorOnlyRoute';
 import OfferReview from './pages/OfferReview/OfferReview';
 import { getEvents } from './store/slices/eventSlice';
 import { useDispatch } from 'react-redux';
-import UsersOnlyRoute from './components/Hocs/UsersOnlyRoute/UsersOnlyRoute';
+import WithRoleRoute from './components/Hocs/WithRoleRoute/WithRoleRoute';
 
 function App() {
   const dispatch = useDispatch();
@@ -49,7 +47,13 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/howItWorks" component={HowItWorks} />
-        <Route exact path="/events" component={EventPage} />
+        <Route
+          exact
+          path="/events"
+          component={WithRoleRoute(EventPage, {
+            blacklistedRoles: [CONSTANTS.MODERATOR, CONSTANTS.CREATOR],
+          })}
+        />
         <Route
           exact
           path="/login"
@@ -63,45 +67,66 @@ function App() {
         <Route
           exact
           path="/offersReview"
-          component={ModeratorOnlyRoute(OfferReview)}
+          component={WithRoleRoute(OfferReview, {
+            blacklistedRoles: [CONSTANTS.CREATOR, CONSTANTS.CUSTOMER],
+          })}
         />
-        <Route exact path="/payment" component={UsersOnlyRoute(Payment)} />
+        <Route
+          exact
+          path="/payment"
+          component={WithRoleRoute(Payment, {
+            blacklistedRoles: [CONSTANTS.MODERATOR],
+          })}
+        />
         <Route
           exact
           path="/startContest"
-          component={UsersOnlyRoute(StartContestPage)}
+          component={WithRoleRoute(StartContestPage, {
+            blacklistedRoles: [CONSTANTS.MODERATOR],
+          })}
         />
         <Route
           exact
           path="/startContest/nameContest"
-          component={UsersOnlyRoute(ContestCreationPage, {
+          component={WithRoleRoute(ContestCreationPage, {
             contestType: CONSTANTS.NAME_CONTEST,
             title: 'Company Name',
+            blacklistedRoles: [CONSTANTS.MODERATOR],
           })}
         />
         <Route
           exact
           path="/startContest/taglineContest"
-          component={UsersOnlyRoute(ContestCreationPage, {
+          component={WithRoleRoute(ContestCreationPage, {
             contestType: CONSTANTS.TAGLINE_CONTEST,
             title: 'TAGLINE',
+            blacklistedRoles: [CONSTANTS.MODERATOR],
           })}
         />
         <Route
           exact
           path="/startContest/logoContest"
-          component={UsersOnlyRoute(ContestCreationPage, {
+          component={WithRoleRoute(ContestCreationPage, {
             contestType: CONSTANTS.LOGO_CONTEST,
             title: 'LOGO',
+            blacklistedRoles: [CONSTANTS.MODERATOR],
           })}
         />
-        <Route exact path="/dashboard" component={UsersOnlyRoute(Dashboard)} />
+        <Route
+          exact
+          path="/dashboard"
+          component={WithRoleRoute(Dashboard, {
+            blacklistedRoles: [CONSTANTS.MODERATOR],
+          })}
+        />
         <Route
           exact
           path="/contest/:id"
-          component={UsersOnlyRoute(ContestPage)}
+          component={WithRoleRoute(ContestPage, {
+            blacklistedRoles: [CONSTANTS.MODERATOR],
+          })}
         />
-        <Route exact path="/account" component={PrivateHoc(UserProfile)} />
+        <Route exact path="/account" component={WithRoleRoute(UserProfile)} />
         <Route component={NotFound} />
       </Switch>
       <ChatContainer />

@@ -3,12 +3,16 @@ import { MdEventNote } from 'react-icons/md';
 import styles from './EventsLink.module.sass';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
-import { selectCounts } from '../../../utils/reselect/eventsReselect';
+import { selectCountsAndRole } from '../../../utils/reselect/eventsReselect';
+import CONSTANTS from '../../../constants';
 
 function EventsLink() {
   const location = useLocation();
-  const { overCount: isOverCount, remindCount: isRemindCount } =
-    useSelector(selectCounts);
+  const {
+    overCount: isOverCount,
+    remindCount: isRemindCount,
+    role,
+  } = useSelector(selectCountsAndRole);
 
   const isRemindCountNotNull = isRemindCount !== 0;
   const isOverCountNotNull = isOverCount !== 0;
@@ -21,10 +25,9 @@ function EventsLink() {
   });
 
   if (
+    role !== CONSTANTS.CUSTOMER ||
     location.pathname === '/events' ||
-    location.pathname === '/payment' ||
-    location.pathname === '/login' ||
-    location.pathname === '/registration'
+    location.pathname === '/payment'
   ) {
     return null;
   }

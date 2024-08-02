@@ -120,53 +120,62 @@ const OfferBox = (props) => {
       props.data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW &&
       !props.isForModerator,
     [styles.transparentBackground]: props.isForModerator,
+    [styles.offerContainerSmallerPadding]:
+      props.isForModerator || role === CONSTANTS.CUSTOMER,
   });
+
+  const mainInfoContainerClassnames = classNames(styles.mainInfoContainer, {
+    [styles.mainInfoContainerModerator]: props.isForModerator,
+  });
+
   return (
     <div className={offerContainerClassnames}>
       {offerStatus()}
-      <div className={styles.mainInfoContainer}>
-        <div className={styles.userInfo}>
-          <div className={styles.creativeInfoContainer}>
-            <img
-              src={
-                avatar === 'anon.png'
-                  ? CONSTANTS.ANONYM_IMAGE_PATH
-                  : `${CONSTANTS.PUBLIC_IMAGES_URL}${avatar}`
-              }
-              alt="user"
-            />
-            <div className={styles.nameAndEmail}>
-              <span>{`${firstName} ${lastName}`}</span>
-              <span>{email}</span>
+      <div className={mainInfoContainerClassnames}>
+        {!props.isForModerator && (
+          <div className={styles.userInfo}>
+            <div className={styles.creativeInfoContainer}>
+              <img
+                src={
+                  avatar === 'anon.png'
+                    ? CONSTANTS.ANONYM_IMAGE_PATH
+                    : `${CONSTANTS.PUBLIC_IMAGES_URL}${avatar}`
+                }
+                alt="user"
+              />
+              <div className={styles.nameAndEmail}>
+                <span>{`${firstName} ${lastName}`}</span>
+                <span>{email}</span>
+              </div>
+            </div>
+            <div className={styles.creativeRating}>
+              <span className={styles.userScoreLabel}>Creative Rating </span>
+              <Rating
+                initialRating={rating}
+                fractions={2}
+                fullSymbol={
+                  <img
+                    src={`${CONSTANTS.STATIC_IMAGES_PATH}star.png`}
+                    alt="star"
+                  />
+                }
+                placeholderSymbol={
+                  <img
+                    src={`${CONSTANTS.STATIC_IMAGES_PATH}star.png`}
+                    alt="star"
+                  />
+                }
+                emptySymbol={
+                  <img
+                    src={`${CONSTANTS.STATIC_IMAGES_PATH}star-outline.png`}
+                    alt="star-outline"
+                  />
+                }
+                readonly
+              />
             </div>
           </div>
-          <div className={styles.creativeRating}>
-            <span className={styles.userScoreLabel}>Creative Rating </span>
-            <Rating
-              initialRating={rating}
-              fractions={2}
-              fullSymbol={
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}star.png`}
-                  alt="star"
-                />
-              }
-              placeholderSymbol={
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}star.png`}
-                  alt="star"
-                />
-              }
-              emptySymbol={
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}star-outline.png`}
-                  alt="star-outline"
-                />
-              }
-              readonly
-            />
-          </div>
-        </div>
+        )}
         <div className={styles.responseConainer}>
           {contestType === CONSTANTS.LOGO_CONTEST ? (
             <img

@@ -15,6 +15,7 @@ export const selectCountsAndRole = createSelector(
   ({ eventStore, userStore }) => ({
     overCount: eventStore.overCount,
     remindCount: eventStore.remindCount,
+    eventsCount: eventStore.events?.length,
     role: userStore.data?.role,
   })
 );

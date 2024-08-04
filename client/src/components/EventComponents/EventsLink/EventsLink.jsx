@@ -18,13 +18,13 @@ function EventsLink() {
   const events = useSelector(selectEvents);
   useEffect(() => {
     let timeoutId = null;
-    if (eventsCount > 0) {
+    if (eventsCount > 0 && role === CONSTANTS.CUSTOMER) {
       timeoutId = createTimeout(events);
     }
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [events, eventsCount]);
+  }, [role, events, eventsCount]);
 
   const isRemindCountNotNull = remindCount !== 0;
   const isOverCountNotNull = overCount !== 0;

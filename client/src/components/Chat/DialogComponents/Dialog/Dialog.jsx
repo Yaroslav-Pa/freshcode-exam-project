@@ -1,15 +1,14 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import className from 'classnames';
 import {
   getDialogMessages,
   clearMessageList,
   setNewMessageOff,
 } from '../../../../store/slices/chatSlice';
 import ChatHeader from '../../ChatComponents/ChatHeader/ChatHeader';
-import styles from './Dialog.module.sass';
 import ChatInput from '../../ChatComponents/ChatInut/ChatInput';
-import { format, isSameDay, parseISO } from 'date-fns';
+import BlockMessage from './BlockMessage/BlockMessage';
+import MainDialog from './MainDialog/MainDialog';
 
 const Dialog = ({
   getDialog,
@@ -45,55 +44,17 @@ const Dialog = ({
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  const renderMainDialog = () => {
-    const messagesArray = [];
-    let currentTime = new Date();
-    messages.forEach((message, i) => {
-      if (!isSameDay(currentTime, message.createdAt)) {
-        messagesArray.push(
-          <div key={message.createdAt} className={styles.date}>
-            {format(message.createdAt, 'MMMM dd, yyyy')}
-          </div>
-        );
-        currentTime = parseISO(message.createdAt);
-      }
-      messagesArray.push(
-        <div
-          key={i}
-          className={className(
-            userId === message.sender ? styles.ownMessage : styles.message
-          )}
-        >
-          <span>{message.body}</span>
-          <span className={styles.messageTime}>
-            {format(message.createdAt, 'HH:mm')}
-          </span>
-          <div ref={messagesEnd} />
-        </div>
-      );
-    });
-    return <div className={styles.messageList}>{messagesArray}</div>;
-  };
-
-  const blockMessage = () => {
-    const { blackList, participants } = chatData;
-    const userIndex = participants.indexOf(userId);
-    let message;
-    if (chatData && blackList[userIndex]) {
-      message = 'You block him';
-    } else if (chatData && blackList.includes(true)) {
-      message = 'He block you';
-    }
-    return <span className={styles.messageBlock}>{message}</span>;
-  };
-
   return (
     <>
       <ChatHeader userId={userId} />
-      {renderMainDialog()}
+      <MainDialog
+        messages={messages}
+        userId={userId}
+        messagesEnd={messagesEnd}
+      />
       <div ref={messagesEnd} />
       {chatData && chatData.blackList.includes(true) ? (
-        blockMessage()
+        <BlockMessage userId={userId} chatData={chatData} />
       ) : (
         <ChatInput />
       )}

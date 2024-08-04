@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import className from 'classnames';
 import {
@@ -11,33 +11,42 @@ import styles from './Dialog.module.sass';
 import ChatInput from '../../ChatComponents/ChatInut/ChatInput';
 import { format, isSameDay, parseISO } from 'date-fns';
 
-class Dialog extends React.Component {
-  messagesEnd = React.createRef();
+const Dialog = ({
+  getDialog,
+  setNewMessageOff,
+  clearMessageList,
+  chatData,
+  messages,
+  userId,
+  interlocutor,
+}) => {
+  const messagesEnd = useRef();
 
-  scrollToBottom = () => {
-    this.messagesEnd.current.scrollIntoView({ behavior: 'smooth' });
-  };
-  
-  componentDidMount() {
-    this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
-    this.props.setNewMessageOff(this.props.chatData?._id);
-    this.scrollToBottom();
-  }
-
-  componentWillUnmount() {
-    this.props.clearMessageList();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.messagesEnd.current) this.scrollToBottom();
-    if (this.props.interlocutor?.id !== prevProps.interlocutor?.id) {
-      this.props.getDialog({ interlocutorId: this.props.interlocutor?.id });
+  const scrollToBottom = useCallback(() => {
+    if (messagesEnd?.current) {
+      messagesEnd.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }
+  }, []);
 
-  renderMainDialog = () => {
+  useEffect(() => {
+    if (chatData?._id) setNewMessageOff(chatData._id);
+    return () => {
+      clearMessageList();
+    };
+  }, [chatData?._id, clearMessageList, setNewMessageOff]);
+
+  useEffect(() => {
+    if (interlocutor?.id) {
+      getDialog({ interlocutorId: interlocutor.id });
+    }
+  }, [interlocutor?.id, getDialog]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
+
+  const renderMainDialog = () => {
     const messagesArray = [];
-    const { messages, userId } = this.props;
     let currentTime = new Date();
     messages.forEach((message, i) => {
       if (!isSameDay(currentTime, message.createdAt)) {
@@ -59,15 +68,14 @@ class Dialog extends React.Component {
           <span className={styles.messageTime}>
             {format(message.createdAt, 'HH:mm')}
           </span>
-          <div ref={this.messagesEnd} />
+          <div ref={messagesEnd} />
         </div>
       );
     });
     return <div className={styles.messageList}>{messagesArray}</div>;
   };
 
-  blockMessage = () => {
-    const { userId, chatData } = this.props;
+  const blockMessage = () => {
     const { blackList, participants } = chatData;
     const userIndex = participants.indexOf(userId);
     let message;
@@ -79,22 +87,19 @@ class Dialog extends React.Component {
     return <span className={styles.messageBlock}>{message}</span>;
   };
 
-  render() {
-    const { chatData, userId } = this.props;
-    return (
-      <>
-        <ChatHeader userId={userId} />
-        {this.renderMainDialog()}
-        <div ref={this.messagesEnd} />
-        {chatData && chatData.blackList.includes(true) ? (
-          this.blockMessage()
-        ) : (
-          <ChatInput />
-        )}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <ChatHeader userId={userId} />
+      {renderMainDialog()}
+      <div ref={messagesEnd} />
+      {chatData && chatData.blackList.includes(true) ? (
+        blockMessage()
+      ) : (
+        <ChatInput />
+      )}
+    </>
+  );
+};
 
 const mapStateToProps = (state) => state.chatStore;
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import DialogListContainer from '../../DialogComponents/DialogListContainer/DialogListContainer';
@@ -19,20 +19,23 @@ import CatalogListHeader from '../../CatalogComponents/CatalogListHeader/Catalog
 import ChatError from '../../ChatError/ChatError';
 import NewMessagePoint from '../../../NewMessagePoint/NewMessagePoint';
 
-class Chat extends React.Component {
-  componentDidMount() {
-    chatController.subscribeChat(this.props.userStore.data.id);
-    this.props.getPreviewChat();
-  }
+const Chat = ({
+  id,
+  getPreviewChat,
+  changeShow,
+  chatStore,
+  setChatPreviewMode,
+}) => {
+  useEffect(() => {
+    chatController.subscribeChat(id);
+    getPreviewChat();
+    return () => {
+      chatController.unsubscribeChat(id);
+    };
+  }, [id, getPreviewChat]);
 
-  componentWillUnmount() {
-    chatController.unsubscribeChat(this.props.userStore.data.id);
-  }
-
-  renderDialogList = () => {
-    const { setChatPreviewMode } = this.props;
-    const { chatMode, isShowChatsInCatalog } = this.props.chatStore;
-    const { id } = this.props.userStore.data;
+  const renderDialogList = () => {
+    const { chatMode, isShowChatsInCatalog } = chatStore;
     const {
       NORMAL_PREVIEW_CHAT_MODE,
       FAVORITE_PREVIEW_CHAT_MODE,
@@ -92,32 +95,35 @@ class Chat extends React.Component {
     );
   };
 
-  render() {
-    const { isExpanded, isShow, isShowCatalogCreation, error } =
-      this.props.chatStore;
-    const { id } = this.props.userStore.data;
-    const { changeShow, getPreviewChat } = this.props;
-    return (
-      <div
-        className={classNames(styles.chatContainer, {
-          [styles.showChat]: isShow,
-        })}
-      >
-        {error && <ChatError getData={getPreviewChat} error={error}/>}
-        {isShowCatalogCreation && <CatalogCreation />}
-        {isExpanded ? <Dialog userId={id} /> : this.renderDialogList()}
-        <div className={styles.toggleChat} onClick={() => changeShow()}>
-          {isShow ? 'Hide Chat' : 'Show Chat'}
-          <NewMessagePoint isNewMessage={this.props.chatStore.isNewMessages && !this.props.chatStore.isShow} top='-6px' />
-        </div>
+  const { isExpanded, isShow, isShowCatalogCreation, error } = chatStore;
+  return (
+    <div
+      className={classNames(styles.chatContainer, {
+        [styles.showChat]: isShow,
+      })}
+    >
+      {error && <ChatError getData={getPreviewChat} error={error} />}
+      {isShowCatalogCreation && <CatalogCreation />}
+      {isExpanded ? <Dialog userId={id} /> : renderDialogList()}
+      <div className={styles.toggleChat} onClick={() => changeShow()}>
+        {isShow ? 'Hide Chat' : 'Show Chat'}
+        <NewMessagePoint
+          isNewMessage={chatStore.isNewMessages && !chatStore.isShow}
+          top="-6px"
+        />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => {
-  const { chatStore, userStore } = state;
-  return { chatStore, userStore };
+  const {
+    chatStore,
+    userStore: {
+      data: { id },
+    },
+  } = state;
+  return { chatStore, id };
 };
 
 const mapDispatchToProps = (dispatch) => ({

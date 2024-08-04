@@ -8,7 +8,7 @@ module.exports = {
     pass: 'oiuc qjud dhgm tihu',
   },
   LOGGER_FILENAME: 'errors.log',
-  ARCHIVE_DIR: 'logs/archive',
+  ARCHIVE_DIR: path.join('logs', 'archive'),
   LOGGER_DIR: 'logs',
   OFFER_STATUS: {
     REVIEW: 'onReview',

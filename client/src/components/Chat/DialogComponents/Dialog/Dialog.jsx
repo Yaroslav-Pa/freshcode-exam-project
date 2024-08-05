@@ -29,16 +29,16 @@ const Dialog = ({
 
   useEffect(() => {
     if (chatData?._id) setNewMessageOff(chatData._id);
-    return () => {
-      clearMessageList();
-    };
-  }, [chatData?._id, clearMessageList, setNewMessageOff]);
+  }, [chatData?._id, setNewMessageOff]);
 
   useEffect(() => {
     if (interlocutor?.id) {
       getDialog({ interlocutorId: interlocutor.id });
     }
-  }, [interlocutor?.id, getDialog]);
+    return () => {
+      clearMessageList();
+    };
+  }, [interlocutor?.id, getDialog, clearMessageList]);
 
   useEffect(() => {
     scrollToBottom();

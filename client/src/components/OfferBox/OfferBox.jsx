@@ -119,7 +119,7 @@ const OfferBox = (props) => {
     [styles.offerContainerFailReview]:
       props.data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW &&
       !props.isForModerator,
-    [styles.transparentBackground]: props.isForModerator,
+    [styles.moderatorStyles]: props.isForModerator,
     [styles.offerContainerSmallerPadding]:
       props.isForModerator || role === CONSTANTS.CUSTOMER,
   });

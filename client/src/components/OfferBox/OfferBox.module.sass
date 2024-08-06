@@ -8,17 +8,18 @@
 .offerContainer
   display: flex
   align-self: stretch
-  padding: 30px 40px 10px 40px
+  padding: 30px 40px
   background-color: #f9fafb
   flex-direction: column
   justify-content: flex-start
   border-radius: 10px
   position: relative
   align-items: flex-start
-  @media(max-width: 500px)
-    gap: 10px 0
-  @media(max-width: 450px)
-    padding: 10px 0
+  gap: 5px 0
+  @media screen and (max-width: 500px)
+    gap: 10px 5px
+  @media screen and (max-width: 450px)
+    padding: 15px 5px
 
   .reject
     @extend %status
@@ -35,7 +36,7 @@
     flex-direction: row
     align-items: center
     justify-content: space-between
-    @media(max-width: 500px)
+    @media screen and (max-width: 500px)
       margin: 0 10px
 
     .resolveBtn
@@ -54,12 +55,9 @@
     gap: 10px
     @media screen and (max-width: 1100px)
       justify-content: space-around
-    @media(max-width: 570px)
+    @media screen and (max-width: 570px)
       gap: 20px 0
       flex-direction: column
-
-    .userInfo
-      min-width: 215px
 
     .chatIcon
       top: -25px
@@ -70,12 +68,12 @@
       font-size: 26px
       transition: font-size 0.2s
       color: #4e618d
-      @media(max-width: 450px)
+      @media screen and (max-width: 450px)
         top: 30px
-      @media(max-width: 380px)
+      @media screen and (max-width: 380px)
         top: 75px
         align-self: flex-end
-      @media(max-width: 500px)
+      @media screen and (max-width: 500px)
         align-self: flex-end
 
       &:hover
@@ -83,18 +81,18 @@
         transition: font-size 0.2s
 
     .chatIconForModerator
-      right: -20px
+      top: -5px
+      right: 7px
 
     .responseConainer
-      width: 70%
+      flex: 1
+      max-width: 70%
       align-self: center
       display: flex
       flex-direction: column
       justify-content: flex-start
       align-items: center
       gap: 10px
-      @media(max-width: 1100px)
-        max-width: 200px
 
       .responseLogo
         width: auto
@@ -106,51 +104,17 @@
         align-self: stretch
         color: #556da5
         font-size: 18px
+        line-height: 20px
 
-    .creativeRating
-      display: flex
-      margin-top: 5px
-      align-items: center
+  .mainInfoContainerModerator
+    justify-content: center
 
-      .userScoreLabel
-        margin-right: 10px
-        color: #556da5
-        font-size: 15px
-
-    .creativeInfoContainer
-      display: flex
-      flex-direction: row
-      align-items: center
-      justify-content: flex-start
-
-      .nameAndEmail
-        display: flex
-        flex-direction: column
-        align-items: flex-start
-        justify-content: flex-start
-        // overflow: hidden
-        // text-overflow: ellipsis
-        // @media screen and (max-width: 600px)
-        //   max-width: 200px
-
-        span
-          color: #556da5
-          font-size: 16px
-          font-weight: 500
-          margin-left: 10px
-          overflow: hidden
-          line-height: 24px
-          text-overflow: ellipsis
-          max-width: 250px
-          @media screen and (max-width: 650px)
-            max-width: 220px
-          @media screen and (max-width: 450px)
-            max-width: 150px
-
-      img
-        width: 50px
-        height: 50px
-        border-radius: 25px
+.offerContainerSmallerPadding
+  padding: 30px 40px 10px 40px
+  @media screen and (max-width: 500px)
+    gap: 10px 5px
+  @media screen and (max-width: 450px)
+    padding: 15px 5px
 
 .winner
   background-color: #8aca6b
@@ -164,5 +128,10 @@
 .offerContainerFailReview
   border: 2px solid #c41d26
 
-.transparentBackground
+.moderatorStyles
+  padding: 0
+  flex: 1
+  max-width: 80%
+  min-height: 50px
+  justify-content: center
   background: transparent

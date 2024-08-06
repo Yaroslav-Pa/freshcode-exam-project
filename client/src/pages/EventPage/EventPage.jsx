@@ -20,6 +20,7 @@ function EventPage() {
     dispatch(getEvents());
     dispatch(checkTime());
   }, [dispatch]);
+  
   useEffect(() => {
     dispatch(saveEvents());
   }, [events, dispatch]);

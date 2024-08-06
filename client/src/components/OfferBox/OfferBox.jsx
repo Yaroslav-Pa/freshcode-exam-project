@@ -15,11 +15,35 @@ import CONSTANTS from '../../constants';
 import styles from './OfferBox.module.sass';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import './confirmStyle.css';
+import OfferUserInfo from './OfferUserInfo/OfferUserInfo';
 
-const OfferBox = (props) => {
+const OfferBox = ({
+  setOfferStatus,
+  data,
+  clearError,
+  changeMarkRedux,
+  goToExpandedDialog,
+  changeShowImage,
+  needButtons,
+  ...restProps
+}) => {
+  const createConfirmAlert = (command) => ({
+    title: `Confirm ${command}`,
+    message: 'Are you sure?',
+    buttons: [
+      {
+        label: 'Yes',
+        onClick: () => setOfferStatus(data.User.id, data.id, command),
+      },
+      {
+        label: 'No',
+      },
+    ],
+  });
+
   const findConversationInfo = () => {
-    const { messagesPreview, id } = props;
-    const participants = [id, props.data.User.id];
+    const { messagesPreview, id } = restProps;
+    const participants = [id, data.User.id];
     participants.sort(
       (participant1, participant2) => participant1 - participant2
     );
@@ -37,51 +61,25 @@ const OfferBox = (props) => {
   };
 
   const resolveOffer = () => {
-    confirmAlert({
-      title: 'confirm',
-      message: 'Are u sure?',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: () =>
-            props.setOfferStatus(props.data.User.id, props.data.id, 'resolve'),
-        },
-        {
-          label: 'No',
-        },
-      ],
-    });
+    confirmAlert(createConfirmAlert('resolve'));
   };
 
   const rejectOffer = () => {
-    confirmAlert({
-      title: 'confirm',
-      message: 'Are u sure?',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: () =>
-            props.setOfferStatus(props.data.User.id, props.data.id, 'reject'),
-        },
-        {
-          label: 'No',
-        },
-      ],
-    });
+    confirmAlert(createConfirmAlert('reject'));
   };
 
   const changeMark = (value) => {
-    props.clearError();
-    props.changeMark({
+    clearError();
+    changeMarkRedux({
       mark: value,
-      offerId: props.data.id,
-      isFirst: !props.data.mark,
-      creatorId: props.data.User.id,
+      offerId: data.id,
+      isFirst: !data.mark,
+      creatorId: data.User.id,
     });
   };
 
   const offerStatus = () => {
-    const { status } = props.data;
+    const { status } = data;
     if (status === CONSTANTS.OFFER_STATUS_REJECTED) {
       return (
         <i
@@ -100,78 +98,42 @@ const OfferBox = (props) => {
   };
 
   const goChat = () => {
-    props.goToExpandedDialog({
-      interlocutor: props.data.User,
+    goToExpandedDialog({
+      interlocutor: data.User,
       conversationData: findConversationInfo(),
     });
   };
 
+  const { role, id, contestType } = restProps;
+  const isForModerator = role === CONSTANTS.MODERATOR;
+
   const chatIconClassnames = classNames(styles.chatIcon, {
-    [styles.chatIconForModerator]: props.isForModerator,
+    [styles.chatIconForModerator]: isForModerator,
   });
 
-  const { data, role, id, contestType } = props;
-  const { avatar, firstName, lastName, email, rating } = props.data.User;
   const offerContainerClassnames = classNames(styles.offerContainer, {
     [styles.offerContainerReview]:
-      props.data.status === CONSTANTS.OFFER_STATUS_REVIEW &&
-      !props.isForModerator,
+      data.status === CONSTANTS.OFFER_STATUS_REVIEW && !isForModerator,
     [styles.offerContainerFailReview]:
-      props.data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW &&
-      !props.isForModerator,
-    [styles.transparentBackground]: props.isForModerator,
+      data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW && !isForModerator,
+    [styles.moderatorStyles]: isForModerator,
+    [styles.offerContainerSmallerPadding]: role === CONSTANTS.CUSTOMER,
   });
+
+  const mainInfoContainerClassnames = classNames(styles.mainInfoContainer, {
+    [styles.mainInfoContainerModerator]: isForModerator,
+  });
+
   return (
     <div className={offerContainerClassnames}>
       {offerStatus()}
-      <div className={styles.mainInfoContainer}>
-        <div className={styles.userInfo}>
-          <div className={styles.creativeInfoContainer}>
-            <img
-              src={
-                avatar === 'anon.png'
-                  ? CONSTANTS.ANONYM_IMAGE_PATH
-                  : `${CONSTANTS.PUBLIC_IMAGES_URL}${avatar}`
-              }
-              alt="user"
-            />
-            <div className={styles.nameAndEmail}>
-              <span>{`${firstName} ${lastName}`}</span>
-              <span>{email}</span>
-            </div>
-          </div>
-          <div className={styles.creativeRating}>
-            <span className={styles.userScoreLabel}>Creative Rating </span>
-            <Rating
-              initialRating={rating}
-              fractions={2}
-              fullSymbol={
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}star.png`}
-                  alt="star"
-                />
-              }
-              placeholderSymbol={
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}star.png`}
-                  alt="star"
-                />
-              }
-              emptySymbol={
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}star-outline.png`}
-                  alt="star-outline"
-                />
-              }
-              readonly
-            />
-          </div>
-        </div>
+      <div className={mainInfoContainerClassnames}>
+        {!isForModerator && <OfferUserInfo data={data} />}
         <div className={styles.responseConainer}>
           {contestType === CONSTANTS.LOGO_CONTEST ? (
             <img
               onClick={() =>
-                props.changeShowImage({
+                changeShowImage({
                   imagePath: data.fileName,
                   isShowOnFull: true,
                 })
@@ -183,7 +145,7 @@ const OfferBox = (props) => {
           ) : (
             <span className={styles.response}>{data.text}</span>
           )}
-          {!props.isForModerator && data.User.id !== id && (
+          {data?.User?.id !== id && !isForModerator && (
             <Rating
               fractions={2}
               fullSymbol={
@@ -209,14 +171,14 @@ const OfferBox = (props) => {
             />
           )}
         </div>
-        {role !== CONSTANTS.CREATOR && (
+        {role !== CONSTANTS.CREATOR && !isForModerator && (
           <i
             onClick={goChat}
             className={'fas fa-comments ' + chatIconClassnames}
           />
         )}
       </div>
-      {props.needButtons && props.needButtons(data.status) && (
+      {needButtons && needButtons(data.status) && (
         <div className={styles.btnsContainer}>
           <div onClick={resolveOffer} className={styles.resolveBtn}>
             Resolve
@@ -231,7 +193,7 @@ const OfferBox = (props) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  changeMark: (data) => dispatch(changeMark(data)),
+  changeMarkRedux: (data) => dispatch(changeMark(data)),
   clearError: () => dispatch(clearChangeMarkError()),
   goToExpandedDialog: (data) => dispatch(goToExpandedDialog(data)),
   changeShowImage: (data) => dispatch(changeShowImage(data)),

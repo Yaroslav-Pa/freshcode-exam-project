@@ -3,15 +3,31 @@ import { MdEventNote } from 'react-icons/md';
 import styles from './EventsLink.module.sass';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
-import { selectCounts } from '../../../utils/reselect/eventsReselect';
+import {
+  selectCountsAndRole,
+  selectEvents,
+} from '../../../utils/reselect/eventsReselect';
+import CONSTANTS from '../../../constants';
+import { useEffect } from 'react';
+import { createTimeout } from '../../../utils/eventsFunctions';
 
 function EventsLink() {
   const location = useLocation();
-  const { overCount: isOverCount, remindCount: isRemindCount } =
-    useSelector(selectCounts);
+  const { overCount, remindCount, eventsCount, role } =
+    useSelector(selectCountsAndRole);
+  const events = useSelector(selectEvents);
+  useEffect(() => {
+    let timeoutId = null;
+    if (eventsCount > 0 && role === CONSTANTS.CUSTOMER) {
+      timeoutId = createTimeout(events);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [role, events, eventsCount]);
 
-  const isRemindCountNotNull = isRemindCount !== 0;
-  const isOverCountNotNull = isOverCount !== 0;
+  const isRemindCountNotNull = remindCount !== 0;
+  const isOverCountNotNull = overCount !== 0;
 
   const remindClassnames = classNames({
     [styles.remindCount]: isRemindCountNotNull,
@@ -21,10 +37,9 @@ function EventsLink() {
   });
 
   if (
+    role !== CONSTANTS.CUSTOMER ||
     location.pathname === '/events' ||
-    location.pathname === '/payment' ||
-    location.pathname === '/login' ||
-    location.pathname === '/registration'
+    location.pathname === '/payment'
   ) {
     return null;
   }
@@ -35,10 +50,10 @@ function EventsLink() {
         <button className={styles.button}>
           <MdEventNote className={styles.icon} />
           {isOverCountNotNull && (
-            <span className={overClassnames}>{isOverCount}</span>
+            <span className={overClassnames}>{overCount}</span>
           )}
           {isRemindCountNotNull && (
-            <span className={remindClassnames}>{isRemindCount}</span>
+            <span className={remindClassnames}>{remindCount}</span>
           )}
         </button>
       </Link>

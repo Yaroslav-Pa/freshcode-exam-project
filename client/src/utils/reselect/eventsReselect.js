@@ -1,16 +1,21 @@
 import { createSelector } from 'reselect';
 
-const selectEventStore = (state) => state.eventStore;
+const selectStores = (state) => ({
+  eventStore: state.eventStore,
+  userStore: state.userStore,
+});
 
 export const selectEvents = createSelector(
-  [selectEventStore],
-  (eventStore) => eventStore.events
+  [selectStores],
+  ({ eventStore }) => eventStore.events
 );
 
-export const selectCounts = createSelector(
-  [selectEventStore],
-  (eventStore) => ({
+export const selectCountsAndRole = createSelector(
+  [selectStores],
+  ({ eventStore, userStore }) => ({
     overCount: eventStore.overCount,
     remindCount: eventStore.remindCount,
+    eventsCount: eventStore.events?.length,
+    role: userStore.data?.role,
   })
 );

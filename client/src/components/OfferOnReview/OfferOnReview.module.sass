@@ -33,3 +33,31 @@
 
 .offerApproved
   background-color: rgba(97, 214, 38, 0.3)
+
+.textAndInfoContainer
+  display: flex
+  flex-direction: row
+  gap: 20px
+  padding: 30px 40px 10px 40px
+  @media screen and (max-width: 600px)
+    align-items: center
+    flex-direction: column
+
+.contestInfo
+  max-width: 300px
+  display: flex
+  gap: 5px
+  flex-direction: column
+  @media screen and (max-width: 600px)
+    text-align: center
+
+.contestInfoTitle
+  color: #455a89
+  font-weight: 600
+  border-bottom: 1px solid #455a89
+
+.contestTitle
+  max-width: 250px
+  line-height: 20px
+  text-overflow: ellipsis
+  overflow: hidden

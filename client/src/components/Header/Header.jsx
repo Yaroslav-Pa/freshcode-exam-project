@@ -50,7 +50,7 @@ function Header({
   );
 
   const logOut = () => {
-    localStorage.clear();
+    localStorage.removeItem(CONSTANTS.ACCESS_TOKEN);
     clearUserStore();
     clearChatData();
     clearContestStore();

@@ -56,3 +56,16 @@ export const contestList = (contests, goToExtended) => {
 export const removeDuplicates = (array1, array2) => {
   return _.uniqWith([...array1, ...array2], _.isEqual);
 };
+
+export const getContestStyle = (contest) => {
+  if (contest.contest_type === CONSTANTS.NAME_CONTEST) {
+    return `Style name: ${contest.style_name}`;
+  }
+  if (contest.contest_type === CONSTANTS.LOGO_CONTEST) {
+    return `Brand style: ${contest.brand_style}`;
+  }
+  if (contest.contest_type === CONSTANTS.TAGLINE_CONTEST) {
+    return `Type of tagline: ${contest.type_of_tagline}`;
+  }
+  return null;
+};

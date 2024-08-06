@@ -8,9 +8,11 @@ import {
   removeOffer,
   setStatus,
 } from '../../store/slices/moderatedOffersSlice';
+import { getContestStyle } from '../../utils/contestFunctions';
 
 function OfferOnReview({ offer }) {
   const dispatch = useDispatch();
+  const contest = offer.Contest;
 
   useEffect(() => {
     if (offer.updatedStatus) {
@@ -29,17 +31,26 @@ function OfferOnReview({ offer }) {
       offer.updatedStatus === CONSTANTS.OFFER_STATUS_PENDING,
   });
 
+  const contestStyle = getContestStyle(contest);
+
   const buttonClickHendler = (status) => {
     dispatch(setStatus({ offerId: offer.id, status }));
   };
   return (
     <section className={offerBoxClassnames}>
-      <OfferBox
-        isForModerator={true}
-        data={offer}
-        needButtons={false}
-        contestType={offer.fileName !== null ? CONSTANTS.LOGO_CONTEST : null}
-      />
+      <div className={styles.textAndInfoContainer}>
+        <div className={styles.contestInfo}>
+          <h1 className={styles.contestInfoTitle}>Contest info</h1>
+          <p className={styles.contestTitle}>{`Title: ${contest.title}`}</p>
+          <p>Industry: {contest.industry}</p>
+          {contestStyle && <p>{contestStyle}</p>}
+        </div>
+        <OfferBox
+          data={offer}
+          needButtons={false}
+          contestType={offer.fileName !== null ? CONSTANTS.LOGO_CONTEST : null}
+        />
+      </div>
       <div className={styles.buttonContainer}>
         <button
           className={styles.approveButton}

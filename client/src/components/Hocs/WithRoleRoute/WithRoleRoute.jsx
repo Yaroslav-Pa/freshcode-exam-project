@@ -5,7 +5,7 @@ import { getUser } from '../../../store/slices/userSlice';
 import Spinner from '../../Spinner/Spinner';
 import CONSTANTS from '../../../constants';
 
-const PrivateHoc = (Component, props) => {
+const WithRoleRoute = (Component, props) => {
   const Redirector = ({ data, getUser, isFetching, history, match }) => {
     const [isLoading, setIsLoading] = useState(true);
 
@@ -20,7 +20,10 @@ const PrivateHoc = (Component, props) => {
       return <Spinner />;
     }
 
-    if (!isFetching && !data) {
+    if (
+      !isFetching &&
+      (!data || props?.blacklistedRoles.includes(data?.role))
+    ) {
       return <Redirect to="/login" />;
     }
 
@@ -36,4 +39,4 @@ const PrivateHoc = (Component, props) => {
   return connect(mapStateToProps, mapDispatchToProps)(Redirector);
 };
 
-export default PrivateHoc;
+export default WithRoleRoute;

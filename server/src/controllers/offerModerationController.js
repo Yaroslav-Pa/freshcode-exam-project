@@ -21,16 +21,16 @@ module.exports.getAllOffersOnReview = async (req, res, next) => {
       order: [['id', 'ASC']],
       include: [
         {
-          model: db.User,
+          model: db.Contest,
           required: true,
-          attributes: {
-            exclude: ['password', 'role', 'balance', 'accessToken'],
-          },
-        },
-        {
-          model: db.Rating,
-          required: false,
-          attributes: { exclude: ['userId', 'offerId'] },
+          attributes: [
+            'contest_type',
+            'title',
+            'industry',
+            'style_name',
+            'type_of_tagline',
+            'brand_style',
+          ],
         },
       ],
     });

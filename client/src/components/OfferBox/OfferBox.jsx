@@ -117,8 +117,7 @@ const OfferBox = ({
     [styles.offerContainerFailReview]:
       data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW && !isForModerator,
     [styles.moderatorStyles]: isForModerator,
-    [styles.offerContainerSmallerPadding]:
-      isForModerator || role === CONSTANTS.CUSTOMER,
+    [styles.offerContainerSmallerPadding]: role === CONSTANTS.CUSTOMER,
   });
 
   const mainInfoContainerClassnames = classNames(styles.mainInfoContainer, {

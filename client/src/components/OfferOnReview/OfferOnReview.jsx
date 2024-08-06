@@ -35,7 +35,6 @@ function OfferOnReview({ offer }) {
   return (
     <section className={offerBoxClassnames}>
       <OfferBox
-        isForModerator={true}
         data={offer}
         needButtons={false}
         contestType={offer.fileName !== null ? CONSTANTS.LOGO_CONTEST : null}

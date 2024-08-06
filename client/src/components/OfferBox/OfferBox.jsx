@@ -106,33 +106,34 @@ const OfferBox = (props) => {
     });
   };
 
-  const chatIconClassnames = classNames(styles.chatIcon, {
-    [styles.chatIconForModerator]: props.isForModerator,
-  });
-
   const { data, role, id, contestType } = props;
   const { avatar, firstName, lastName, email, rating } = props.data.User;
+  const isForModerator = role === CONSTANTS.MODERATOR;
+
+  const chatIconClassnames = classNames(styles.chatIcon, {
+    [styles.chatIconForModerator]: isForModerator,
+  });
+
   const offerContainerClassnames = classNames(styles.offerContainer, {
     [styles.offerContainerReview]:
-      props.data.status === CONSTANTS.OFFER_STATUS_REVIEW &&
-      !props.isForModerator,
+      props.data.status === CONSTANTS.OFFER_STATUS_REVIEW && !isForModerator,
     [styles.offerContainerFailReview]:
       props.data.status === CONSTANTS.OFFER_STATUS_FAIL_REVIEW &&
-      !props.isForModerator,
-    [styles.moderatorStyles]: props.isForModerator,
+      !isForModerator,
+    [styles.moderatorStyles]: isForModerator,
     [styles.offerContainerSmallerPadding]:
-      props.isForModerator || role === CONSTANTS.CUSTOMER,
+      isForModerator || role === CONSTANTS.CUSTOMER,
   });
 
   const mainInfoContainerClassnames = classNames(styles.mainInfoContainer, {
-    [styles.mainInfoContainerModerator]: props.isForModerator,
+    [styles.mainInfoContainerModerator]: isForModerator,
   });
 
   return (
     <div className={offerContainerClassnames}>
       {offerStatus()}
       <div className={mainInfoContainerClassnames}>
-        {!props.isForModerator && (
+        {!isForModerator && (
           <div className={styles.userInfo}>
             <div className={styles.creativeInfoContainer}>
               <img
@@ -192,7 +193,7 @@ const OfferBox = (props) => {
           ) : (
             <span className={styles.response}>{data.text}</span>
           )}
-          {!props.isForModerator && data.User.id !== id && (
+          {data.User.id !== id && !isForModerator && (
             <Rating
               fractions={2}
               fullSymbol={
@@ -218,7 +219,7 @@ const OfferBox = (props) => {
             />
           )}
         </div>
-        {role !== CONSTANTS.CREATOR && (
+        {role !== CONSTANTS.CREATOR && !isForModerator && (
           <i
             onClick={goChat}
             className={'fas fa-comments ' + chatIconClassnames}

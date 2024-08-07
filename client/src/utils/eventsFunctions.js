@@ -75,9 +75,9 @@ export const createTimeout = (events) => {
     if (filteredRemainingTime.length !== 0) {
       const smallestTime = Math.min(...filteredRemainingTime);
       return setTimeout(() => {
-        store.dispatch(checkTime(Date.now() + 1000));
+        store.dispatch(checkTime());
         createTimeout(events);
-      }, smallestTime);
+      }, smallestTime + 1000);
     }
   }
   return null;

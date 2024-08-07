@@ -16,6 +16,9 @@ function EventsLink() {
   const { overCount, remindCount, eventsCount, role } =
     useSelector(selectCountsAndRole);
   const events = useSelector(selectEvents);
+  const isRemindCountNotNull = remindCount !== 0;
+  const isOverCountNotNull = overCount !== 0;
+  
   useEffect(() => {
     let timeoutId = null;
     if (eventsCount > 0 && role === CONSTANTS.CUSTOMER) {
@@ -25,9 +28,6 @@ function EventsLink() {
       clearTimeout(timeoutId);
     };
   }, [role, events, eventsCount]);
-
-  const isRemindCountNotNull = remindCount !== 0;
-  const isOverCountNotNull = overCount !== 0;
 
   const remindClassnames = classNames({
     [styles.remindCount]: isRemindCountNotNull,
